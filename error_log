@@ -1,0 +1,27 @@
+[05-Jan-2021 04:35:39 UTC] PHP Fatal error:  Allowed memory size of 1610612736 bytes exhausted (tried to allocate 4096 bytes) in phar:///opt/cpanel/composer/bin/composer/src/Composer/DependencyResolver/Solver.php on line 223
+[05-Jan-2021 04:41:27 UTC] PHP Fatal error:  Allowed memory size of 1610612736 bytes exhausted (tried to allocate 4096 bytes) in phar:///opt/cpanel/composer/bin/composer/src/Composer/DependencyResolver/Solver.php on line 223
+[15-Jan-2021 08:52:22 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/control/artisan(20): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:54:04 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/control/artisan(20): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:54:17 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/control/artisan(20): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:54:24 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/control/artisan(20): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:54:28 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/control/artisan(20): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14

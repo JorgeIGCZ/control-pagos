@@ -1,0 +1,115 @@
+[02-Oct-2020 02:51:22 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:51:22 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:51:22 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:57:00 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:57:00 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:57:00 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:58:50 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:58:50 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:58:50 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public/control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:58:52 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:58:52 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 02:58:52 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public/control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:01:50 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/publiccontrol/public/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:01:50 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/publiccontrol/public/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:01:50 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/publiccontrol/public/control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:03:07 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/public/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:03:07 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/public/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:03:07 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public/control/public/control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:14 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:14 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:14 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:16 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:16 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:16 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:17 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:17 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:17 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:17 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:17 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:04:17 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public/control/control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:05:16 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public../control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:05:16 UTC] PHP Warning:  require(/home/ceusjice/public_html/control/public../control/vendor/autoload.php): failed to open stream: No such file or directory in /home/ceusjice/public_html/control/public/index.php on line 34
+[02-Oct-2020 03:05:16 UTC] PHP Fatal error:  require(): Failed opening required '/home/ceusjice/public_html/control/public../control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/ceusjice/public_html/control/public/index.php on line 34
+[25-Oct-2020 00:40:36 UTC] PHP Fatal error:  Allowed memory size of 536870912 bytes exhausted (tried to allocate 518000640 bytes) in /home/ceusjice/public_html/control/control/app/Http/Controllers/AlumnoController.php on line 41
+[25-Oct-2020 00:40:51 UTC] PHP Fatal error:  Allowed memory size of 536870912 bytes exhausted (tried to allocate 518000640 bytes) in /home/ceusjice/public_html/control/control/app/Http/Controllers/AlumnoController.php on line 41
+[25-Oct-2020 02:13:13 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\DB as DB because the name is already in use in /home/ceusjice/public_html/control/control/app/Http/Controllers/AlumnoController.php on line 9
+[26-Oct-2020 00:07:59 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\AjaxController::__construct() in /home/ceusjice/public_html/control/control/app/Http/Controllers/AjaxController.php on line 18
+[04-Nov-2020 04:01:23 UTC] PHP Fatal error:  Allowed memory size of 536870912 bytes exhausted (tried to allocate 518000640 bytes) in /home/ceusjice/public_html/control/control/app/Http/Controllers/AlumnoController.php on line 72
+[16-Nov-2020 03:17:07 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\PagoController::getAlumnoPago() in /home/ceusjice/public_html/control/control/app/Http/Controllers/PagoController.php on line 108
+[17-Nov-2020 04:21:19 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\OrdenController::createOrder() in /home/ceusjice/public_html/control/control/app/Http/Controllers/OrdenController.php on line 101
+[23-Nov-2020 02:39:11 UTC] PHP Fatal error:  Cannot use empty array elements in arrays in /home/ceusjice/public_html/control/control/app/Http/Controllers/DashboardController.php on line 16
+[23-Nov-2020 02:39:51 UTC] PHP Fatal error:  Cannot use empty array elements in arrays in /home/ceusjice/public_html/control/control/app/Http/Controllers/DashboardController.php on line 16
+[09-Dec-2020 06:13:16 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\PagoController::indexAction() in /home/ceusjice/public_html/control/control/app/Http/Controllers/PagoController.php on line 29
+[22-Dec-2020 07:35:19 UTC] PHP Fatal error:  Allowed memory size of 536870912 bytes exhausted (tried to allocate 518000640 bytes) in /home/ceusjice/public_html/control/control/app/Http/Controllers/DescuentoController.php on line 31
+[22-Dec-2020 07:35:19 UTC] PHP Fatal error:  Allowed memory size of 536870912 bytes exhausted (tried to allocate 65536 bytes) in /home/ceusjice/public_html/control/control/vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php on line 12
+[15-Jan-2021 08:52:32 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:52:53 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:53:34 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:53:36 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:53:39 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:54:52 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:54:56 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:56:12 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:56:14 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[15-Jan-2021 08:56:15 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/ceusjice/public_html/control/control/bootstrap/app.php:14
+Stack trace:
+#0 /home/ceusjice/public_html/control/public/index.php(47): require_once()
+#1 {main}
+  thrown in /home/ceusjice/public_html/control/control/bootstrap/app.php on line 14
+[21-Feb-2021 02:03:13 UTC] PHP Fatal error:  Allowed memory size of 536870912 bytes exhausted (tried to allocate 83886080 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php on line 66
+[21-Feb-2021 02:03:40 UTC] PHP Fatal error:  Allowed memory size of 536870912 bytes exhausted (tried to allocate 83886080 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php on line 66
+[21-Feb-2021 02:05:55 UTC] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 41943040 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php on line 66
+[21-Feb-2021 02:06:20 UTC] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 41943040 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php on line 66
+[21-Feb-2021 02:06:31 UTC] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 41943040 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php on line 66
+[21-Feb-2021 02:06:48 UTC] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 41943040 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php on line 66
+[21-Feb-2021 02:08:29 UTC] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 41943040 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php on line 66
+[21-Feb-2021 02:08:54 UTC] PHP Fatal error:  Allowed memory size of 524288000 bytes exhausted (tried to allocate 83886080 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php on line 66
+[21-Feb-2021 02:09:31 UTC] PHP Fatal error:  Allowed memory size of 524288000 bytes exhausted (tried to allocate 83886080 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Collection/Memory.php on line 66
+[21-Feb-2021 02:10:21 UTC] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 33554440 bytes) in /home/ceusjice/public_html/control/control/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Worksheet/Worksheet.php on line 1356
+[22-May-2021 07:34:10 UTC] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 1052774400 bytes) in /home/ceusjice/public_html/control/control/app/Http/Controllers/AlumnoController.php on line 97
+[22-May-2021 07:35:45 UTC] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 1052774400 bytes) in /home/ceusjice/public_html/control/control/app/Http/Controllers/AlumnoController.php on line 97
+[22-May-2021 07:36:56 UTC] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 1052774400 bytes) in /home/ceusjice/public_html/control/control/app/Http/Controllers/AlumnoController.php on line 97
+[22-May-2021 07:39:16 UTC] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 1052774400 bytes) in /home/ceusjice/public_html/control/control/app/Http/Controllers/AlumnoController.php on line 97
+[22-May-2021 07:41:28 UTC] PHP Fatal error:  Allowed memory size of 1073741824 bytes exhausted (tried to allocate 1052774400 bytes) in /home/ceusjice/public_html/control/control/app/Http/Controllers/AlumnoController.php on line 97
+[09-Jan-2022 08:19:52 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/ceusjice/public_html/control/control/app/Http/Controllers/OrdenController.php on line 157
+[09-Jan-2022 08:20:28 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/ceusjice/public_html/control/control/app/Http/Controllers/OrdenController.php on line 157
+[15-Mar-2022 04:22:11 UTC] PHP Warning:  require(/home/controlpagos/public_html/public/../control/vendor/autoload.php): failed to open stream: No such file or directory in /home/controlpagos/public_html/public/index.php on line 34
+[15-Mar-2022 04:22:11 UTC] PHP Warning:  require(/home/controlpagos/public_html/public/../control/vendor/autoload.php): failed to open stream: No such file or directory in /home/controlpagos/public_html/public/index.php on line 34
+[15-Mar-2022 04:22:11 UTC] PHP Fatal error:  require(): Failed opening required '/home/controlpagos/public_html/public/../control/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home/controlpagos/public_html/public/index.php on line 34
