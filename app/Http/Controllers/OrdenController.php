@@ -407,10 +407,11 @@ class OrdenController extends Controller
         }      
     }
 
-
-
-
-
+    public function removeColegiaturasPeriodoActual($alumnoId){
+        $result = ordenes::where('Alumno_id', $alumnoId)->where('Fecha_creacion','>=','NOW()')->where('Estatus', 0)->delete();
+        
+        return $result;
+    }
 
     function creationOrdenValidation($descripcion,$alumnoId)
     {

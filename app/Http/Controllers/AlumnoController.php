@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Alumnos;
 use App\Models\Alumno_relaciones;
 use App\Http\Controllers\OrdenController;
-use App\Http\Controllers\AlumnoController;
+use App\Models\Ordenes;
 use Illuminate\Support\Facades\DB;
 use URL;
 
@@ -432,8 +432,10 @@ class AlumnoController extends Controller
         }
         return $result;
     }
-    function updateDPAlumno($datos){
+    function updateDPAlumno($datos,$actualizarColegiatura){
         $result = '';
+        $OrdenController = new OrdenController;
+
         try{
             alumnos::where('Id', $datos['id'])->update(['Nombre' => $datos['nombre'],
                                                                   'Apellido_materno' => $datos['apellidoMaterno'],
@@ -454,7 +456,11 @@ class AlumnoController extends Controller
                                                                   'Concepto_titulacion_id' => $datos['conceptoTitulacion'],
                                                                   'Concepto_inscripcion_id'=> $datos['conceptoInscripcion'],
                                                                   'Concepto_cuota_id'=> $datos['conceptoCuota']
-                                                                 ]);                                                            
+                                                                 ]);
+            if($actualizarColegiatura){
+                $OrdenController->removeColegiaturasPeriodoActual($datos['id']);
+                $OrdenController->createOrdenAlumno($datos['id'],$datos['fechaInicio'].'-01');
+            }
             $result = ['success','¡Alumno editado exitosamente!'];
         }catch(\Illuminate\Database\QueryException $e){
             print_r($e->errorInfo);
