@@ -408,9 +408,9 @@ class OrdenController extends Controller
     }
 
     public function removeColegiaturasPeriodoActual($alumnoId){
-        DB::enableQueryLog();
-        ordenes::where('Alumno_id', $alumnoId)->where('Fecha_creacion','>=','NOW()')->where('Estatus', 0)->delete();
-        dd(DB::getQueryLog());
+        // DB::enableQueryLog();
+        DB::delete('select * from `ordenes` where `Alumno_id` = ? and `Fecha_creacion` >= NOW() and `Estatus` = ?',[$alumnoId,0]);
+        // dd(DB::getQueryLog());
     }
 
     function creationOrdenValidation($descripcion,$alumnoId)
