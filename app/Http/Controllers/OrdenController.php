@@ -418,7 +418,7 @@ class OrdenController extends Controller
         $periodoActual = DB::select($periodoActualQuery);
 
         if(count($periodoActual) > 0){
-            DB::delete('delete from ordenes where Alumno_id = ? and Fecha_creacion >= ? and Estatus = ?',[$alumnoId,$periodoActual[0]['Fecha_inicio'],0]);
+            DB::delete('delete from ordenes where Alumno_id = ? and Fecha_creacion >= ? and Estatus = ?',[$alumnoId,$periodoActual[0]->Fecha_inicio,0]);
         }
     }
 
