@@ -972,7 +972,7 @@
             Swal.fire({
                 title: `Actualizar colegiaturas`,
                 html: `¿Desea regenerar las colegiaturas del actual periodo?`,
-                icon: 'warning',
+                icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#1f3047',
                 cancelButtonColor: '#d92550',
@@ -982,9 +982,15 @@
                 if (result.isConfirmed) {
                     actualizarColegiatura = true;
                 }
+                submitDatos(actualizarColegiatura);
+                return;
             });
+        }else{
+            submitDatos(actualizarColegiatura);
+            return;
         }
-
+    }
+    function submitDatos(actualizarColegiatura){
         $('.loader').show();
         let nombre          = $('#nombre').val();
         let apellidoPaterno = $('#apellido_paterno').val();
