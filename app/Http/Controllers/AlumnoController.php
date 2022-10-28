@@ -87,7 +87,7 @@ class AlumnoController extends Controller
         $grupos         = DB::select('SELECT * FROM grupos ');
         $conceptos      = DB::select('SELECT * FROM conceptos WHERE Tipo ="colegiatura" AND Estatus = 1 ORDER BY Nombre ASC ');
         $titulaciones   = DB::select('SELECT * FROM conceptos WHERE Tipo ="titulacion" AND Estatus = 1 ');
-        $inscripciones  = DB::select('SELECT * FROM conceptos WHERE Tipo ="inscripcion" AND Estatus = 1 ');
+        $inscripciones  = DB::select('SELECT * FROM conceptos WHERE Tipo ="inscripcion" AND Estatus = 1 ORDER BY Nombre ASC ');
         $cuotas         = DB::select('SELECT * FROM conceptos WHERE Tipo ="cuota-personalizada-anual" AND Estatus = 1 ');
         $generaciones   = DB::select('SELECT * FROM generaciones WHERE Estatus = 1 ORDER BY Nombre DESC ');
         $informacion    = DB::select('SELECT * FROM alumno_relaciones WHERE Alumno_Id = :Id', ['Id' => $alumnoId]);
@@ -460,7 +460,7 @@ class AlumnoController extends Controller
 
             if($actualizarColegiatura == 'true'){
                 $OrdenController->removeColegiaturasPeriodoActual($datos['id']);
-                //$OrdenController->createOrdenAlumno($datos['id'],date('Y-m-d'));
+                $OrdenController->createOrdenAlumno($datos['id'],date('Y-m-d'));
             }
             $result = ['success','¡Alumno editado exitosamente!'];
         }catch(\Illuminate\Database\QueryException $e){
