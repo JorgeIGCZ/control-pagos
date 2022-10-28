@@ -244,10 +244,12 @@
         });
 
         $('.datos-personales').on('click', '.save', function(){
-            editDatos();
+            const tipo = "personales";
+            editDatos(tipo);
         });
         $('.datos-academicos').on('click', '.save', function(){
-            editDatos();
+            const tipo = "academicos";
+            editDatos(tipo);
         });
 
         $('#pagos').on('click', '.edit_pago', function(){
@@ -963,7 +965,26 @@
             });
         }
     }
-    function editDatos(){
+    function editDatos(tipo){
+        let actualizarColegiatura = false;
+        
+        if(tipo === 'academicos'){
+            Swal.fire({
+                title: `Actualizar colegiaturas`,
+                html: `¿Desea regenerar las colegiaturas del actual periodo?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#1f3047',
+                cancelButtonColor: '#d92550',
+                confirmButtonText: `Actualizar!`,
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    actualizarColegiatura = true;
+                }
+            });
+        }
+
         $('.loader').show();
         let nombre          = $('#nombre').val();
         let apellidoPaterno = $('#apellido_paterno').val();
@@ -1011,7 +1032,8 @@
             data:
             {
                 '_token' : '{{ csrf_token() }}',
-                'datos': datos
+                'datos': datos,
+                'actualizarColegiatura' actualizarColegiatura
             },
             success: function (result) {
                 $('.loader').hide();
@@ -1075,7 +1097,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-4 datos-personales">
                                                 <label for="inputEmail4">Nombre</label>
-                                                <input type="test" class="form-control" id="nombre" disabled="disabled" value="@php echo($alumno[0]->Nombre); @endphp">
+                                                <input type="text" class="form-control" id="nombre" disabled="disabled" value="@php echo($alumno[0]->Nombre); @endphp">
                                                 @if (session()->get('user_roles')['Alumnos']->Modificar == 'Y')<button class="edit-save-btn edit" input="nombre">Editar</button> @endif
                                             </div>
                                             <div class="form-group col-md-4 datos-personales">
