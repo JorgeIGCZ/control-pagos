@@ -164,6 +164,8 @@ class OrdenController extends Controller
 
         $periodos = DB::select($periodosQuery);
 
+        dd($periodos);
+
         foreach($periodos as $periodo){
             $fechaInicioDate       = new DateTime($periodo->Fecha_inicio);
             $fechaFinalizacionDate = new DateTime($periodo->Fecha_finalizacion);
