@@ -457,10 +457,10 @@ class AlumnoController extends Controller
                                                                   'Concepto_inscripcion_id'=> $datos['conceptoInscripcion'],
                                                                   'Concepto_cuota_id'=> $datos['conceptoCuota']
                                                                  ]);
-                                                                 
+
             if($actualizarColegiatura == 'true'){
                 $OrdenController->removeColegiaturasPeriodoActual($datos['id']);
-                $OrdenController->createOrdenAlumno($datos['id'],$datos['fechaInicio'].'-01');
+                $OrdenController->createOrdenAlumno($datos['id'],date('Y-m-d'));
             }
             $result = ['success','¡Alumno editado exitosamente!'];
         }catch(\Illuminate\Database\QueryException $e){
