@@ -460,7 +460,7 @@ class AlumnoController extends Controller
 
             if($actualizarColegiatura == 'true'){
                 $OrdenController->removeColegiaturasPeriodoActual($datos['id']);
-                $OrdenController->createOrdenAlumno($datos['id'],date('Y-m-d'));
+                //$OrdenController->createOrdenAlumno($datos['id'],date('Y-m-d'));
             }
             $result = ['success','¡Alumno editado exitosamente!'];
         }catch(\Illuminate\Database\QueryException $e){
