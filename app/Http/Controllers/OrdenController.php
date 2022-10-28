@@ -163,8 +163,8 @@ class OrdenController extends Controller
                  'WHERE G.Estatus = 1 AND G.Fecha_inicio <="'.$now.'" AND CP.Fecha_inicio <= "'.$now.'" AND AR.Alumno_id    = '.$alummoId.' ORDER BY Periodo_numero ASC '; 
 
         $periodos = DB::select($periodosQuery);
-
-        dd($periodos);
+        echo($fechaInicio);
+        dd($alummoId);
 
         foreach($periodos as $periodo){
             $fechaInicioDate       = new DateTime($periodo->Fecha_inicio);
