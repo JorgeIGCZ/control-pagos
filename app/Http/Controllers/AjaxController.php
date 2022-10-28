@@ -82,7 +82,8 @@ class AjaxController extends Controller
     
     function updateDPAlumno(Request $request){
         $datos = $_POST['datos'];
-        $result = $this->AlumnoController->updateDPAlumno($datos);
+        $actualizarColegiatura = $_POST['actualizarColegiatura'];
+        $result = $this->AlumnoController->updateDPAlumno($datos,$actualizarColegiatura);
         return $result;
     }
     function updateGrupoAlumnos(Request $request){
