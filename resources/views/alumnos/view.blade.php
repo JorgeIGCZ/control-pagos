@@ -971,7 +971,7 @@
         if(tipo === 'academicos'){
             Swal.fire({
                 title: `Actualizar colegiaturas`,
-                html: `¿Desea regenerar las colegiaturas del actual periodo?`,
+                html: `¿Desea actualizar las colegiaturas del actual periodo?`,
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#1f3047',

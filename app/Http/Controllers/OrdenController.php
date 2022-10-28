@@ -408,7 +408,18 @@ class OrdenController extends Controller
     }
 
     public function removeColegiaturasPeriodoActual($alumnoId){
-        DB::delete('delete from ordenes where Alumno_id = ? and Fecha_creacion >= NOW() and Estatus = ?',[$alumnoId,0]);
+        $periodoActualQuery = ''.
+                         'SELECT CP.Fecha_inicio,CP.Fecha_finalizacion                       '.
+                         'FROM alumno_relaciones        AR                                   '.
+                         'LEFT JOIN generaciones         G ON G.Id        = AR.Generacion_id '.
+                         'LEFT JOIN generacion_periodos CP ON CP.Generacion_id = G.Id        '.
+                         'WHERE G.Estatus = 1 AND G.Fecha_inicio <= NOW() AND CP.Fecha_inicio <= NOW() AND AR.Alumno_id = "'.$alumnoId.'" ORDER BY Periodo_numero ASC ';
+                         
+        $periodoActual = DB::select($periodoActualQuery);
+
+        if(count($periodoActual) > 0){
+            DB::delete('delete from ordenes where Alumno_id = ? and Fecha_creacion >= ? and Estatus = ?',[$alumnoId,$periodoActual[0]['Fecha_inicio'],0]);
+        }
     }
 
     function creationOrdenValidation($descripcion,$alumnoId)
