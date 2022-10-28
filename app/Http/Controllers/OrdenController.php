@@ -172,10 +172,10 @@ class OrdenController extends Controller
             $months                = ($months == 0 ? 1 : $months);
 
             $isLastPeriodo         = (($periodo->Fecha_inicio < $now) && ($periodo->Fecha_inicio == $periodos[count($periodos)-1]->Fecha_inicio)) ? true : false;
-            $this->createInscripcion($periodo,$fechaInicio,$isLastPeriodo);
+            $this->createInscripcion($periodo,$periodo->Fecha_inicio,$isLastPeriodo);
 
             if($periodo->Concepto_cuota_id > 0){
-                $this->createCuota($periodo,$fechaInicio,$isLastPeriodo);
+                $this->createCuota($periodo,$periodo->Fecha_inicio,$isLastPeriodo);
             }
 
             for($i = 0;$i < $months; $i++){
