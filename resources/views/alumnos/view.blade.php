@@ -967,7 +967,7 @@
     }
     function editDatos(tipo){
         let actualizarColegiatura = false;
-        
+
         if(tipo === 'academicos'){
             Swal.fire({
                 title: `Actualizar colegiaturas`,
@@ -1033,7 +1033,7 @@
             {
                 '_token' : '{{ csrf_token() }}',
                 'datos': datos,
-                'actualizarColegiatura' actualizarColegiatura
+                'actualizarColegiatura' : actualizarColegiatura
             },
             success: function (result) {
                 $('.loader').hide();
