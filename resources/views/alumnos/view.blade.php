@@ -976,8 +976,8 @@
                 showCancelButton: true,
                 confirmButtonColor: '#1f3047',
                 cancelButtonColor: '#d92550',
-                confirmButtonText: `Actualizar!`,
-                cancelButtonText: 'Cancelar'
+                confirmButtonText: `Guardar y actualizar`,
+                cancelButtonText: 'Guardar'
             }).then((result) => {
                 if (result.isConfirmed) {
                     actualizarColegiatura = true;
