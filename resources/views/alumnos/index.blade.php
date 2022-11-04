@@ -519,7 +519,7 @@
             let alumnoId = $('.nombre-alumno-pago').attr('alumnoId');
             let tipo     = $('#concepto').children("option:selected").attr('tipo');
             let mensualidad     = $(this).children("option:selected").val();
-            let mensualidadTipo = $(this).children("option:selected").val('tipo');
+            let mensualidadTipo = $(this).children("option:selected").attr('tipo');
             if(mensualidad > 0){
                 if(tipo == 'colegiatura'){
                     if(mensualidadTipo == 'colegiatura'){
