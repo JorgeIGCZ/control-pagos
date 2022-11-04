@@ -1022,7 +1022,7 @@ class PagoController extends Controller
                           'WHERE AR.Alumno_Id = :Id AND O.Estatus <> 2 ORDER BY ABS( DATEDIFF( O.Fecha_creacion, NOW() ) ) ';   
         */
         $mensualidadesQuery = ''.
-                          'SELECT O.Id,O.Descripcion,O.Fecha_creacion                                              '.                                            
+                          'SELECT O.Id,O.Descripcion,O.Fecha_creacion,C.Tipo                                       '.                                            
                           'FROM      alumnos              A                                                        '.                                      
                           'LEFT JOIN ordenes              O ON O.Alumno_id = A.Id                                  '.
                           'LEFT JOIN conceptos            C ON C.Id           = O.Concepto_id                      '.

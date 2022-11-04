@@ -519,9 +519,12 @@
             let alumnoId = $('.nombre-alumno-pago').attr('alumnoId');
             let tipo     = $('#concepto').children("option:selected").attr('tipo');
             let mensualidad     = $(this).children("option:selected").val();
+            let mensualidadTipo = $(this).children("option:selected").val('tipo');
             if(mensualidad > 0){
                 if(tipo == 'colegiatura'){
-                    getBeca(alumnoId,mensualidad);
+                    if(mensualidadTipo == 'colegiatura'){
+                        getBeca(alumnoId,mensualidad);
+                    }
 
                     if(descuentoIsValid(alumnoId,mensualidad)){
                         $('.descuento-pronto-pago-container').show();
@@ -1053,7 +1056,7 @@
     function createMensualidadesList(mensualidades){
         let options = '';
         for(let i = 0; i < mensualidades.length;i++){
-            options += `<option class="custom" value="${mensualidades[i].Id}" >${mensualidades[i].Descripcion}</option>`
+            options += `<option class="custom" tipo="${mensualidades[i].Tipo}" value="${mensualidades[i].Id}" >${mensualidades[i].Descripcion}</option>`
         }
         $('#mensualidad .custom').remove();
         $(options).appendTo('#mensualidad');
