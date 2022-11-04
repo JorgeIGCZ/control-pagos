@@ -516,6 +516,7 @@
         }
 
         $('#mensualidad').change(function(e){
+            clearPago()
             let alumnoId = $('.nombre-alumno-pago').attr('alumnoId');
             let tipo     = $('#concepto').children("option:selected").attr('tipo');
             let mensualidad     = $(this).children("option:selected").val();
