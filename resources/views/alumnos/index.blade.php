@@ -516,7 +516,7 @@
         }
 
         $('#mensualidad').change(function(e){
-            clearPago()
+            clearCantidades()
             let alumnoId = $('.nombre-alumno-pago').attr('alumnoId');
             let tipo     = $('#concepto').children("option:selected").attr('tipo');
             let mensualidad     = $(this).children("option:selected").val();
@@ -796,28 +796,7 @@
             let tipo   = $(this).children("option:selected").attr('tipo');
             let precio = ($(this).children("option:selected").attr('precio') == undefined) ? 0 : $(this).children("option:selected").attr('precio');
             let alumnoId = $('.nombre-alumno-pago').attr('alumnoId');
-            $('#cantidad-beca').val(formatter.format(0));
-            $('#cantidad-beca').attr('value',0);
-            $('#cantidad-beca').attr('becaId',0);
-            $('#cantidad-descuento').val(formatter.format(0));
-            $('#cantidad-descuento').attr('value',0);
-
-
-            $('#cantidad-recargo').val(formatter.format(0));
-            $('#cantidad-recargo').attr('value',0);
-
-            $('#cantidad-beca-t').val(formatter.format(0));
-            $('#cantidad-beca-t').attr('value',0);
-            $('#cantidad-descuento-t').val(formatter.format(0));
-            $('#cantidad-descuento-t').attr('value',0);
-
-            $('#cantidad-recargo-t').val(formatter.format(0));
-            $('#cantidad-recargo-t').attr('value',0);
-
-            $('#resta').val(formatter.format(0));
-            $('#resta').attr('value',0);
-            $('#cantidad-pago').val(formatter.format(0));
-            $('#cantidad-pago').attr('value',0);
+            clearCantidades();
             
             displayMensualidadContainer(tipo);
             displayPrecio(precio);
@@ -934,6 +913,31 @@
         $('#resta').val(formatter.format(0));
         $('#resta').attr('value',0);
         $('#notas').val('');
+    }
+    function clearCantidades(){
+        $('#cantidad-beca').val(formatter.format(0));
+        $('#cantidad-beca').attr('value','0.00');
+        $('#cantidad-beca').attr('becaId',0);
+        $('#cantidad-descuento').val(formatter.format(0));
+        $('#cantidad-descuento').attr('value','0.00');
+
+        $('#cantidad-recargo').val(formatter.format(0));
+        $('#cantidad-recargo').attr('value','0.00');
+
+
+        $("#descuento-pronto-pago").val("false");
+        $('#cantidad-pagar').val(formatter.format(0));
+        $('#cantidad-pagar').attr('value',0);
+        $('#cantidad-descuento-t').val(formatter.format(0));
+        $('#cantidad-descuento-t').attr('value',0);
+
+        $('#cantidad-recargo-t').val(formatter.format(0));
+        $('#cantidad-recargo-t').attr('value',0);
+
+        $('#cantidad-beca-t').val(formatter.format(0));
+        $('#cantidad-beca-t').attr('value',0);
+        $('#resta').val(formatter.format(0));
+        $('#resta').attr('value',0);
     }
     function savePago(pago,recargo){
         $.ajax({
