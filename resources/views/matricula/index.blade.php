@@ -32,7 +32,7 @@
                 },
                 success: function (result) {
                     $('.loader').hide();
-                    window.open('https://control.ceusjic.edu.mx/Matricula.xlsx', '_blank').focus();
+                    window.open('https://controlpagos.ceusjic.edu.mx/Matricula.xlsx', '_blank').focus();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     $('.loader').hide();

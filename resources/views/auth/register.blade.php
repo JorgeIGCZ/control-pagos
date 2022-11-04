@@ -1,2 +1,2 @@
 <?php 
-header("Location: https://control.ceusjic.edu.mx/usuarios/");
+header("Location: https://controlpagos.ceusjic.edu.mx/usuarios/");
