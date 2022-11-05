@@ -523,9 +523,9 @@
             let mensualidadTipo = $(this).children("option:selected").attr('tipo');
             if(mensualidad > 0){
                 if(tipo == 'colegiatura'){
-                    if(mensualidadTipo == 'colegiatura'){
+                    //if(mensualidadTipo == 'colegiatura'){
                         getBeca(alumnoId,mensualidad);
-                    }
+                    //}
 
                     if(descuentoIsValid(alumnoId,mensualidad)){
                         $('.descuento-pronto-pago-container').show();
