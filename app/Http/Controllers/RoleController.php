@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Roles_resources;
 use App\Models\Roles;
-use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\DB;
 use URL;
 
