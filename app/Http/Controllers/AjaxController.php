@@ -174,7 +174,8 @@ class AjaxController extends Controller
     }
     function getBecaAlumno(Request $request){
         $alumno      = $_POST['alumno'];
-        $result = $this->AlumnoController->getBecaAlumno($alumno);
+        $orden      = $_POST['mensualidad'];
+        $result = $this->AlumnoController->getBecaAlumno($alumno,$orden);
         return $result;
     }
 

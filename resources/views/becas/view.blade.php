@@ -538,7 +538,7 @@
                 $('.loader').hide();
                 let periodos = "";
                 for (periodo of result.periodos) {
-                    periodos += `<option class="options" value="${periodo.Id}" generacion="${periodo.Generacion_id}">${periodo.fecha}</option>`;
+                    periodos += `<option class="options" value="${periodo.Periodo_numero}" generacion="${periodo.Generacion_id}">${periodo.fecha}</option>`;
                 }
                 $('#periodo').prepend(periodos);
                 $("#concepto-nombre").val(result.concepto[0].Nombre);
