@@ -285,7 +285,7 @@ class AlumnoController extends Controller
                         'LEFT JOIN generacion_periodos CP ON CP.Id = BA.Periodo_id         '.
                         'LEFT JOIN becas           B ON B.Id = BA.Beca_id                 '.
                         'WHERE A.Id = '.$alumno['id'].' and BA.Periodo_id = '.$alumnos[0]->Periodo_numero;
-        
+        dd($alumnosQuery);
         $alumnos = DB::select($alumnosQuery);
         return ['data'=>$alumnos];
     }
