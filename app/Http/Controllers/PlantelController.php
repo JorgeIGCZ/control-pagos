@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Planteles;
-use App\Http\Controllers\PlantelController;
 use Illuminate\Support\Facades\DB;
 use URL;
 
