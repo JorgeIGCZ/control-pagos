@@ -18,19 +18,6 @@ class PlantelapiController extends Controller
      */
     public function index()
     {
-        try {
-            $planteles = PlantelResource::collection(Planteles::all());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $planteles,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
     }
 
     /**
@@ -47,13 +34,18 @@ class PlantelapiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         try {
-            $plantel = PlantelResource::collection(Planteles::where('Id',$id)->get());
+            $id = $request->input('id');
+
+            $plantelesQuery = Planteles::get();
+            $plantelesQuery = !is_null($id) ? $plantelesQuery->where('Id',$id) : $plantelesQuery;
+
+            $plantel = PlantelResource::collection($plantelesQuery);
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],

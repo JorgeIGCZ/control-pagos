@@ -18,51 +18,6 @@ class GrupoapiController extends Controller
      */
     public function index()
     {
-        try {
-            $grupos = GrupoResource::collection(Grupos::all());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $grupos,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  $plantel
-     * @param  $nivel
-     * @param  $licenciatura
-     * @param  $sistema
-     * @return \Illuminate\Http\Response
-     */
-    public function busqueda($plantel,$nivel,$licenciatura,$sistema,$estatus){
-        try {
-            $niveles = GrupoResource::collection(
-                Grupos::where('Plantel_id',$plantel)
-                ->where('Nivel_id',$nivel)
-                ->where('Licenciatura_id',$licenciatura)
-                ->where('Sistema_id',$sistema)
-                ->where('Estatus',$estatus)
-                ->get()
-            );
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $niveles,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
     }
 
     /**
@@ -79,13 +34,28 @@ class GrupoapiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         try {
-            $grupo = GrupoResource::collection(Grupos::where('Id',$id)->get());
+            $id           = $request->input('id');
+            $plantel      = $request->input('plantel');
+            $nivel        = $request->input('nivel');
+            $licenciatura = $request->input('licenciatura');
+            $sistema      = $request->input('sistema');
+            $estatus      = $request->input('estatus');
+
+            $gruposQuery = Grupos::get();
+            $gruposQuery = !is_null($id)      ? $gruposQuery->where('Id',$id) : $gruposQuery;
+            $gruposQuery = !is_null($plantel) ? $gruposQuery->where('Plantel_id',$plantel) : $gruposQuery;
+            $gruposQuery = !is_null($nivel) ? $gruposQuery->where('Nivel_id',$nivel) : $gruposQuery;
+            $gruposQuery = !is_null($licenciatura) ? $gruposQuery->where('Licenciatura_id',$licenciatura) : $gruposQuery;
+            $gruposQuery = !is_null($sistema) ? $gruposQuery->where('Sistema_id',$sistema) : $gruposQuery;
+            $gruposQuery = !is_null($estatus) ? $gruposQuery->where('Estatus',$estatus) : $gruposQuery;
+
+            $grupos = GrupoResource::collection($gruposQuery);
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],
@@ -94,7 +64,7 @@ class GrupoapiController extends Controller
         }
 
         return response()->json([
-            'data' => $grupo,
+            'data' => $grupos,
             'message' => 'Succeed'
         ], JsonResponse::HTTP_OK);
     }

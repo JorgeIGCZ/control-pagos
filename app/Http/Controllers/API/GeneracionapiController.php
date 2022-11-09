@@ -18,41 +18,6 @@ class GeneracionapiController extends Controller
      */
     public function index()
     {
-        try {
-            $generaciones = GeneracionResource::collection(Generaciones::all());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $generaciones,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  $plantel\
-     * @return \Illuminate\Http\Response
-     */
-    public function busqueda($plantel,$estatus){
-        try {
-            $niveles = GeneracionResource::collection(Generaciones::where('Plantel_id',$plantel)->where('Estatus',$estatus)->get());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $niveles,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
     }
 
     /**
@@ -69,13 +34,22 @@ class GeneracionapiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         try {
-            $generacion = GeneracionResource::collection(Generaciones::where('Id',$id)->get());
+            $id      = $request->input('id');
+            $plantel = $request->input('plantel');
+            $estatus = $request->input('estatus');
+
+            $geneacionesQuery = Generaciones::get();
+            $geneacionesQuery = !is_null($id)      ? $geneacionesQuery->where('Id',$id) : $geneacionesQuery;
+            $geneacionesQuery = !is_null($plantel) ? $geneacionesQuery->where('Plantel_id',$plantel) : $geneacionesQuery;
+            $geneacionesQuery = !is_null($estatus) ? $geneacionesQuery->where('Estatus',$estatus) : $geneacionesQuery;
+
+            $generacion = GeneracionResource::collection($geneacionesQuery);
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],

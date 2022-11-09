@@ -18,42 +18,6 @@ class LicenciaturaapiController extends Controller
      */
     public function index()
     {
-        try {
-            $licenciaturas = LicenciaturaResource::collection(Licenciaturas::all());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $licenciaturas,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  $plantel
-     * @param  $nivel
-     * @return \Illuminate\Http\Response
-     */
-    public function busqueda($plantel,$nivel,$estatus){
-        try {
-            $niveles = LicenciaturaResource::collection(Licenciaturas::where('Plantel_id',$plantel)->where('Nivel_id',$nivel)->where('Estatus',$estatus)->get());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $niveles,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
     }
 
     /**
@@ -70,13 +34,24 @@ class LicenciaturaapiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         try {
-            $licenciatura = LicenciaturaResource::collection(Licenciaturas::where('Id',$id)->get());
+            $id      = $request->input('id');
+            $plantel = $request->input('plantel');
+            $nivel   = $request->input('nivel');
+            $estatus = $request->input('estatus');
+
+            $licenciaturasQuery = Licenciaturas::get();
+            $licenciaturasQuery = !is_null($id)      ? $licenciaturasQuery->where('Id',$id) : $licenciaturasQuery;
+            $licenciaturasQuery = !is_null($plantel) ? $licenciaturasQuery->where('Plantel_id',$plantel) : $licenciaturasQuery;
+            $licenciaturasQuery = !is_null($nivel)   ? $licenciaturasQuery->where('Nivel_id',$plantel) : $licenciaturasQuery;
+            $licenciaturasQuery = !is_null($estatus) ? $licenciaturasQuery->where('Estatus',$estatus) : $licenciaturasQuery;
+
+            $licenciatura = LicenciaturaResource::collection($licenciaturasQuery);
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],

@@ -18,56 +18,6 @@ class AlumnoapiController extends Controller
      */
     public function index()
     {
-        try {
-            $alumnos = AlumnoResource::collection(Alumnos::all());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $alumnos,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  $plantel
-     * @param  $nivel
-     * @param  $licenciatura
-     * @param  $sistema
-     * @param  $grupo
-     * @param  $generacion
-     * @return \Illuminate\Http\Response
-     */
-    public function busqueda($plantel,$nivel,$licenciatura,$sistema,$grupo,$generacion,$estatus){
-        try {
-            $niveles = AlumnoResource::collection(
-                Alumnos::whereHas('alumnoRelaciones', function ($query) use ($plantel,$nivel,$licenciatura,$sistema,$grupo,$generacion) {
-                    $query
-                        ->where('Plantel_id',$plantel)
-                        ->where('Nivel_id',$nivel)
-                        ->where('Licenciatura_id',$licenciatura)
-                        ->where('Sistema_id',$sistema)
-                        ->where('Grupo_id',$grupo)
-                        ->where('Generacion_id',$generacion);
-                })->where('Estatus',$estatus)->get()
-            );
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $niveles,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
     }
 
     /**
@@ -84,13 +34,31 @@ class AlumnoapiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         try {
-            $generacion = AlumnoResource::collection(Alumnos::where('Id',$id)->get());
+            $id           = $request->input('id');
+            $plantel      = $request->input('plantel');
+            $nivel        = $request->input('nivel');
+            $licenciatura = $request->input('licenciatura');
+            $sistema      = $request->input('sistema');
+            $grupo        = $request->input('grupo');
+            $estatus      = $request->input('estatus');
+
+            $alumnosQuery = Alumnos::get();
+            $alumnosQuery = !is_null($id)      ? $alumnosQuery->where('Id',$id) : $alumnosQuery;
+            $alumnosQuery = !is_null($plantel) ? $alumnosQuery->where('Plantel_id',$plantel) : $alumnosQuery;
+            $alumnosQuery = !is_null($nivel) ? $alumnosQuery->where('Nivel_id',$nivel) : $alumnosQuery;
+            $alumnosQuery = !is_null($licenciatura) ? $alumnosQuery->where('Licenciatura_id',$licenciatura) : $alumnosQuery;
+            $alumnosQuery = !is_null($sistema) ? $alumnosQuery->where('Sistema_id',$sistema) : $alumnosQuery;
+            $alumnosQuery = !is_null($grupo) ? $alumnosQuery->where('Sistema_id',$sistema) : $alumnosQuery;
+            $alumnosQuery = !is_null($estatus) ? $alumnosQuery->where('Estatus',$estatus) : $alumnosQuery;
+
+
+            $alumnos = AlumnoResource::collection($alumnosQuery);
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],
@@ -99,7 +67,7 @@ class AlumnoapiController extends Controller
         }
 
         return response()->json([
-            'data' => $generacion,
+            'data' => $alumnos,
             'message' => 'Succeed'
         ], JsonResponse::HTTP_OK);
     }

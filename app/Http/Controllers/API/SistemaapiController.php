@@ -18,19 +18,6 @@ class SistemaapiController extends Controller
      */
     public function index()
     {
-        try {
-            $sistemas = SistemaResource::collection(Sistemas::all());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $sistemas,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
     }
 
     /**
@@ -47,13 +34,18 @@ class SistemaapiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         try {
-            $sistema = SistemaResource::collection(Sistemas::where('Id',$id)->get());
+            $id = $request->input('id');
+
+            $sistemasQuery = Sistemas::get();
+            $sistemasQuery = !is_null($id) ? $sistemasQuery->where('Id',$id) : $sistemasQuery;
+
+            $sistema = SistemaResource::collection($sistemasQuery);
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],

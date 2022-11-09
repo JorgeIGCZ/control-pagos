@@ -18,19 +18,6 @@ class NivelapiController extends Controller
      */
     public function index()
     {
-        try {
-            $niveles = NivelResource::collection(Niveles::all());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $niveles,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
     }
 
     /**
@@ -39,20 +26,8 @@ class NivelapiController extends Controller
      * @param  $plantel
      * @return \Illuminate\Http\Response
      */
-    public function busqueda($plantel,$estatus){
-        try {
-            $niveles = NivelResource::collection(Niveles::where('Plantel_id',$plantel)->where('Estatus',$estatus)->get());
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'message'=>$e->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return response()->json([
-            'data' => $niveles,
-            'message' => 'Succeed'
-        ], JsonResponse::HTTP_OK);
+    public function busqueda(Request $request){
+        //
     }
 
     /**
@@ -69,13 +44,22 @@ class NivelapiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
         try {
-            $nivel = NivelResource::collection(Niveles::where('Id',$id)->get());
+            $id      = $request->input('id');
+            $plantel = $request->input('plantel');
+            $estatus = $request->input('estatus');
+
+            $nivelesQuery = Niveles::get();
+            $nivelesQuery = !is_null($id)      ? $nivelesQuery->where('Id',$id) : $nivelesQuery;
+            $nivelesQuery = !is_null($plantel) ? $nivelesQuery->where('Plantel_id',$plantel) : $nivelesQuery;
+            $nivelesQuery = !is_null($estatus) ? $nivelesQuery->where('Estatus',$estatus) : $nivelesQuery;
+
+            $niveles = NivelResource::collection($nivelesQuery);
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],
@@ -84,7 +68,7 @@ class NivelapiController extends Controller
         }
 
         return response()->json([
-            'data' => $nivel,
+            'data' => $niveles,
             'message' => 'Succeed'
         ], JsonResponse::HTTP_OK);
     }

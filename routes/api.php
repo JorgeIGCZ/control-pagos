@@ -26,27 +26,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('plantel', PlantelapiController::class);
-//Route::get('disponibilidad/actividadDisponibilidad/{id}/{fecha}/{horario}',[DisponibilidadApiController::class,'actividadDisponibilidad']);
+Route::get('plantel',[PlantelapiController::class,'show']);
 
 // -plantel
-Route::apiResource('nivel', NivelapiController::class);
-Route::get('nivel/busqueda/{plantel}/{estatus}',[NivelapiController::class,'busqueda']);
+Route::get('nivel',[NivelapiController::class,'show']);
 
-Route::apiResource('sistema', SistemaapiController::class);
+Route::get('sistema',[SistemaapiController::class,'show']);
 
 // -plantel, -nivel
-Route::apiResource('licenciatura', LicenciaturaapiController::class);
-Route::get('licenciatura/busqueda/{plantel}/{nivel}/{estatus}',[LicenciaturaapiController::class,'busqueda']);
+Route::get('licenciatura',[LicenciaturaapiController::class,'show']);
 
 // -plantel
-Route::apiResource('generacion', GeneracionapiController::class);
-Route::get('generacion/busqueda/{plantel}/{estatus}',[GeneracionapiController::class,'busqueda']);
+Route::get('generacion',[GeneracionapiController::class,'show']);
 
 // -plantel, -nivel, -licenciatura, -sistema
-Route::apiResource('grupo', GrupoapiController::class);
-Route::get('grupo/busqueda/{plantel}/{nivel}/{licenciatura}/{sistema}/{estatus}',[GrupoapiController::class,'busqueda']);
+Route::get('grupo',[GrupoapiController::class,'show']);
 
 // -plantel, -nivel, -licenciatura, -sistema, -grupo, -generacion
-Route::apiResource('alumno', AlumnoapiController::class);
-Route::get('alumno/busqueda/{plantel}/{nivel}/{licenciatura}/{sistema}/{grupo}/{generacion}/{estatus}',[AlumnoapiController::class,'busqueda']);
+Route::get('alumno',[AlumnoapiController::class,'show']);
