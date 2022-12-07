@@ -5,6 +5,7 @@ use App\Http\Controllers\API\GeneracionapiController;
 use App\Http\Controllers\API\GrupoapiController;
 use App\Http\Controllers\API\LicenciaturaapiController;
 use App\Http\Controllers\API\NivelapiController;
+use App\Http\Controllers\API\PeriodoapiController;
 use App\Http\Controllers\API\PlantelapiController;
 use App\Http\Controllers\API\SistemaapiController;
 use App\Http\Resources\GeneracionResource;
@@ -36,11 +37,14 @@ Route::get('sistema',[SistemaapiController::class,'show']);
 // -plantel, -nivel
 Route::get('licenciatura',[LicenciaturaapiController::class,'show']);
 
+// -plantel, -nivel, -licenciatura, -sistema
+Route::get('grupo',[GrupoapiController::class,'show']);
+
 // -plantel
 Route::get('generacion',[GeneracionapiController::class,'show']);
 
-// -plantel, -nivel, -licenciatura, -sistema
-Route::get('grupo',[GrupoapiController::class,'show']);
+// -generacion
+Route::get('periodo',[PeriodoapiController::class,'show']);
 
 // -plantel, -nivel, -licenciatura, -sistema, -grupo, -generacion
 Route::get('alumno',[AlumnoapiController::class,'show']);
