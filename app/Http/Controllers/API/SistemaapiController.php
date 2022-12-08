@@ -45,6 +45,8 @@ class SistemaapiController extends Controller
             $sistemasQuery = Sistemas::get();
             $sistemasQuery = !is_null($id) ? $sistemasQuery->where('Id',$id) : $sistemasQuery;
 
+            $sistemasQuery = $sistemasQuery->orderBy('Nombre', 'desc');
+
             $sistema = SistemaResource::collection($sistemasQuery);
         } catch (Exception $e) {
             return response()->json([

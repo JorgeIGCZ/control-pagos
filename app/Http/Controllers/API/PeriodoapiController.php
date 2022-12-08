@@ -50,6 +50,8 @@ class PeriodoapiController extends Controller
             $periodosQuery = !is_null($generacion) ? $periodosQuery->where('Generacion_id',$generacion) : $periodosQuery;
             $periodosQuery = !is_null($estatus)    ? $periodosQuery->where('Estatus',$estatus) : $periodosQuery;
 
+            $periodosQuery = $periodosQuery->orderBy('Periodo_numero', 'desc');
+
             $periodo = PeriodoResource::collection($periodosQuery);
         } catch (Exception $e) {
             return response()->json([

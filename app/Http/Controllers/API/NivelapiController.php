@@ -59,6 +59,8 @@ class NivelapiController extends Controller
             $nivelesQuery = !is_null($plantel) ? $nivelesQuery->where('Plantel_id',$plantel) : $nivelesQuery;
             $nivelesQuery = !is_null($estatus) ? $nivelesQuery->where('Estatus',$estatus) : $nivelesQuery;
 
+            $nivelesQuery = $nivelesQuery->orderBy('Nombre', 'desc');
+
             $niveles = NivelResource::collection($nivelesQuery);
         } catch (Exception $e) {
             return response()->json([

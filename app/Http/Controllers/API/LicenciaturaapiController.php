@@ -51,6 +51,8 @@ class LicenciaturaapiController extends Controller
             $licenciaturasQuery = !is_null($nivel)   ? $licenciaturasQuery->where('Nivel_id',$plantel) : $licenciaturasQuery;
             $licenciaturasQuery = !is_null($estatus) ? $licenciaturasQuery->where('Estatus',$estatus) : $licenciaturasQuery;
 
+            $licenciaturasQuery = $licenciaturasQuery->orderBy('Nombre', 'desc');
+
             $licenciatura = LicenciaturaResource::collection($licenciaturasQuery);
         } catch (Exception $e) {
             return response()->json([

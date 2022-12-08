@@ -55,6 +55,8 @@ class GrupoapiController extends Controller
             $gruposQuery = !is_null($sistema) ? $gruposQuery->where('Sistema_id',$sistema) : $gruposQuery;
             $gruposQuery = !is_null($estatus) ? $gruposQuery->where('Estatus',$estatus) : $gruposQuery;
 
+            $gruposQuery = $gruposQuery->orderBy('Nombre', 'desc');
+
             $grupos = GrupoResource::collection($gruposQuery);
         } catch (Exception $e) {
             return response()->json([
