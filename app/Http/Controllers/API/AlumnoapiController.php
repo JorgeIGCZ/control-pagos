@@ -48,7 +48,7 @@ class AlumnoapiController extends Controller
             $grupo        = $request->input('grupo');
             $estatus      = $request->input('estatus');
 
-            $alumnosQuery = Alumnos::orderBy('Nombre', 'desc')->get();
+            $alumnosQuery = Alumnos::orderBy('Nombre', 'asc')->get();
             $alumnosQuery = !is_null($id)      ? $alumnosQuery->where('Id',$id) : $alumnosQuery;
             $alumnosQuery = !is_null($plantel) ? $alumnosQuery->where('Plantel_id',$plantel) : $alumnosQuery;
             $alumnosQuery = !is_null($nivel) ? $alumnosQuery->where('Nivel_id',$nivel) : $alumnosQuery;
