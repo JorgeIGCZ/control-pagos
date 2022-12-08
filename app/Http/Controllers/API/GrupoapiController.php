@@ -47,15 +47,13 @@ class GrupoapiController extends Controller
             $sistema      = $request->input('sistema');
             $estatus      = $request->input('estatus');
 
-            $gruposQuery = Grupos::get();
+            $gruposQuery = Grupos::orderBy('Nombre', 'desc')->get();
             $gruposQuery = !is_null($id)      ? $gruposQuery->where('Id',$id) : $gruposQuery;
             $gruposQuery = !is_null($plantel) ? $gruposQuery->where('Plantel_id',$plantel) : $gruposQuery;
             $gruposQuery = !is_null($nivel) ? $gruposQuery->where('Nivel_id',$nivel) : $gruposQuery;
             $gruposQuery = !is_null($licenciatura) ? $gruposQuery->where('Licenciatura_id',$licenciatura) : $gruposQuery;
             $gruposQuery = !is_null($sistema) ? $gruposQuery->where('Sistema_id',$sistema) : $gruposQuery;
             $gruposQuery = !is_null($estatus) ? $gruposQuery->where('Estatus',$estatus) : $gruposQuery;
-
-            $gruposQuery = $gruposQuery->orderBy('Nombre', 'desc');
 
             $grupos = GrupoResource::collection($gruposQuery);
         } catch (Exception $e) {

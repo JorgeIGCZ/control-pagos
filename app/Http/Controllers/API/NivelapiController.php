@@ -54,12 +54,10 @@ class NivelapiController extends Controller
             $plantel = $request->input('plantel');
             $estatus = $request->input('estatus');
 
-            $nivelesQuery = Niveles::get();
+            $nivelesQuery = Niveles::orderBy('Nombre', 'desc')->get();
             $nivelesQuery = !is_null($id)      ? $nivelesQuery->where('Id',$id) : $nivelesQuery;
             $nivelesQuery = !is_null($plantel) ? $nivelesQuery->where('Plantel_id',$plantel) : $nivelesQuery;
             $nivelesQuery = !is_null($estatus) ? $nivelesQuery->where('Estatus',$estatus) : $nivelesQuery;
-
-            $nivelesQuery = $nivelesQuery->orderBy('Nombre', 'desc');
 
             $niveles = NivelResource::collection($nivelesQuery);
         } catch (Exception $e) {

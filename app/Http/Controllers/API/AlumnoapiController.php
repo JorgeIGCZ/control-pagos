@@ -48,7 +48,7 @@ class AlumnoapiController extends Controller
             $grupo        = $request->input('grupo');
             $estatus      = $request->input('estatus');
 
-            $alumnosQuery = Alumnos::get();
+            $alumnosQuery = Alumnos::orderBy('Nombre', 'desc')->get();
             $alumnosQuery = !is_null($id)      ? $alumnosQuery->where('Id',$id) : $alumnosQuery;
             $alumnosQuery = !is_null($plantel) ? $alumnosQuery->where('Plantel_id',$plantel) : $alumnosQuery;
             $alumnosQuery = !is_null($nivel) ? $alumnosQuery->where('Nivel_id',$nivel) : $alumnosQuery;
@@ -56,8 +56,6 @@ class AlumnoapiController extends Controller
             $alumnosQuery = !is_null($sistema) ? $alumnosQuery->where('Sistema_id',$sistema) : $alumnosQuery;
             $alumnosQuery = !is_null($grupo) ? $alumnosQuery->where('Sistema_id',$sistema) : $alumnosQuery;
             $alumnosQuery = !is_null($estatus) ? $alumnosQuery->where('Estatus',$estatus) : $alumnosQuery;
-
-            $alumnosQuery = $alumnosQuery->orderBy('Nombre', 'desc');
 
             $alumnos = AlumnoResource::collection($alumnosQuery);
         } catch (Exception $e) {
