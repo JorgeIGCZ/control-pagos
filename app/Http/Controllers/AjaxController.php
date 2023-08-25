@@ -26,6 +26,24 @@ use App\Http\Controllers\GeneralFilterController;
 class AjaxController extends Controller
 {
     protected $AlumnoController;
+    protected $TitulacionController;
+    protected $PlantelController;
+    protected $NivelController;
+    protected $LicenciaturaController;
+    protected $SistemaController;
+    protected $GrupoController;
+    protected $ConceptoController;
+    protected $GeneracionController;
+    protected $PagoController;
+    protected $OrdenController;
+    protected $MatriculaController;
+    protected $BecaController;
+    protected $RoleController;
+    protected $UsuarioController;
+    protected $DescuentoController;
+    protected $ReestructuraController;
+    protected $GeneralFilterController;
+
     public function __construct(AlumnoController $AlumnoController,TitulacionController $TitulacionController,PlantelController $PlantelController,NivelController $NivelController, LicenciaturaController $LicenciaturaController,SistemaController $SistemaController, GrupoController $GrupoController, ConceptoController $ConceptoController,GeneracionController $GeneracionController,PagoController $PagoController,OrdenController $OrdenController,MatriculaController $MatriculaController,BecaController $BecaController,RoleController $RoleController,UsuarioController $UsuarioController,DescuentoController $DescuentoController,ReestructuraController $ReestructuraController,GeneralFilterController $GeneralFilterController)
     {
         $this->AlumnoController  = $AlumnoController;
@@ -174,8 +192,13 @@ class AjaxController extends Controller
     }
     function getBecaAlumno(Request $request){
         $alumno      = $_POST['alumno'];
-        $orden      = $_POST['mensualidad'];
+        $orden       = $_POST['mensualidad'];
         $result = $this->AlumnoController->getBecaAlumno($alumno,$orden);
+        return $result;
+    }
+    function getBecasAlumno(Request $request){
+        $alumno      = $_POST['alumno'];
+        $result = $this->AlumnoController->getBecasAlumno($alumno);
         return $result;
     }
 

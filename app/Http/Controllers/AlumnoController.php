@@ -289,6 +289,19 @@ class AlumnoController extends Controller
         $alumnos = DB::select($alumnosQuery);
         return ['data'=>$alumnos];
     }
+    function getBecasAlumno($alumno){
+        $alumnosQuery = ''.
+                        'SELECT BA.Estatus,B.Id,B.Nombre,BA.Cantidad_beca,CONCAT(CP.Fecha_inicio," - ",CP.Fecha_finalizacion) AS Periodo '.
+                        'FROM beca_alumnos BA                                             '.
+                        'LEFT JOIN alumnos  A ON A.Id = BA.Alumno_id                      '.
+                        'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id            '.
+                        'LEFT JOIN generacion_periodos CP ON CP.Id = BA.Periodo_id         '.
+                        'LEFT JOIN becas           B ON B.Id = BA.Beca_id                 '.
+                        'WHERE A.Id = '.$alumno['id'];
+        
+        $alumnos = DB::select($alumnosQuery);
+        return ['data'=>$alumnos];
+    }
     function getAlumnos($datos){
         $datos      = json_decode($datos);
         $queryWhere = '';

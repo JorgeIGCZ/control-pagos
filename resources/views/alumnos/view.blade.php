@@ -310,7 +310,7 @@
         $('#beca-alumno').DataTable( {
             ajax: {
                 type: 'POST',
-                url: '/ajax/getbecaalumno',
+                url: '/ajax/getbecasalumno',
                 dataType: 'json',
                 data:
                 {

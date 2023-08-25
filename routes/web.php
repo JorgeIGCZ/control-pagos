@@ -85,13 +85,14 @@ Route::post('ajax/suspbecaalumno',[AjaxController::class,'suspBecaAlumno']);
 Route::post('ajax/deletebecaalumno',[AjaxController::class,'deleteBecaAlumno']);
 Route::post('ajax/updatebecaalumno',[AjaxController::class,'updateBecaAlumno']);
 
-Route::post('ajax/getbecaalumno',[AjaxController::class,'getBecaAlumno']);
-
 Route::post('ajax/suspalumnobe',[AjaxController::class,'suspalumno']);
 Route::post('ajax/deletepalumnobe',[AjaxController::class,'deletepalumno']);
 
 Route::post('ajax/getbecaalumnos',[AjaxController::class,'getBecaAlumnos']);
+Route::post('ajax/getbecaalumno',[AjaxController::class,'getBecaAlumno']);
 Route::post('ajax/newbecaalumno',[AjaxController::class,'newBecaAlumno']);
+
+Route::post('ajax/getbecasalumno',[AjaxController::class,'getBecasAlumno']);
 
 Route::post('ajax/newplantel',[AjaxController::class,'createPlantel']);
 Route::post('ajax/updateplantel',[AjaxController::class,'updatePlantel']);

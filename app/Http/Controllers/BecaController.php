@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Becas;
 use App\Models\Beca_alumnos;
-use App\Http\Controllers\BecaController;
 use Illuminate\Support\Facades\DB;
 use URL;
 
