@@ -47,7 +47,7 @@ class BecaController extends Controller
         $becaAlumnoId = $becaAlumnoId['id'];
         $alumno   = DB::select('SELECT * FROM alumnos WHERE Id ='.$alumnoId);
         $concepto = DB::select('select * FROM alumno_relaciones AR LEFT JOIN conceptos C ON C.Id = AR.Concepto_id WHERE AR.Alumno_id = '.$alumnoId);
-        $periodos = DB::select('select CP.Periodo_numero,CP.Generacion_id,CP.Id,CONCAT(CP.Fecha_inicio," - ",CP.Fecha_finalizacion) AS fecha FROM alumno_relaciones AR LEFT JOIN generacion_periodos CP ON CP.Generacion_id = AR.Generacion_id WHERE AR.Alumno_id = '.$alumnoId);
+        $periodos = DB::select('select CP.Id,CP.Generacion_id,CP.Id,CONCAT(CP.Fecha_inicio," - ",CP.Fecha_finalizacion) AS fecha FROM alumno_relaciones AR LEFT JOIN generacion_periodos CP ON CP.Generacion_id = AR.Generacion_id WHERE AR.Alumno_id = '.$alumnoId);
         
         $becaAlumnos = DB::select('SELECT * FROM beca_alumnos BA WHERE BA.Id = '.$becaAlumnoId);
         
