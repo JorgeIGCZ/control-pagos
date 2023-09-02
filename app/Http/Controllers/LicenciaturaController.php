@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Licenciaturas;
-use App\Http\Controllers\LicenciaturaController;
 use Illuminate\Support\Facades\DB;
 use URL;
 

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Grupos;
-use App\Http\Controllers\GrupoController;
 use Illuminate\Support\Facades\DB;
 use URL;
 

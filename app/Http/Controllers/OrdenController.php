@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ordenes;
 use App\Models\Alumnos;
-use App\Http\Controllers\OrdenController;
 use Illuminate\Support\Facades\DB;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;

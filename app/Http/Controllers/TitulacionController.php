@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Alumnos;
 use App\Models\Alumno_relaciones;
-use App\Http\Controllers\TitulacionController;
+// use App\Http\Controllers\TitulacionController;
 use Illuminate\Support\Facades\DB;
 use URL;
 

@@ -7,7 +7,6 @@ use App\Models\Niveles;
 use App\Models\Planteles;
 use App\Models\Licenciaturas;
 use App\Models\Sistemas;
-use App\Http\Controllers\GeneralFilterController;
 use Illuminate\Support\Facades\DB;
 
 class GeneralFilterController extends Controller

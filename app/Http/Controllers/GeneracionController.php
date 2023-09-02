@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Generaciones;
 use App\Models\Generacion_periodos;
-use App\Http\Controllers\GeneracionController;
 use Illuminate\Support\Facades\DB;
 use URL;
 

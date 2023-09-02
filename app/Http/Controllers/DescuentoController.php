@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Descuentos;
 use App\Models\Alumnos;
-use App\Http\Controllers\DescuentoController;
 use Illuminate\Support\Facades\DB;
 
 class DescuentoController extends Controller

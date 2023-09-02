@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Alumnos;
 use App\Models\Ordenes;
 use App\Models\Alumno_relaciones;
-use App\Http\Controllers\ReestructuraController;
 use Illuminate\Support\Facades\DB;
 use URL;
 

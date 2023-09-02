@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\UsuarioController;
 use App\Models\Users;
 use App\Models\User_relaciones;
 use App\Models\User_planteles;
