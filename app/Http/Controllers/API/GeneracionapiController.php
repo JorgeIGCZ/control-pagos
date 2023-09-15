@@ -45,9 +45,9 @@ class GeneracionapiController extends Controller
             $estatus = $request->input('estatus');
 
             $geneacionesQuery = Generaciones::orderBy('Nombre', 'asc')->get();
-            $geneacionesQuery = !is_null($id)      ? $geneacionesQuery->where('Id',$id) : $geneacionesQuery;
-            $geneacionesQuery = !is_null($plantel) ? $geneacionesQuery->where('Plantel_id',$plantel) : $geneacionesQuery;
-            $geneacionesQuery = !is_null($estatus) ? $geneacionesQuery->where('Estatus',$estatus) : $geneacionesQuery;
+            $geneacionesQuery = (!is_null($id)      || $id !== '0')     ? $geneacionesQuery->where('Id',$id) : $geneacionesQuery;
+            $geneacionesQuery = (!is_null($plantel) || $plantel !== '0') ? $geneacionesQuery->where('Plantel_id',$plantel) : $geneacionesQuery;
+            $geneacionesQuery = (!is_null($estatus)) ? $geneacionesQuery->where('Estatus',$estatus) : $geneacionesQuery;
 
             $generacion = GeneracionResource::collection($geneacionesQuery);
         } catch (Exception $e) {

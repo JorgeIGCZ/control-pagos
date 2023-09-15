@@ -46,9 +46,9 @@ class PeriodoapiController extends Controller
             $estatus = $request->input('estatus');
 
             $periodosQuery = Generacion_periodos::orderBy('Periodo_numero', 'asc')->get();
-            $periodosQuery = !is_null($id)         ? $periodosQuery->where('Id',$id) : $periodosQuery;
-            $periodosQuery = !is_null($generacion) ? $periodosQuery->where('Generacion_id',$generacion) : $periodosQuery;
-            $periodosQuery = !is_null($estatus)    ? $periodosQuery->where('Estatus',$estatus) : $periodosQuery;
+            $periodosQuery = (!is_null($id)         || $id !== '0')          ? $periodosQuery->where('Id',$id) : $periodosQuery;
+            $periodosQuery = (!is_null($generacion) || $generacion !== '0')  ? $periodosQuery->where('Generacion_id',$generacion) : $periodosQuery;
+            $periodosQuery = (!is_null($estatus))     ? $periodosQuery->where('Estatus',$estatus) : $periodosQuery;
 
             $periodo = PeriodoResource::collection($periodosQuery);
         } catch (Exception $e) {

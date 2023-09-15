@@ -46,10 +46,10 @@ class LicenciaturaapiController extends Controller
             $estatus = $request->input('estatus');
 
             $licenciaturasQuery = Licenciaturas::orderBy('Nombre', 'asc')->get();
-            $licenciaturasQuery = !is_null($id)      ? $licenciaturasQuery->where('Id',$id) : $licenciaturasQuery;
-            $licenciaturasQuery = !is_null($plantel) ? $licenciaturasQuery->where('Plantel_id',$plantel) : $licenciaturasQuery;
-            $licenciaturasQuery = !is_null($nivel)   ? $licenciaturasQuery->where('Nivel_id',$plantel) : $licenciaturasQuery;
-            $licenciaturasQuery = !is_null($estatus) ? $licenciaturasQuery->where('Estatus',$estatus) : $licenciaturasQuery;
+            $licenciaturasQuery = (!is_null($id)      || $id !== '0')      ? $licenciaturasQuery->where('Id',$id) : $licenciaturasQuery;
+            $licenciaturasQuery = (!is_null($plantel) || $plantel !== '0') ? $licenciaturasQuery->where('Plantel_id',$plantel) : $licenciaturasQuery;
+            $licenciaturasQuery = (!is_null($nivel)   || $nivel !== '0')   ? $licenciaturasQuery->where('Nivel_id',$plantel) : $licenciaturasQuery;
+            $licenciaturasQuery = (!is_null($estatus) || $estatus !== '0') ? $licenciaturasQuery->where('Estatus',$estatus) : $licenciaturasQuery;
 
             $licenciatura = LicenciaturaResource::collection($licenciaturasQuery);
         } catch (Exception $e) {
