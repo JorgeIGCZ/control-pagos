@@ -43,7 +43,7 @@ class SistemaapiController extends Controller
             $id = $request->input('id');
 
             $sistemasQuery = Sistemas::orderBy('Nombre', 'asc')->get();
-            $sistemasQuery = (!is_null($id)|| $id !== '0') ? $sistemasQuery->where('Id',$id) : $sistemasQuery;
+            $sistemasQuery = (!is_null($id)) ? $sistemasQuery->where('Id',$id) : $sistemasQuery;
 
             $sistema = SistemaResource::collection($sistemasQuery);
         } catch (Exception $e) {

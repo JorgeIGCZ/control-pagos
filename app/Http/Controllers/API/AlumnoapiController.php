@@ -51,28 +51,28 @@ class AlumnoapiController extends Controller
             $lista        = $request->input('lista');
 
             $alumnosQuery = Alumnos::whereHas('alumnoRelaciones', function (Builder $subquery) use ($id, $plantel, $nivel, $licenciatura, $sistema, $grupo, $estatus, $lista) { 
-                if(!is_null($id) || $id !== '0'){
+                if(!is_null($id)){
                     $subquery->where('Id', $id);
                 }
-                if(!is_null($plantel) || $plantel !== '0'){
+                if(!is_null($plantel)){
                     $subquery->where('Plantel_id', $plantel);
                 }
-                if(!is_null($nivel) || $nivel !== '0'){
+                if(!is_null($nivel)){
                     $subquery->where('Nivel_id', $nivel);
                 }
-                if(!is_null($licenciatura) || $licenciatura !== '0'){
+                if(!is_null($licenciatura)){
                     $subquery->where('Licenciatura_id', $licenciatura);
                 }
-                if(!is_null($sistema) || $sistema !== '0'){
+                if(!is_null($sistema)){
                     $subquery->where('Sistema_id', $sistema);
                 }
-                if(!is_null($grupo) || $grupo !== '0'){
+                if(!is_null($grupo)){
                     $subquery->where('Grupo_id', $grupo);
                 }
                 if(!is_null($estatus)){
                     $subquery->where('Estatus', $estatus);
                 }
-                if(!is_null($lista) || $lista !== '0'){
+                if(!is_null($lista)){
                     $subquery->where('Id', $lista);
                 }
             })->orderBy('Nombre', 'asc')->get();

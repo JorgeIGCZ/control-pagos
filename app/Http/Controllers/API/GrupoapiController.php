@@ -48,11 +48,11 @@ class GrupoapiController extends Controller
             $estatus      = $request->input('estatus');
 
             $gruposQuery = Grupos::orderBy('Nombre', 'asc')->get();
-            $gruposQuery = (!is_null($id)            || $id !== '0') ? $gruposQuery->where('Id',$id) : $gruposQuery;
-            $gruposQuery = (!is_null($plantel)       || $plantel !== '0') ? $gruposQuery->where('Plantel_id',$plantel) : $gruposQuery;
-            $gruposQuery = (!is_null($nivel)         || $nivel !== '0') ? $gruposQuery->where('Nivel_id',$nivel) : $gruposQuery;
-            $gruposQuery = (!is_null($licenciatura)  || $licenciatura !== '0') ? $gruposQuery->where('Licenciatura_id',$licenciatura) : $gruposQuery;
-            $gruposQuery = (!is_null($sistema)       || $sistema !== '0') ? $gruposQuery->where('Sistema_id',$sistema) : $gruposQuery;
+            $gruposQuery = (!is_null($id)) ? $gruposQuery->where('Id',$id) : $gruposQuery;
+            $gruposQuery = (!is_null($plantel)) ? $gruposQuery->where('Plantel_id',$plantel) : $gruposQuery;
+            $gruposQuery = (!is_null($nivel)) ? $gruposQuery->where('Nivel_id',$nivel) : $gruposQuery;
+            $gruposQuery = (!is_null($licenciatura)) ? $gruposQuery->where('Licenciatura_id',$licenciatura) : $gruposQuery;
+            $gruposQuery = (!is_null($sistema)) ? $gruposQuery->where('Sistema_id',$sistema) : $gruposQuery;
             $gruposQuery = (!is_null($estatus)) ? $gruposQuery->where('Estatus',$estatus) : $gruposQuery;
      
             $grupos = GrupoResource::collection($gruposQuery);

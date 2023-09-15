@@ -43,7 +43,7 @@ class PlantelapiController extends Controller
             $id = $request->input('id');
 
             $plantelesQuery = Planteles::orderBy('Nombre', 'asc')->get();
-            $plantelesQuery = (!is_null($id) || $id !== '0') ? $plantelesQuery->where('Id',$id) : $plantelesQuery;
+            $plantelesQuery = (!is_null($id)) ? $plantelesQuery->where('Id',$id) : $plantelesQuery;
 
             $plantel = PlantelResource::collection($plantelesQuery);
         } catch (Exception $e) {
