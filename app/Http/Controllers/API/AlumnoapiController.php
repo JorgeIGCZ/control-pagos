@@ -50,7 +50,7 @@ class AlumnoapiController extends Controller
             $estatus      = $request->input('estatus');
             $lista        = $request->input('lista');
 
-            $alumnosQuery = Alumnos::whereHas('alumnoRelaciones', function (Builder $subquery) use ($id, $plantel, $nivel, $licenciatura, $sistema, $grupo, $estatus, $lista) { 
+            $alumnos = Alumnos::whereHas('alumnoRelaciones', function (Builder $subquery) use ($id, $plantel, $nivel, $licenciatura, $sistema, $grupo, $estatus, $lista) { 
                 if(!is_null($id)){
                     $subquery->where('Id', $id);
                 }
@@ -77,7 +77,39 @@ class AlumnoapiController extends Controller
                 }
             })->orderBy('Nombre', 'asc')->get();
 
-            $alumnos = AlumnoResource::collection($alumnosQuery);
+            $informacionAlumnos = [];
+            foreach($alumnos as $alumno){
+                $informacionAlumnos[] = [
+                    "Id"                    => $alumno->Id,
+                    "Matricula"             => $alumno->Matricula,
+                    "Curp"                  => $alumno->Curp,
+                    "Nombre"                => $alumno->Nombre,
+                    "Apellido_materno"      => $alumno->Apellido_materno,
+                    "Apellido_paterno"      => $alumno->Apellido_paterno,
+                    "Email"                 => $alumno->Email,
+                    "Telefono"              => $alumno->Telefono,
+                    "Nombre_tutor"          => $alumno->Nombre_tutor,
+                    "Telefono_tutor"        => $alumno->Telefono_tutor,
+                    "Estatus"               => $alumno->Estatus,
+                    "Fecha_baja"            => $alumno->Fecha_baja,
+                    "Fecha_inicio"          => $alumno->Fecha_inicio,
+                    "updated_at"            => $alumno->updated_at,
+                    "created_at"            => $alumno->created_at,
+                    "Plantel"               => $alumno->alumnoRelaciones->plantel->Nombre,
+                    "Plantel_id"            => $alumno->alumnoRelaciones->Plantel_id,
+                    "Nivel"                 => $alumno->alumnoRelaciones->nivel->Nombre,
+                    "Nivel_id"              => $alumno->alumnoRelaciones->Nivel_id,
+                    "Licenciatura"          => $alumno->alumnoRelaciones->licenciatura->Nombre,
+                    "Licenciatura_id"       => $alumno->alumnoRelaciones->Licenciatura_id,
+                    "Sistema"               => $alumno->alumnoRelaciones->sistema->Nombre,
+                    "Sistema_id"            => $alumno->alumnoRelaciones->Sistema_id,
+                    "Grupo"                 => $alumno->alumnoRelaciones->grupo->Nombre,
+                    "Grupo_id"              => $alumno->alumnoRelaciones->Grupo_id,
+                    "Generacion"            => $alumno->alumnoRelaciones->generacion->Nombre,
+                    "Generacion_id"         => $alumno->alumnoRelaciones->Generacion_id,
+                ];
+            }
+            $alumnos = AlumnoResource::collection($informacionAlumnos);
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],
