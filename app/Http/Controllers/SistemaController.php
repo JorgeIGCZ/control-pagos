@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sistemas;
-use App\Http\Controllers\SistemaController;
+// use App\Http\Controllers\SistemaController;
 use Illuminate\Support\Facades\DB;
 use URL;
 
