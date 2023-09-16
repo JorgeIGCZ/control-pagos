@@ -48,7 +48,7 @@ class AlumnoapiController extends Controller
             $sistema      = $request->input('sistema');
             $grupo        = $request->input('grupo');
             $estatus      = $request->input('estatus');
-            $lista        = explode(",", $request->input('lista'));
+            $lista        = $request->input('lista');
 
             $alumnos = Alumnos::whereHas('alumnoRelaciones', function (Builder $subquery) use ($id, $plantel, $nivel, $licenciatura, $sistema, $grupo, $estatus, $lista) { 
                 if(!is_null($id)){
@@ -73,7 +73,8 @@ class AlumnoapiController extends Controller
                     $subquery->where('Estatus', $estatus);
                 }
                 if(!is_null($lista)){
-                    $subquery->whereIn('Id', $lista);
+                    $listaArray = explode(",", $lista);
+                    $subquery->whereIn('Id', $listaArray);
                 }
             })->orderBy('Nombre', 'asc')->get();
 
