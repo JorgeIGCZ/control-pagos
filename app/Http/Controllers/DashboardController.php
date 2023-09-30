@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Alumnos;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use URL;
 
@@ -15,6 +16,9 @@ class DashboardController extends Controller
             exit();
         }
 
+        $fechaInicio = Carbon::parse('first day of this month')->startOfDay();
+        $fechaFinal  = Carbon::parse('last day of this month')->endOfDay();
+
         $queryWhere = '';
         if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
             $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
@@ -25,14 +29,14 @@ class DashboardController extends Controller
                                           'FROM pagos                   P                                 '.
                                           'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = P.Alumno_id   '.
                                           'LEFT JOIN conceptos          C ON C.Id         = P.Descripcion '.
-                                          'WHERE P.Tipo_pago = "Cuenta bancaria" AND C.Tipo IN ("colegiatura","pagos") '.$queryWhere;
+                                          'WHERE P.Tipo_pago = "Cuenta bancaria" AND C.Tipo IN ("colegiatura","pagos") AND P.created_at BETWEEN "'.$fechaInicio.'" AND "'.$fechaFinal.'" '.$queryWhere;
 
         $recaudacionEfectivoQuery = ''.
                                           'SELECT SUM(P.Cantidad_pago) AS result    '.
                                           'FROM pagos                   P                                 '.
                                           'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = P.Alumno_id   '.
                                           'LEFT JOIN conceptos          C ON C.Id         = P.Descripcion '.
-                                          'WHERE P.Tipo_pago = "Efectivo" AND C.Tipo IN ("colegiatura","pagos") '.$queryWhere;
+                                          'WHERE P.Tipo_pago = "Efectivo" AND C.Tipo IN ("colegiatura","pagos") AND P.created_at BETWEEN "'.$fechaInicio.'" AND "'.$fechaFinal.'" '.$queryWhere;
 
 
 
@@ -52,7 +56,7 @@ class DashboardController extends Controller
             'alumnosInactivos'             => $alumnosInactivos,
             'recaudacionMensualTotal'      => $recaudaconMensualTotal,
             'recaudacionMensualBancaria'   => $recaudaconMensualBancaria,
-            'recaudacionMensualEfectivo' => $recaudaconMensualEfectivo
+            'recaudacionMensualEfectivo'   => $recaudaconMensualEfectivo
         ]);
     }
 }
