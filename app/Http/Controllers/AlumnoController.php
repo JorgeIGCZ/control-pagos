@@ -172,7 +172,6 @@ class AlumnoController extends Controller
                             'WHERE P.Alumno_id = '.$alumnoId.' AND P.Orden_id = '.$ordenId.' AND C.Tipo = "pronto-pago" ';
         
         $oldDiscounts = DB::select($oldDiscountsQuery);
-
         if($oldDiscounts[0]->descuentos < 1){
             $isCurrentOrderQuery = ''.
                             'SELECT COUNT(O.Id) AS isCurrent '.
@@ -187,6 +186,10 @@ class AlumnoController extends Controller
             $isCurrentOrder = DB::select($isCurrentOrderQuery);
             if($isCurrentOrder[0]->isCurrent){
                 if($monthDay < 6){
+                    $result = true;
+                }
+                $plantelId = alumno_relaciones::where('alumno_Id', $alumnoId)->first()['Plantel_id'];
+                if($plantelId == 1 && ($monthDay <= 6)){
                     $result = true;
                 }
             }else{
