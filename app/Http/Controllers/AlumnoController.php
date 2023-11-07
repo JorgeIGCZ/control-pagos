@@ -188,10 +188,6 @@ class AlumnoController extends Controller
                 if($monthDay < 6){
                     $result = true;
                 }
-                $plantelId = alumno_relaciones::where('alumno_Id', $alumnoId)->first()['Plantel_id'];
-                if($plantelId == 1 && ($monthDay <= 6)){
-                    $result = true;
-                }
             }else{
                 $isFutureOrder = DB::select($isFutureOrderQuery);
                 if($isFutureOrder[0]->isFuture){
