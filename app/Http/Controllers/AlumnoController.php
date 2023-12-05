@@ -176,12 +176,12 @@ class AlumnoController extends Controller
             $isCurrentOrderQuery = ''.
                             'SELECT COUNT(O.Id) AS isCurrent '.
                             'FROM ordenes O                '.
-                            'WHERE O.Id = '.$ordenId.' AND MONTH(O.Fecha_creacion) = MONTH(CURDATE()) AND YEAR(O.Fecha_creacion) = YEAR(CURDATE())  ';
+                            'WHERE O.Id = '.$ordenId.' AND O.Fecha_creacion = CURDATE()';
             
             $isFutureOrderQuery = ''.
                             'SELECT COUNT(O.Id) AS isFuture '.
                             'FROM ordenes O                '.
-                            'WHERE O.Id = '.$ordenId.' AND MONTH(O.Fecha_creacion) >= MONTH(CURDATE()) AND YEAR(O.Fecha_creacion) >= YEAR(CURDATE())  ';
+                            'WHERE O.Id = '.$ordenId.' AND O.Fecha_creacion >= CURDATE()';
 
             $isCurrentOrder = DB::select($isCurrentOrderQuery);
             if($isCurrentOrder[0]->isCurrent){
