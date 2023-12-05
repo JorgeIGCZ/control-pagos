@@ -176,7 +176,7 @@ class AlumnoController extends Controller
             $isCurrentOrderQuery = ''.
                             'SELECT COUNT(O.Id) AS isCurrent '.
                             'FROM ordenes O                '.
-                            'WHERE O.Id = '.$ordenId.' AND O.Fecha_creacion = CURDATE()';
+                            'WHERE O.Id = '.$ordenId.' AND MONTH(O.Fecha_creacion) = MONTH(CURDATE()) AND YEAR(O.Fecha_creacion) = YEAR(CURDATE())';
             
             $isFutureOrderQuery = ''.
                             'SELECT COUNT(O.Id) AS isFuture '.
