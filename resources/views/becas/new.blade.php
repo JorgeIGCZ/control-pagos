@@ -78,6 +78,13 @@
                     <div>Nueva Beca
                     </div>
                 </div>
+                <div class="page-title-actions">
+                    <div class="d-inline-block dropdown">
+                        <a href="{{ url('becas') }}" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-primary">
+                            Becas
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="">

@@ -2,6 +2,7 @@
 <script type='text/javascript'>
     $(function() {
         $('#sistemas').DataTable( {
+            order: [[2, 'desc']],
             ajax: {
                 url: '/ajax/getbecas'
             },
@@ -22,6 +23,7 @@
             columns: [
                 { data: 'Id' },
                 { data: 'Nombre' },
+                { data: 'Alumnos' },
                 {  data: 'Estatus', defaultContent: 'Estatus', 'render': function ( data, type, row ) 
                     {
                         let estatus;
@@ -38,7 +40,7 @@
                         }
                         let view = `<span class="mb-2 mr-2 btn-hover-shine btn ${tClass}">${estatus}</span>`;
                         return  view;
-                    } 
+                    }
                 },
                 { defaultContent: 'Actions', 'render': function ( data, type, row ) 
                     {
@@ -89,6 +91,7 @@
                                     <tr>
                                         <th>Id</th>
                                         <th>Nombre</th>
+                                        <th>Alumnos Activos</th>
                                         <th>Estatus</th>
                                         <th>Acciones</th>
                                     </tr>

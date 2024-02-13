@@ -77,7 +77,16 @@ class BecaController extends Controller
         return $result;
     }
     function getBecas(){
-        $becas = DB::select('select * from becas');
+        $becassQuery = ''.
+                        'SELECT B.id AS Id, B.nombre AS Nombre, B.Estatus,                                      '.
+                        '    COUNT(CASE WHEN CP.Fecha_finalizacion > NOW() THEN A.id ELSE NULL END) AS Alumnos  '.
+                        'FROM becas B                                                                           '.
+                        'LEFT JOIN beca_alumnos BA ON BA.Beca_id = B.id                                         '.
+                        'LEFT JOIN alumnos A ON BA.Alumno_id = A.id                                             '.
+                        'LEFT JOIN generacion_periodos CP ON CP.Id = BA.Periodo_id                              '.
+                        'GROUP BY B.id, B.nombre, B.Estatus                                                     '.
+                        'ORDER BY Alumnos DESC';
+        $becas = DB::select($becassQuery);
         return ['data'=>$becas];
     }
     function createBeca($beca){
@@ -141,48 +150,51 @@ class BecaController extends Controller
     function getBecaAlumnos($becaId,$datos){
         $result = '';
 
-        $datos      = json_decode($datos);
-        $queryWhere = '';
-        if(is_object($datos)){
-            foreach($datos as $key => $value){
-                if($value <> 0){
-                    switch ($key) {
-                        case 'plantel':
-                            $queryWhere .= ' AND AR.Plantel_id IN ('.$value.') ';
-                            break;
-                        case 'nivel':
-                            $queryWhere .= ' AND AR.Nivel_id = '.$value.' ';
-                            break;
-                        case 'licenciatura':
-                            $queryWhere .= ' AND AR.Licenciatura_id = '.$value.' ';
-                            break;
-                        case 'sistema':
-                            $queryWhere .= ' AND AR.Sistema_id = '.$value.' ';
-                            break;
-                        case 'grupo':
-                            $queryWhere .= ' AND AR.Grupo_id = '.$value.' ';
-                            break;
-                        case 'mes':
-                            $queryWhere .= ' AND MONTH(P.created_at) = MONTH("'.$value.'-00 00:00:00") AND YEAR(P.created_at) = YEAR("'.$value.'-00 00:00:00") ';
-                            break;
-                    }
-                }
-            }
-        }
+        // $datos      = json_decode($datos);
+        // $queryWhere = '';
+        // if(is_object($datos)){
+        //     foreach($datos as $key => $value){
+        //         if($value <> 0){
+        //             switch ($key) {
+        //                 case 'plantel':
+        //                     $queryWhere .= ' AND AR.Plantel_id IN ('.$value.') ';
+        //                     break;
+        //                 case 'nivel':
+        //                     $queryWhere .= ' AND AR.Nivel_id = '.$value.' ';
+        //                     break;
+        //                 case 'licenciatura':
+        //                     $queryWhere .= ' AND AR.Licenciatura_id = '.$value.' ';
+        //                     break;
+        //                 case 'sistema':
+        //                     $queryWhere .= ' AND AR.Sistema_id = '.$value.' ';
+        //                     break;
+        //                 case 'grupo':
+        //                     $queryWhere .= ' AND AR.Grupo_id = '.$value.' ';
+        //                     break;
+        //                 case 'mes':
+        //                     $queryWhere .= ' AND MONTH(P.created_at) = MONTH("'.$value.'-00 00:00:00") AND YEAR(P.created_at) = YEAR("'.$value.'-00 00:00:00") ';
+        //                     break;
+        //             }
+        //         }
+        //     }
+        // }
         
 
-        if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
-            $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
-        }
+        // if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
+        //     $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
+        // }
 
 
         $alumnosQuery = ''.
-                        'SELECT BA.Estatus,BA.Id AS BecaAlumnoId, A.Id,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,BA.Cantidad_beca,CONCAT(CP.Fecha_inicio," - ",CP.Fecha_finalizacion) AS Periodo '.
-                        'FROM beca_alumnos BA                                             '.
-                        'LEFT JOIN alumnos  A ON A.Id = BA.Alumno_id                      '.
-                        'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id            '.
-                        'LEFT JOIN generacion_periodos CP ON CP.Id = BA.Periodo_id             '.
-                        'WHERE BA.Beca_id = '.$becaId.' AND CP.Fecha_finalizacion > NOW() '.$queryWhere;
+                        'SELECT BA.Estatus,BA.Id AS BecaAlumnoId, P.nombre AS Plantel, N.nombre AS Nivel, L.nombre AS Licenciatura, A.Id,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,BA.Cantidad_beca,CONCAT(CP.Fecha_inicio," - ",CP.Fecha_finalizacion) AS Periodo '.
+                        'FROM beca_alumnos BA                                              '.
+                        'LEFT JOIN alumnos  A ON A.Id = BA.Alumno_id                       '.
+                        'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id             '.
+                        'LEFT JOIN planteles P ON P.id = AR.Plantel_id                     '.
+                        'LEFT JOIN niveles N ON N.id = AR.Nivel_id                         '.
+                        'LEFT JOIN licenciaturas L ON L.id = AR.Licenciatura_id            '.
+                        'LEFT JOIN generacion_periodos CP ON CP.Id = BA.Periodo_id         '.
+                        'WHERE BA.Beca_id = '.$becaId.' AND CP.Fecha_finalizacion > NOW() ';
         
         $alumnos = DB::select($alumnosQuery);
         return ['data'=>$alumnos];

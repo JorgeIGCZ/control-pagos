@@ -336,6 +336,10 @@ class AlumnoController extends Controller
             }
         }
 
+        if($queryWhere == ''){
+            return ['data'=>[]];
+        }
+
         //if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
         //    $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
         //}

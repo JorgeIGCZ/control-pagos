@@ -145,7 +145,7 @@
                                     <div class="position-relative form-group">
                                         <label for="alumnos" class="">Seleccionar Alumno</label>
                                         <form>
-                                            <div id="nuevaBeca" class="form-row filters" style="grid-template-columns: 1fr 1fr 1fr 1fr 90px;">
+                                            <div id="nuevaBeca" class="form-row filters" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr;">
                                                 <div class="form-group  ">
                                                     <label for="plantel">Plantel</label>
                                                     <select class="form-control" name="plantel" id="plantel" @if(session()->get('user_roles')['Matrícula']->Plantel_id > 0) xdisabled="disabled" @endif>
@@ -158,38 +158,35 @@
                                                 </div>
                                                 <div class="form-group  ">
                                                     <label for="nivel">Nivel</label>
-                                                    <select class="form-control" name="nivel" id="nivel">
+                                                    <select class="form-control dinamic_filters" name="nivel" id="nivel">
                                                         <option value="0" selected="selected">Seleccionar nivel</option>
-                                                        @foreach ($niveles as $nivel)
-                                                            <option value="@php echo($nivel->Id); @endphp">@php echo($nivel->Nombre); @endphp</option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="form-group  ">
                                                     <label for="licenciaturas">Licenciatura</label>
-                                                    <select class="form-control" name="licenciatura" id="licenciatura">
+                                                    <select class="form-control dinamic_filters" name="licenciatura" id="licenciatura">
                                                         <option value="0" selected="selected">Seleccionar licenciatura</option>
-                                                        @foreach ($licenciaturas as $licenciatura)
-                                                            <option value="@php echo($licenciatura->Id); @endphp">@php echo($licenciatura->Nombre); @endphp</option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="form-group  ">
                                                     <label for="sistema">Sistema</label>
-                                                    <select class="form-control" name="sistema" id="sistema">
+                                                    <select class="form-control dinamic_filters" name="sistema" id="sistema">
                                                         <option value="0" selected="selected">Seleccionar sistema</option>
                                                         @foreach ($sistemas as $sistema)
                                                             <option value="@php echo($sistema->Id); @endphp">@php echo($sistema->Nombre); @endphp</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="form-group" style="display:none">
+                                                <div class="form-group  ">
                                                     <label for="grupo">Grupo</label>
                                                     <select class="form-control" name="grupo" id="grupo">
                                                         <option value="0" selected="selected">Seleccionar grupo</option>
-                                                        @foreach ($grupos as $grupo)
-                                                            <option value="@php echo($grupo->Id); @endphp">@php echo($grupo->Nombre); @endphp</option>
-                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group  ">
+                                                    <label for="generacion">Generación</label>
+                                                    <select class="form-control dinamic_filters" name="generacion" id="generacion">
+                                                        <option value="0" selected="selected">Seleccionar generación</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group buscar-button " style="text-align: center;">
@@ -267,6 +264,54 @@
         
 <script type='text/javascript'>
     $(function() {
+
+        const niveles       = @php echo(json_encode($niveles)); @endphp;
+        const licenciaturas = @php echo(json_encode($licenciaturas)); @endphp;
+        const grupos        = @php echo(json_encode($grupos)); @endphp;
+        const generaciones  = @php echo(json_encode($generaciones)); @endphp;
+
+        displayOptions('nivel',[$('#plantel').children("option:selected").val()],niveles,['Plantel_id'],0);
+        displayOptions('licenciatura',[$('#plantel').children("option:selected").val()],licenciaturas,['Plantel_id'],0);
+        displayOptions('generacion',[$('#plantel').children("option:selected").val()],generaciones,['Plantel_id'],0);
+        displayOptions('grupo',[$('#plantel').children("option:selected").val(),$('#licenciatura').children("option:selected").val(),$('#sistema').children("option:selected").val()],grupos,['Plantel_id','Licenciatura_id','Sistema_id'],0);
+
+
+        $('#plantel').on('change',function(){
+            const selection    = $(this).children("option:selected").val();
+            const licenciatura = $('#licenciatura').children("option:selected").val();
+            const sistema      = $('#sistema').children("option:selected").val();
+            displayOptions('nivel',[selection],niveles,['Plantel_id'],0);
+            displayOptions('licenciatura',[selection],licenciaturas,['Plantel_id'],0);
+            displayOptions('generacion',[selection],generaciones,['Plantel_id'],0);
+            displayOptions('grupo',[selection,licenciatura,sistema],grupos,['Plantel_id','Licenciatura_id','Sistema_id'],0);
+            
+        });
+        $('#nivel').on('change',function(){
+            const plantel   = $('#plantel').children("option:selected").val();
+            const selection    = $(this).children("option:selected").val();
+            const licenciatura = $('#licenciatura').children("option:selected").val();
+            const sistema      = $('#sistema').children("option:selected").val();
+            displayOptions('licenciatura',[plantel],licenciaturas,['Plantel_id'],0);
+            displayOptions('generacion',[plantel],generaciones,['Plantel_id'],0);
+            displayOptions('grupo',[plantel,selection,licenciatura,sistema],grupos,['Plantel_id','Nivel_id','Licenciatura_id','Sistema_id'],0);
+            
+        });
+
+        $('#licenciatura').on('change',function(){
+            const plantel   = $('#plantel').children("option:selected").val();
+            const nivel     = $('#nivel').children("option:selected").val();
+            const selection = $(this).children("option:selected").val();
+            const sistema   = $('#sistema').children("option:selected").val();
+            displayOptions('grupo',[plantel,nivel,selection,sistema],grupos,['Plantel_id','Nivel_id','Licenciatura_id','Sistema_id'],0);
+        });
+        $('#sistema').on('change',function(){
+            const plantel      = $('#plantel').children("option:selected").val();
+            const nivel     = $('#nivel').children("option:selected").val();
+            const licenciatura = $('#licenciatura').children("option:selected").val();
+            const selection    = $(this).children("option:selected").val();
+            displayOptions('grupo',[plantel,nivel,licenciatura,selection],grupos,['Plantel_id','Nivel_id','Licenciatura_id','Sistema_id'],0);
+        });
+
         
         $('#buscarNuevaBecaAlumnos').click(function(e){
             $('#alumnos').DataTable().ajax.reload();
@@ -304,7 +349,9 @@
             columns: [
                 { data: 'Id' },
                 { data: 'Nombre' },
-                { data: 'Email' },
+                { data: 'Plantel' },
+                { data: 'Nivel' },
+                { data: 'Licenciatura' },
                 { data: 'Periodo' },
                 { defaultContent: 'Cantidad_beca', 'render': function ( data, type, row ) 
                     {
@@ -936,71 +983,16 @@
                     <div class="main-card mb-12 card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-12 mb-5">
                                     <h5 class="card-title" style="margin-button:20px;">Beca Alumnos
-                                    @if (session()->get('user_roles')['Becas']->Crear == 'Y')
-                                    <div class="d-inline-block dropdown" style="right: 13px;position: absolute;">
-                                        <button id="beca-alumno" type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-primary" data-toggle="modal" data-target="#new_beca_alumno" becaId="@php echo($_GET['beca']) @endphp"> 
-                                            <i class="fas fa-plus"></i> Nueva Beca Alumno
-                                        </button>
-                                    </div>
-                                    @endif
-                                    </h5>
-                                    <form>
-                                        <div id="becaAlumnos" class="form-row filters" style="grid-template-columns: 1fr 1fr 1fr 1fr 90px;">
-                                            <div class="form-group  ">
-                                                <label for="plantel">Plantel</label>
-                                                <select class="form-control" name="plantel" id="plantel" @if(session()->get('user_roles')['Matrícula']->Plantel_id > 0) xdisabled="disabled" @endif>
-                                                    <option value="0">Seleccionar plantel</option>
-                                                    @foreach ($planteles as $plantel)
-                                                        <option value="{{$plantel->Id}}">{{$plantel->Nombre}}</option>
-                                                    @endforeach
-                                                    <!--option value="{{$plantel->Id}}" @if(session()->get('user_roles')['Matrícula']->Plantel_id == $plantel->Id) selected="selected" @endif >{{$plantel->Nombre}}</option-->
-                                                </select>
-                                            </div>
-                                            <div class="form-group  ">
-                                                <label for="nivel">Nivel</label>
-                                                <select class="form-control" name="nivel" id="nivel">
-                                                    <option value="0" selected="selected">Seleccionar nivel</option>
-                                                    @foreach ($niveles as $nivel)
-                                                        <option value="@php echo($nivel->Id); @endphp">@php echo($nivel->Nombre); @endphp</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group  ">
-                                                <label for="licenciaturas">Licenciatura</label>
-                                                <select class="form-control" name="licenciatura" id="licenciatura">
-                                                    <option value="0" selected="selected">Seleccionar licenciatura</option>
-                                                    @foreach ($licenciaturas as $licenciatura)
-                                                        <option value="@php echo($licenciatura->Id); @endphp">@php echo($licenciatura->Nombre); @endphp</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group  ">
-                                                <label for="sistema">Sistema</label>
-                                                <select class="form-control" name="sistema" id="sistema">
-                                                    <option value="0" selected="selected">Seleccionar sistema</option>
-                                                    @foreach ($sistemas as $sistema)
-                                                        <option value="@php echo($sistema->Id); @endphp">@php echo($sistema->Nombre); @endphp</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group  " style="display: none;">
-                                                <label for="grupo">Grupo</label>
-                                                <select class="form-control" name="grupo" id="grupo">
-                                                    <option value="0" selected="selected">Seleccionar grupo</option>
-                                                    @foreach ($grupos as $grupo)
-                                                        <option value="@php echo($grupo->Id); @endphp">@php echo($grupo->Nombre); @endphp</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="form-group buscar-button " style="text-align: center;">
-                                                <button id="buscar-alumnos" type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-primary" style="margin-top: 33px;"> 
-                                                    <i class="fas fa-search"></i> Buscar
-                                                </button>
-                                            </div>
+                                        @if (session()->get('user_roles')['Becas']->Crear == 'Y')
+                                        <div class="d-inline-block dropdown" style="right: 13px;position: absolute;">
+                                            <button id="beca-alumno" type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-primary" data-toggle="modal" data-target="#new_beca_alumno" becaId="@php echo($_GET['beca']) @endphp"> 
+                                                <i class="fas fa-plus"></i> Nueva Beca Alumno
+                                            </button>
                                         </div>
-                                    </form>
+                                        @endif
+                                    </h5>
                                 </div>
                             </div>
                             <table id="beca-alumnos" class="mb-0 table">
@@ -1008,7 +1000,9 @@
                                     <tr>
                                         <th>Id</th>
                                         <th>Nombre</th>
-                                        <th>Correo</th>
+                                        <th>Plantel</th>
+                                        <th>Nivel</th>
+                                        <th>Licenciatura</th>
                                         <th>Periodo</th>
                                         <th>Cantidad Beca</th>
                                         <th>Estatus Beca</th>
