@@ -265,6 +265,16 @@
                     <div>Nuevo Alumno
                     </div>
                 </div>
+                <div class="page-title-actions">
+                    <div class="d-inline-block dropdown">
+                        <a href="{{ url('alumnos') }}" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-primary">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="fa fa-arrow-left fa-w-20"></i>
+                            </span>
+                            Alumnos
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="">

@@ -1077,17 +1077,25 @@
                         </i>
                     </div>
                     <div>
-                    @php echo($alumno[0]->Nombre." ".$alumno[0]->Apellido_paterno." ".$alumno[0]->Apellido_materno); @endphp
+                        @php echo($alumno[0]->Nombre." ".$alumno[0]->Apellido_paterno." ".$alumno[0]->Apellido_materno); @endphp
                     </div>
-
+                </div>
+                <div class="page-title-actions">
                     @if (session()->get('user_roles')['Becas']->Crear == 'Y')
-                    <div class="d-inline-block dropdown" style="right: 13px;position: absolute;">
+                    <div class="d-inline-block dropdown">
                         <button id="descuento-alumno" type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-primary" data-toggle="modal" data-target="#new_descuento"> 
                             <i class="fas fa-plus"></i> Descuentos
                         </button>
                     </div>
                     @endif
-
+                    <div class="d-inline-block dropdown">
+                        <a href="{{ url('alumnos') }}" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-primary">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="fa fa-arrow-left fa-w-20"></i>
+                            </span>
+                            Alumnos
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
