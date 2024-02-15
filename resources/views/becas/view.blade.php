@@ -804,7 +804,7 @@
                       timerProgressBar: true,
                       onClose: () => {
                         if(result[0] == 'success'){
-                            location.reload();
+                            history.back();
                         }
                       }
                 });
