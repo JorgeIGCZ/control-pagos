@@ -883,7 +883,7 @@
                           timerProgressBar: true,
                           onClose: () => {
                             if(result[0] == 'success'){
-                                location.reload();
+                                $('#beca-alumnos').DataTable().ajax.reload();
                             }
                           }
                     });
