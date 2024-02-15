@@ -34,7 +34,7 @@
                             tClass  = 'btn-success';
                             break;
                           default:
-                            estatus = 'Baja';
+                            estatus = 'Inactivo';
                             tClass  = 'btn-secondary';
                             break;
                         }
