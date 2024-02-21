@@ -162,7 +162,7 @@
                 }
             },
             columns: [
-                { data: 'provId' },
+                { data: 'Alumno_id' },
                 { data: 'Nombre',defaultContent: 'Actions', 'render': function ( data, type, row ) 
                     {
                         let nombre = `<a href='/alumnos/view?alumno=${row.Alumno_id}#titulaciones' target="_blank" >${row.Nombre}</a> `

@@ -118,7 +118,6 @@
             },
             columns: [
 
-                { data: 'provId' },
                 { data: 'Id' },
                 { data: 'Nombre' },
                 { data: 'Grupo' },
@@ -311,7 +310,6 @@
                             <table id="alumnos" class="mb-0 table">
                                 <thead>
                                     <tr>
-                                        <th>Index</th>
                                         <th>Id</th>
                                         <th>Nombre</th>
                                         <th>Grupo</th>

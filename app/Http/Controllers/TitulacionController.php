@@ -76,7 +76,7 @@ class TitulacionController extends Controller
 
         $alumnosQuery = 'SELECT                                                                                                                                                                                  '.
                         '    A.Id AS Alumno_id,                                                                                                                                                                  '.
-                        '    @total := @total + 1 AS provId,    '.
+                        // '    @total := @total + 1 AS provId,    '.
                         '    CONCAT(A.Nombre, " ", A.Apellido_paterno, " ", A.Apellido_materno) AS Nombre,                                                                                                       '.
                         '    A.Email,                                                                                                                                                                            '.
                         '    A.Telefono,                                                                                                                                                                         '.
@@ -110,7 +110,7 @@ class TitulacionController extends Controller
                         '    Nombre_tutor,                                                                                                                                                                       '.
                         '    Telefono_tutor,                                                                                                                                                                     '.
                         '    Costo_titulacion                                                                                                                                                                    ';
-        DB::statement( DB::raw( 'SET @total := 0'));
+        // DB::statement( DB::raw( 'SET @total := 0'));
         $alumnos = DB::select($alumnosQuery);
         
         return ['data'=>$alumnos];

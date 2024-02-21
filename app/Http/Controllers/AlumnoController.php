@@ -358,7 +358,7 @@ class AlumnoController extends Controller
 
         $alumnosQuery = 'SELECT                                                                                                                                                                         '.
                         'A.Id,                                                                                                                                                                          '.
-                        '@total := @total + 1 AS provId,                                                                                                                                                '.
+                        // '@total := @total + 1 AS provId,                                                                                                                                                '.
                         'CONCAT(A.Nombre, " ", A.Apellido_paterno, " ", A.Apellido_materno) AS Nombre,                                                                                                  '.
                         'A.Email,                                                                                                                                                                       '.
                         'A.Telefono,                                                                                                                                                                    '.
@@ -392,7 +392,7 @@ class AlumnoController extends Controller
                         '    Nombre_tutor,                                                                                                                                                              '.
                         '    Telefono_tutor                                                                                                                                                             ';
 
-        DB::statement( DB::raw( 'SET @total := 0'));
+        // DB::statement( DB::raw( 'SET @total := 0'));
         //print_r($alumnosQuery);
         $alumnos = DB::select($alumnosQuery);
         
@@ -591,7 +591,7 @@ class AlumnoController extends Controller
 
         $alumnosQuery = 'SELECT                                                                                                                                                                         '.
                         'A.Id,                                                                                                                                                                          '.
-                        '@total := @total + 1 AS provId,                                                                                                                                                '.
+                        // '@total := @total + 1 AS provId,                                                                                                                                                '.
                         'CONCAT(A.Nombre, " ", A.Apellido_paterno, " ", A.Apellido_materno) AS Nombre,                                                                                                  '.
                         'A.Email,                                                                                                                                                                       '.
                         'A.Telefono,                                                                                                                                                                    '.
@@ -625,7 +625,7 @@ class AlumnoController extends Controller
                         '    Nombre_tutor,                                                                                                                                                              '.
                         '    Telefono_tutor                                                                                                                                                             ';
 
-        DB::statement( DB::raw( 'SET @total := 0'));
+        // DB::statement( DB::raw( 'SET @total := 0'));
         $alumnos = DB::select($alumnosQuery);
 
 
