@@ -66,13 +66,50 @@ class TitulacionController extends Controller
         if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
             $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
         }
-        $alumnosQuery = 'SELECT A.Id AS Alumno_id,@total := @total + 1 AS provId,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,A.Telefono,Estatus,Nombre_tutor,Telefono_tutor,'.
-                        '( SELECT O.Estatus FROM ordenes O LEFT JOIN conceptos C ON C.Id = O.Concepto_id WHERE O.Alumno_id = A.Id AND C.Tipo = "titulacion")  AS Estatus_pago, '.
-                        '( SELECT IF(SUM(P.Cantidad_pago) IS NULL,0,SUM(P.Cantidad_pago)) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Concepto_id WHERE P.Alumno_id = A.Id  AND C.Tipo = "titulacion")  AS Cantidad_pago,   '.
-                        '( SELECT C.Precio FROM conceptos C WHERE C.Id = AR.Concepto_titulacion_id)  AS Costo_titulacion '.
-                        'FROM alumnos A                                        '.
-                        'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id '.
-                        'WHERE 1 = 1 '.$queryWhere;
+        // $alumnosQuery = 'SELECT A.Id AS Alumno_id,@total := @total + 1 AS provId,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,A.Telefono,Estatus,Nombre_tutor,Telefono_tutor,'.
+        //                 '( SELECT O.Estatus FROM ordenes O LEFT JOIN conceptos C ON C.Id = O.Concepto_id WHERE O.Alumno_id = A.Id AND C.Tipo = "titulacion")  AS Estatus_pago, '.
+        //                 '( SELECT IF(SUM(P.Cantidad_pago) IS NULL,0,SUM(P.Cantidad_pago)) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Concepto_id WHERE P.Alumno_id = A.Id  AND C.Tipo = "titulacion")  AS Cantidad_pago,   '.
+        //                 '( SELECT C.Precio FROM conceptos C WHERE C.Id = AR.Concepto_titulacion_id)  AS Costo_titulacion '.
+        //                 'FROM alumnos A                                        '.
+        //                 'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id '.
+        //                 'WHERE 1 = 1 '.$queryWhere;
+
+        $alumnosQuery = 'SELECT                                                                                                                                                                                  '.
+                        '    A.Id AS Alumno_id,                                                                                                                                                                  '.
+                        '    @total := @total + 1 AS provId,    '.
+                        '    CONCAT(A.Nombre, " ", A.Apellido_paterno, " ", A.Apellido_materno) AS Nombre,                                                                                                       '.
+                        '    A.Email,                                                                                                                                                                            '.
+                        '    A.Telefono,                                                                                                                                                                         '.
+                        '    A.Estatus,                                                                                                                                                                          '.
+                        '    Nombre_tutor,                                                                                                                                                                       '.
+                        '    Telefono_tutor,                                                                                                                                                                     '.
+                        '    IFNULL(O.Estatus, 0) AS Estatus_pago,                                                                                                                                               '.
+                        '    IFNULL(SUM(P.Cantidad_pago), 0) AS Cantidad_pago,                                                                                                                                   '.
+                        '    C.Precio AS Costo_titulacion                                                                                                                                                        '.
+                        'FROM                                                                                                                                                                                    '.
+                        '    alumnos A                                                                                                                                                                           '.
+                        'LEFT JOIN                                                                                                                                                                               '.
+                        '    alumno_relaciones AR ON AR.Alumno_id = A.Id                                                                                                                                         '.
+                        'LEFT JOIN                                                                                                                                                                               '.
+                        '    (SELECT Alumno_id, O.Estatus FROM ordenes O LEFT JOIN conceptos ON conceptos.Id = O.Concepto_id WHERE conceptos.Tipo = "titulacion") O                                            '.
+                        '    ON O.Alumno_id = A.Id                                                                                                                                                               '.
+                        'LEFT JOIN                                                                                                                                                                               '.
+                        '    (SELECT Alumno_id, SUM(Cantidad_pago) AS Cantidad_pago FROM pagos LEFT JOIN conceptos ON conceptos.Id = pagos.Concepto_id WHERE conceptos.Tipo = "titulacion" GROUP BY Alumno_id) P '.
+                        '    ON P.Alumno_id = A.Id                                                                                                                                                               '.
+                        'LEFT JOIN                                                                                                                                                                               '.
+                        '    conceptos C ON C.Id = AR.Concepto_titulacion_id                                                                                                                                     '.
+                        'WHERE 1 = 1 '.$queryWhere.'                                                                                                                                                              '.
+                        'GROUP BY                                                                                                                                                                                '.
+                        '    A.Id,                                                                                                                                                                               '.
+                        '    A.Nombre,                                                                                                                                                                           '.
+                        '    A.Apellido_paterno,                                                                                                                                                                 '.
+                        '    A.Apellido_materno,                                                                                                                                                                 '.
+                        '    A.Email,                                                                                                                                                                            '.
+                        '    A.Telefono,                                                                                                                                                                         '.
+                        '    A.Estatus,                                                                                                                                                                          '.
+                        '    Nombre_tutor,                                                                                                                                                                       '.
+                        '    Telefono_tutor,                                                                                                                                                                     '.
+                        '    Costo_titulacion                                                                                                                                                                    ';
         DB::statement( DB::raw( 'SET @total := 0'));
         $alumnos = DB::select($alumnosQuery);
         

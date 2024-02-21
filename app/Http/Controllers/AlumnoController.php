@@ -344,15 +344,54 @@ class AlumnoController extends Controller
         //    $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
         //}
 
-        $alumnosQuery = 'SELECT A.Id,@total := @total + 1 AS provId,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,A.Telefono,A.Estatus,G.Nombre AS Grupo,Nombre_tutor,Telefono_tutor,'.
-                        '( SELECT O.Estatus FROM ordenes O LEFT JOIN conceptos C ON C.Id = O.Concepto_id WHERE O.Alumno_id = A.Id AND MONTH(O.Fecha_creacion) = "'.date("m").'" AND YEAR(O.Fecha_creacion) = "'.date("Y").'" AND C.Tipo = "colegiatura")  AS Estatus_pago '.
-                        'FROM alumnos A                                        '.
-                        'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id '.
-                        'LEFT JOIN grupos             G ON G.Id         = AR.Grupo_id '.
-                        'LEFT JOIN generaciones      GR ON GR.Id        = AR.Generacion_id '.
+        // $alumnosQuery = 'SELECT A.Id,@total := @total + 1 AS provId,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,A.Telefono,A.Estatus,G.Nombre AS Grupo,Nombre_tutor,Telefono_tutor,'.
+        //                 // '( SELECT O.Estatus FROM ordenes O LEFT JOIN conceptos C ON C.Id = O.Concepto_id WHERE O.Alumno_id = A.Id AND MONTH(O.Fecha_creacion) = "'.date("m").'" AND YEAR(O.Fecha_creacion) = "'.date("Y").'" AND C.Tipo = "colegiatura")  AS Estatus_pago '.
+        //                 ' "1" AS Estatus_pago '.
+        //                 'FROM alumnos A                                        '.
+        //                 'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id '.
+        //                 'LEFT JOIN grupos             G ON G.Id         = AR.Grupo_id '.
+        //                 'LEFT JOIN generaciones      GR ON GR.Id        = AR.Generacion_id '.
                         
-                        //'WHERE 1 = 1 AND GR.Fecha_finalizacion >=  "'.date("Y-m-d").'"  '.$queryWhere;
-                        'WHERE 1 = 1 '.$queryWhere;
+        //                 //'WHERE 1 = 1 AND GR.Fecha_finalizacion >=  "'.date("Y-m-d").'"  '.$queryWhere;
+        //                 'WHERE 1 = 1 '.$queryWhere;
+
+
+        $alumnosQuery = 'SELECT                                                                                                                                                                         '.
+                        'A.Id,                                                                                                                                                                          '.
+                        '@total := @total + 1 AS provId,                                                                                                                                                '.
+                        'CONCAT(A.Nombre, " ", A.Apellido_paterno, " ", A.Apellido_materno) AS Nombre,                                                                                                  '.
+                        'A.Email,                                                                                                                                                                       '.
+                        'A.Telefono,                                                                                                                                                                    '.
+                        'A.Estatus,                                                                                                                                                                     '.
+                        'G.Nombre AS Grupo,                                                                                                                                                             '.
+                        'Nombre_tutor,                                                                                                                                                                  '.
+                        'Telefono_tutor,                                                                                                                                                                '.
+                        'MAX(CASE WHEN MONTH(O.Fecha_creacion) = MONTH(CURRENT_DATE()) AND YEAR(O.Fecha_creacion) = YEAR(CURRENT_DATE()) AND C.Tipo = "colegiatura" THEN O.Estatus END) AS Estatus_pago '.
+                        'FROM                                                                                                                                                                           '.
+                        '    alumnos A                                                                                                                                                                  '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    alumno_relaciones AR ON AR.Alumno_id = A.Id                                                                                                                                '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    grupos G ON G.Id = AR.Grupo_id                                                                                                                                             '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    generaciones GR ON GR.Id = AR.Generacion_id                                                                                                                                '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    ordenes O ON O.Alumno_id = A.Id                                                                                                                                            '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    conceptos C ON C.Id = O.Concepto_id                                                                                                                                        '.
+                        'WHERE 1 = 1 '.$queryWhere.'                                                                                                                                                    '.
+                        'GROUP BY                                                                                                                                                                       '.
+                        '    A.Id,                                                                                                                                                                      '.
+                        '    A.Nombre,                                                                                                                                                                  '.
+                        '    A.Apellido_paterno,                                                                                                                                                        '.
+                        '    A.Apellido_materno,                                                                                                                                                        '.
+                        '    A.Email,                                                                                                                                                                   '.
+                        '    A.Telefono,                                                                                                                                                                '.
+                        '    A.Estatus,                                                                                                                                                                 '.
+                        '    G.Nombre,                                                                                                                                                                  '.
+                        '    Nombre_tutor,                                                                                                                                                              '.
+                        '    Telefono_tutor                                                                                                                                                             ';
+
         DB::statement( DB::raw( 'SET @total := 0'));
         //print_r($alumnosQuery);
         $alumnos = DB::select($alumnosQuery);
@@ -393,12 +432,28 @@ class AlumnoController extends Controller
             $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
         }
 
-        $alumnosQuery = 'SELECT A.Id,@total := @total + 1 AS provId,A.Fecha_baja,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,A.Telefono,Estatus,Nombre_tutor,Telefono_tutor,'.
-                        '( SELECT O.Estatus FROM ordenes O LEFT JOIN conceptos C ON C.Id = O.Concepto_id WHERE O.Alumno_id = A.Id AND MONTH(O.Fecha_creacion) = "'.date("m").'" AND YEAR(O.Fecha_creacion) = "'.date("Y").'" AND C.Tipo = "colegiatura")  AS Estatus_pago, '.
-                        '(SELECT COUNT(O.Id) FROM ordenes O WHERE O.Estatus <> 2 AND O.Alumno_id = A.Id AND O.Fecha_creacion <= A.Fecha_baja) AS Adeudo '.
+        $alumnosQuery = 'SELECT A.Id,@total := @total + 1 AS provId,A.Fecha_baja,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,A.Telefono,A.Estatus,Nombre_tutor,Telefono_tutor,'.
+                        'MAX(CASE WHEN MONTH(O.Fecha_creacion) = MONTH(CURRENT_DATE()) AND YEAR(O.Fecha_creacion) = YEAR(CURRENT_DATE()) AND C.Tipo = "colegiatura" THEN O.Estatus END) AS Estatus_pago,'.
+                        // '(SELECT COUNT(O.Id) FROM ordenes O WHERE O.Estatus <> 2 AND O.Alumno_id = A.Id AND O.Fecha_creacion <= A.Fecha_baja) AS Adeudo '.
+                        'COUNT(CASE WHEN O.Estatus <> 2 AND O.Fecha_creacion <= A.Fecha_baja THEN O.Id END) AS Adeudo '.
                         'FROM alumnos A                                        '.
                         'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id '.
-                        'WHERE 1 = 1 AND A.Estatus = 0 '.$queryWhere;
+                        'LEFT JOIN ordenes O ON O.Alumno_id = A.Id             '.
+                        'LEFT JOIN conceptos C ON C.Id = O.Concepto_id         '.
+                        'WHERE 1 = 1 AND A.Estatus = 0 '.$queryWhere.'         '.
+                        'GROUP BY                                                                                                                                                                       '.
+                        '    A.Id,                                                                                                                                                                      '.
+                        '    A.Nombre,                                                                                                                                                                  '.
+                        '    A.Apellido_paterno,                                                                                                                                                        '.
+                        '    A.Apellido_materno,                                                                                                                                                        '.
+                        '    A.Email,                                                                                                                                                                   '.
+                        '    A.Telefono,                                                                                                                                                                '.
+                        '    A.Estatus,                                                                                                                                                                 '.
+                        '    Nombre_tutor,                                                                                                                                                              '.
+                        '    Telefono_tutor                                                                                                                                                             ';
+
+
+
         DB::statement( DB::raw( 'SET @total := 0'));
         $alumnos = DB::select($alumnosQuery);
         
@@ -526,13 +581,50 @@ class AlumnoController extends Controller
                 }
             }
         }
-        $alumnosQuery = 'SELECT A.Id,@total := @total + 1 AS provId,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,A.Telefono,A.Estatus,Nombre_tutor,Telefono_tutor,'.
-                        '( SELECT O.Estatus FROM ordenes O LEFT JOIN conceptos C ON C.Id = O.Concepto_id WHERE O.Alumno_id = A.Id AND MONTH(O.Fecha_creacion) = "'.date("m").'" AND YEAR(O.Fecha_creacion) = "'.date("Y").'" AND C.Tipo = "colegiatura")  AS Estatus_pago '.
-                        'FROM alumnos A                                        '.
-                        'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id '.
-                        'LEFT JOIN generaciones      GR ON GR.Id       = AR.Generacion_id '.
+        // $alumnosQuery = 'SELECT A.Id,@total := @total + 1 AS provId,CONCAT(A.Nombre," ",A.Apellido_paterno," ",A.Apellido_materno) AS Nombre,A.Email,A.Telefono,A.Estatus,Nombre_tutor,Telefono_tutor,'.
+        //                 '( SELECT O.Estatus FROM ordenes O LEFT JOIN conceptos C ON C.Id = O.Concepto_id WHERE O.Alumno_id = A.Id AND MONTH(O.Fecha_creacion) = "'.date("m").'" AND YEAR(O.Fecha_creacion) = "'.date("Y").'" AND C.Tipo = "colegiatura")  AS Estatus_pago '.
+        //                 'FROM alumnos A                                        '.
+        //                 'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id '.
+        //                 'LEFT JOIN generaciones      GR ON GR.Id       = AR.Generacion_id '.
         
-                        'WHERE 1 = 1 '.$queryWhere;
+        //                 'WHERE 1 = 1 '.$queryWhere;
+
+        $alumnosQuery = 'SELECT                                                                                                                                                                         '.
+                        'A.Id,                                                                                                                                                                          '.
+                        '@total := @total + 1 AS provId,                                                                                                                                                '.
+                        'CONCAT(A.Nombre, " ", A.Apellido_paterno, " ", A.Apellido_materno) AS Nombre,                                                                                                  '.
+                        'A.Email,                                                                                                                                                                       '.
+                        'A.Telefono,                                                                                                                                                                    '.
+                        'A.Estatus,                                                                                                                                                                     '.
+                        'G.Nombre AS Grupo,                                                                                                                                                             '.
+                        'Nombre_tutor,                                                                                                                                                                  '.
+                        'Telefono_tutor,                                                                                                                                                                '.
+                        'MAX(CASE WHEN MONTH(O.Fecha_creacion) = MONTH(CURRENT_DATE()) AND YEAR(O.Fecha_creacion) = YEAR(CURRENT_DATE()) AND C.Tipo = "colegiatura" THEN O.Estatus END) AS Estatus_pago '.
+                        'FROM                                                                                                                                                                           '.
+                        '    alumnos A                                                                                                                                                                  '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    alumno_relaciones AR ON AR.Alumno_id = A.Id                                                                                                                                '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    grupos G ON G.Id = AR.Grupo_id                                                                                                                                             '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    generaciones GR ON GR.Id = AR.Generacion_id                                                                                                                                '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    ordenes O ON O.Alumno_id = A.Id                                                                                                                                            '.
+                        'LEFT JOIN                                                                                                                                                                      '.
+                        '    conceptos C ON C.Id = O.Concepto_id                                                                                                                                        '.
+                        'WHERE 1 = 1 '.$queryWhere.'                                                                                                                                                    '.
+                        'GROUP BY                                                                                                                                                                       '.
+                        '    A.Id,                                                                                                                                                                      '.
+                        '    A.Nombre,                                                                                                                                                                  '.
+                        '    A.Apellido_paterno,                                                                                                                                                        '.
+                        '    A.Apellido_materno,                                                                                                                                                        '.
+                        '    A.Email,                                                                                                                                                                   '.
+                        '    A.Telefono,                                                                                                                                                                '.
+                        '    A.Estatus,                                                                                                                                                                 '.
+                        '    G.Nombre,                                                                                                                                                                  '.
+                        '    Nombre_tutor,                                                                                                                                                              '.
+                        '    Telefono_tutor                                                                                                                                                             ';
+
         DB::statement( DB::raw( 'SET @total := 0'));
         $alumnos = DB::select($alumnosQuery);
 
