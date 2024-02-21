@@ -898,7 +898,7 @@ class PagoController extends Controller
         $queryWhere = '';
         if(is_object($datos)){
             foreach($datos as $key => $value){
-                if($value <> 0){
+                if($value !== "0" && $value !== "" ){
                     switch ($key) {
                         case 'plantel':
                             $queryWhere .= ' AND AR.Plantel_id IN ('.$value.') ';
