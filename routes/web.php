@@ -68,6 +68,7 @@ Route::post('ajax/newdescuento',[AjaxController::class,'createDescuento']);
 Route::post('ajax/getdescuento',[AjaxController::class,'getdescuento']);
 
 Route::post('ajax/descuentoIsValid',[AjaxController::class,'descuentoIsValid']);
+Route::post('ajax/validDescuentos',[AjaxController::class,'validDescuentos']);
 Route::post('ajax/getalldescuentos',[AjaxController::class,'getAllDescuentos']);
 
 
@@ -75,6 +76,7 @@ Route::post('ajax/getalldescuentos',[AjaxController::class,'getAllDescuentos']);
 //Route::post('ajax/getrecargo',[AjaxController::class,'getrecargo']);
 
 Route::post('ajax/recargoIsValid',[AjaxController::class,'recargoIsValid']);
+Route::post('ajax/validRecargos',[AjaxController::class,'validRecargos']);
 Route::post('ajax/getallrecargos',[AjaxController::class,'getAllRecargos']);
 
 
