@@ -19,7 +19,38 @@
         $('.relaciones').on('click', '.save', function(){
             editRelaciones();
         });
+
+        validateTipo($("#tipo").children("option:selected").val())
+
+        $('#tipo').change(function(e){
+            validateTipo($(this).children("option:selected").val());
+        })
     }); 
+
+    
+
+    function validateTipo(tipo){
+        const diasContainer = $('#dias-container');
+        const dias = $('#dias');
+
+        switch (tipo) {
+            case 'pronto-pago-titulacion':
+            case 'pronto-pago':
+                diasContainer.show();
+                diasContainer.find('label').html('Dias activo')
+                break;
+        
+            case 'recargo-pago':
+                diasContainer.show();
+                diasContainer.find('label').html('Dias sin recargo')
+                break;
+        
+            default:
+                diasContainer.hide();
+                dias.val(0);
+                break;
+        }
+    }
     
     function editConcepto(){
         $('.loader').show();
@@ -28,6 +59,7 @@
         let tipo   = $("#tipo").children("option:selected").val();
         let estatus= $("#estatus").children("option:selected").val();
         let plantel= $("#plantel").children("option:selected").val();
+        let dias   = $("#dias").val();
         
         let concepto = {
             'id'    : @php echo($_GET['concepto']) @endphp,
@@ -35,7 +67,8 @@
             'precio': precio,
             'tipo'  : tipo,
             'estatus': estatus,
-            'plantel':plantel
+            'plantel':plantel,
+            'dias'   :dias
         }
         $.ajax({
             type: 'POST',
@@ -173,18 +206,28 @@
                                             <div class="form-group concepto col-md-3">
                                                 <label for="tipo" class="">Tipo</label>
                                                 <select name="tipo" id="tipo" class="form-control" disabled="disabled">
-                                                    <option value="otro" @if($conceptos[0]->Tipo == 'otro') selected="selected" @endif>Otro</option>
-                                                    <option value="colegiatura" @if($conceptos[0]->Tipo == 'colegiatura') selected="selected" @endif>Colegiatura</option>
-                                                    <option value="pagos" @if($conceptos[0]->Tipo == 'pagos') selected="selected" @endif>Pagos</option>
+                                                    <option disabled value="">Conceptos pago</option>
+                                                        <option value="colegiatura" @if($conceptos[0]->Tipo == 'colegiatura') selected="selected" @endif>Colegiatura</option>
+                                                        <option value="inscripcion" @if($conceptos[0]->Tipo == 'inscripcion') selected="selected" @endif>Inscripción</option>
+                                                        <option value="titulacion" @if($conceptos[0]->Tipo == 'titulacion') selected="selected" @endif>Titulación</option>
+                                                        <option value="cuota-personalizada-anual" @if($conceptos[0]->Tipo == 'cuota-personalizada-anual') selected="selected" @endif>Cuota personalizada anual</option>
+                                                        <option value="pagos" @if($conceptos[0]->Tipo == 'pagos') selected="selected" @endif>Pagos</option>
+                                                    <option disabled value="">Descuentos</option>
                                                     <option value="descuentos" @if($conceptos[0]->Tipo == 'descuentos') selected="selected" @endif>Descuentos</option>
-                                                    <option value="becas" @if($conceptos[0]->Tipo == 'becas') selected="selected" @endif>Becas</option>
-                                                    <option value="titulacion" @if($conceptos[0]->Tipo == 'titulacion') selected="selected" @endif>Titulación</option>
-                                                    <option value="inscripcion" @if($conceptos[0]->Tipo == 'inscripcion') selected="selected" @endif>Inscripción</option>
-                                                    <option value="pronto-pago" @if($conceptos[0]->Tipo == 'pronto-pago') selected="selected" @endif>Pronto pago</option>
+                                                    <option value="pronto-pago" @if($conceptos[0]->Tipo == 'pronto-pago') selected="selected" @endif>Pronto pago (colegiatura, inscripción)</option>
+                                                    <option value="pronto-pago-titulacion" @if($conceptos[0]->Tipo == 'pronto-pago-titulacion') selected="selected" @endif>Pronto pago (titulación)</option>
                                                     <option value="recargo-pago" @if($conceptos[0]->Tipo == 'recargo-pago') selected="selected" @endif>Recargo pago tardío</option>
-                                                    <option value="cuota-personalizada-anual" @if($conceptos[0]->Tipo == 'cuota-personalizada-anual') selected="selected" @endif>Cuota personalizada anual</option>
+                                                        <option value="otro" @if($conceptos[0]->Tipo == 'otro') selected="selected" @endif>Otro</option>
+                                                        <option value="becas" @if($conceptos[0]->Tipo == 'becas') selected="selected" @endif>Becas</option>
                                                 </select>
                                                 <button class="edit-save-btn edit" input="tipo">Editar</button>
+                                            </div>
+
+
+                                            <div id="dias-container" class="form-group col-md-3 hidden concepto">
+                                                <label for="dias">Dias activo</label>
+                                                <input type="number" class="form-control" id="dias" min="1" max="31" disabled="disabled" value="@php echo($conceptos[0]->Dias); @endphp">
+                                                <button class="edit-save-btn edit" input="dias">Editar</button>
                                             </div>
                                             
                                             <div class="form-group concepto col-md-3">

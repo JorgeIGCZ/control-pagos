@@ -21,6 +21,31 @@
             let nivel = $(this).children("option:selected").html();
             displayLicenciaturas(nivel);
         });
+
+        $('#tipo').change(function(e){
+            let tipo = $(this).children("option:selected").val();
+            const diasContainer = $('#dias-container');
+            const dias = $('#dias');
+
+            switch (tipo) {
+                case 'pronto-pago-titulacion':
+                case 'pronto-pago':
+                    diasContainer.show();
+                    diasContainer.find('label').html('Dias activo')
+                    break;
+            
+                case 'recargo-pago':
+                    diasContainer.show();
+                    diasContainer.find('label').html('Dias sin recargo')
+                    break;
+            
+                default:
+                    diasContainer.hide();
+                    dias.val(0);
+                    break;
+            }
+
+        });
     }); 
     
     function displayLicenciaturas(nivel){
@@ -43,6 +68,7 @@
         let precio       = $('#precio').attr("value");
         let tipo         = $("#tipo").children("option:selected").val();
         let plantel      = $("#plantel").children("option:selected").val();
+        let dias         = $("#dias").val();
         /*let nivel        = $("#nivel").children("option:selected").val();
         let licenciatura = $("#licenciatura").children("option:selected").val();
         let sistema      = $("#sistema").children("option:selected").val();
@@ -52,7 +78,8 @@
             'nombre'      : nombre,
             'precio'      : precio,
             'tipo'        : tipo,
-            'plantel'     : plantel/*,
+            'plantel'     : plantel,
+            'dias'        : dias/*,
             'nivel'       : nivel,
             'licenciatura': licenciatura,
             'sistema'     : sistema,
@@ -140,19 +167,26 @@
                                             <div class="form-group col-md-3">
                                                 <label for="tipo" class="">Tipo</label>
                                                 <select name="tipo" id="tipo" class="form-control">
-                                                    <option value="otro">Otro</option>
-                                                    <option value="colegiatura">Colegiatura</option>
-                                                    <option value="pagos">Pagos</option>
-                                                    <option value="descuentos">Descuentos</option>
-                                                    <option value="becas">Becas</option>
-                                                    <option value="titulacion">Titulación</option>
-                                                    <option value="inscripcion">Inscripción</option>
-                                                    <option value="pronto-pago">Pronto pago</option>
-                                                    <option value="recargo-pago">Recargo pago tardío</option>
-                                                    <option value="cuota-personalizada-anual">Cuota personalizada anual</option>
+                                                    <option disabled value="">Conceptos pago</option>
+                                                        <option value="colegiatura">Colegiatura</option>
+                                                        <option value="inscripcion">Inscripción</option>
+                                                        <option value="titulacion">Titulación</option>
+                                                        <option value="cuota-personalizada-anual">Cuota personalizada anual</option>
+                                                        <option value="pagos">Pagos</option>
+                                                    <option disabled value="">Descuentos</option>
+                                                        <option value="descuentos">Descuentos</option>
+                                                        <option value="pronto-pago">Pronto pago (colegiatura, inscripción)</option>
+                                                        <option value="pronto-pago-titulacion">Pronto pago (titulación)</option>
+                                                        <option value="recargo-pago">Recargo pago tardío</option>
+                                                    <option value="otro" disabled>Otro</option>
+                                                    <option value="becas" disabled>Becas</option>
                                                 </select>
                                             </div>
-                                        </div>
+
+                                            <div id="dias-container" class="form-group col-md-3 hidden">
+                                                <label for="dias">Dias activo</label>
+                                                <input type="number" class="form-control" id="dias" min="1" max="31">
+                                            </div>
                                         </div>
                                     </form>
                                     <button id="submit_concepto" class="btn btn-primary">Guardar</button>

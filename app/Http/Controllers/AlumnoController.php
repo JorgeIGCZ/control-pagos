@@ -197,6 +197,192 @@ class AlumnoController extends Controller
         }
         return ['result'=>$result];
     }
+
+    function getValidDescuentos($alumno, $concepto, $orden, $plantel){
+        $monthDay = date_create_from_format('j',date('j'));
+        $monthDay->setTimezone(new \DateTimeZone('America/Mexico_City'));
+        $monthDay = $monthDay->format('j');
+
+        $alumnoId  = $alumno['id'];
+        $conceptoId= $concepto['id'];
+        $ordenId   = $orden['id'];
+        $plantelId = $plantel['id'];
+        $result   = false;
+
+        $allDescuentos = [];
+
+        // Descuentos Pronto Pago
+        if(!$this->isDiscountAlreadyApplied($alumnoId, $ordenId)){
+            // Descuentos Pronto Pago Colegiatura - Inscripcion
+            if($this->canShowDescuentosProntoPago('colegiatura-inscripcion', $conceptoId)){
+                $allDescuentos = $this->getProntoPagoDescuentos($monthDay, $ordenId, $plantelId);
+            }
+
+            // Descuentos Pronto Pago Titulacion
+            if($this->canShowDescuentosProntoPago('titulacion', $conceptoId)){
+                $allDescuentos = $this->getProntoPagoTitulacionDescuentos($monthDay, $plantelId);
+            }
+        }
+
+        // Descuentos generales
+        $descuentosGenerales = $this->getDescuentosGenerales($plantelId);
+        if(count($descuentosGenerales) > 0){
+            $allDescuentos = array_merge($allDescuentos, $descuentosGenerales);
+        }
+
+        return ['result'=>$allDescuentos];
+    }
+
+    function getProntoPagoDescuentos($monthDay, $ordenId, $plantelId){
+        $descuentos = [];
+
+        if($ordenId == 0){
+            return $descuentos;
+        }
+
+        $prontoPagoDescuentos = DB::select('SELECT * FROM conceptos WHERE Tipo = "pronto-pago"  AND Plantel_id = '.@$plantelId.' AND Estatus = 1');
+
+
+        $isCurrentOrderQuery = ''.
+                            'SELECT COUNT(O.Id) AS isCurrent '.
+                            'FROM ordenes O                '.
+                            'WHERE O.Id = '.$ordenId.' AND MONTH(O.Fecha_creacion) = MONTH(CURDATE()) AND YEAR(O.Fecha_creacion) = YEAR(CURDATE())';
+            
+        $isFutureOrderQuery = ''.
+                        'SELECT COUNT(O.Id) AS isFuture '.
+                        'FROM ordenes O                '.
+                        'WHERE O.Id = '.$ordenId.' AND O.Fecha_creacion >= CURDATE()';
+
+        $isCurrentOrder = DB::select($isCurrentOrderQuery)[0]->isCurrent;
+        $isFutureOrder = DB::select($isFutureOrderQuery)[0]->isFuture;
+
+        foreach($prontoPagoDescuentos as $prontoPagoDescuento){
+
+            if($isFutureOrder){
+                $descuentos[] = $prontoPagoDescuento;
+                continue;
+            }
+
+            if($isCurrentOrder){
+                if($monthDay < $prontoPagoDescuento->Dias || session()->get('user_roles')['role'] === 'Administrador'){
+                    $descuentos[] = $prontoPagoDescuento;
+                }
+            }
+        }
+
+        return $descuentos;
+    }
+
+    function getRecargos($monthDay, $ordenId, $plantelId){
+        $recargos = [];
+
+        if($ordenId == 0){
+            return $recargos;
+        }
+
+        $allRecargos = DB::select('SELECT * FROM conceptos WHERE Tipo = "recargo-pago"  AND Plantel_id = '.@$plantelId.' AND Estatus = 1');
+
+
+        $isCurrentOrderQuery = ''.
+                            'SELECT COUNT(O.Id) AS isCurrent '.
+                            'FROM ordenes O                '.
+                            'WHERE O.Id = '.$ordenId.' AND MONTH(O.Fecha_creacion) = MONTH(CURDATE()) AND YEAR(O.Fecha_creacion) = YEAR(CURDATE())';
+            
+        $isFutureOrderQuery = ''.
+                        'SELECT COUNT(O.Id) AS isFuture '.
+                        'FROM ordenes O                '.
+                        'WHERE O.Id = '.$ordenId.' AND O.Fecha_creacion >= CURDATE()';
+
+        $isCurrentOrder = DB::select($isCurrentOrderQuery)[0]->isCurrent;
+        $isFutureOrder = DB::select($isFutureOrderQuery)[0]->isFuture;
+
+        foreach($allRecargos as $recargo){
+
+            if($isFutureOrder){
+                continue;
+            }
+
+            if($isCurrentOrder){
+                if($monthDay > $recargo->Dias){
+                    $recargos[] = $recargo;
+                }
+            }
+        }
+
+        return $recargos;
+    }
+
+    function getProntoPagoTitulacionDescuentos($monthDay, $plantelId){
+        $descuentos = [];
+        $prontoPagoDescuentos = DB::select('SELECT * FROM conceptos WHERE Tipo = "pronto-pago-titulacion"  AND Plantel_id = '.@$plantelId.' AND Estatus = 1');
+
+        foreach($prontoPagoDescuentos as $prontoPagoDescuento){
+            if($monthDay < $prontoPagoDescuento->Dias || session()->get('user_roles')['role'] === 'Administrador'){
+                $descuentos[] = $prontoPagoDescuento;
+            }
+        }
+
+        return $descuentos;
+    }
+
+    function getDescuentosGenerales($plantelId){
+        return DB::select('SELECT * FROM conceptos WHERE Tipo = "descuentos"  AND Plantel_id = '.@$plantelId.' AND Estatus = 1');
+    }
+
+    function canShowDescuentosProntoPago($tipo, $conceptoId){
+        $result = false;
+        $tiposToEvaluate = [];
+
+        if (session()->get('user_roles')['role'] === 'Administrador'){
+            return true;
+        }
+
+        switch ($tipo) {
+            case 'colegiatura-inscripcion':
+                $tiposToEvaluate = ['colegiatura', 'inscripcion'];
+                break;
+
+            case 'titulacion':
+                $tiposToEvaluate = ['titulacion'];
+                break;
+        }
+        
+
+        $ordenConceptoTipo = DB::select('SELECT C.Tipo FROM conceptos C LEFT JOIN ordenes O ON O.Concepto_id = C.Id WHERE O.Concepto_id = '.$conceptoId);
+        
+        if(!in_array($ordenConceptoTipo[0]->Tipo, $tiposToEvaluate)){
+            return false;
+        }
+
+        return true;    
+    }
+
+    function isDiscountAlreadyApplied($alumnoId, $ordenId){
+        $currentDiscountsQuery = ''.
+                            'SELECT COUNT(P.Id) AS descuentos '.
+                            'FROM pagos P                '.
+                            'LEFT JOIN conceptos C ON C.Id = P.Descripcion '.
+                            'WHERE P.Alumno_id = '.$alumnoId.' AND P.Orden_id = '.$ordenId.' AND C.Tipo IN ("pronto-pago", "pronto-pago-titulacion") ';
+        
+        $currentDiscounts = DB::select($currentDiscountsQuery);
+        
+        return ($currentDiscounts[0]->descuentos > 0);
+    }
+
+    function isRecargoAlreadyApplied($alumnoId, $ordenId){
+        $currentRecargosQuery = ''.
+                            'SELECT COUNT(P.Id) AS recargos '.
+                            'FROM pagos P                   '.
+                            'LEFT JOIN conceptos C ON C.Id = P.Descripcion '.
+                            'WHERE P.Alumno_id = '.$alumnoId.' AND P.Orden_id = '.$ordenId.' AND C.Tipo = "recargo-pago" ';
+        
+
+        $currentRecargos = DB::select($currentRecargosQuery);
+        
+        return ($currentRecargos[0]->recargos > 0);
+    }
+
+
     function getAllDescuentos($alumno,$mensualidad){
         $alumnoId = $alumno['id'];
         $ordenId  = $mensualidad['id'];
@@ -253,6 +439,30 @@ class AlumnoController extends Controller
         
         return ['result'=>$result];
     }
+
+    function getValidRecargos($alumno, $orden, $plantel){
+        $monthDay = date_create_from_format('j',date('j'));
+        $monthDay->setTimezone(new \DateTimeZone('America/Mexico_City'));
+        $monthDay = $monthDay->format('j');
+
+        $alumnoId  = $alumno['id'];
+        $ordenId   = $orden['id'];
+        $plantelId = $plantel['id'];
+
+        $allRecargos = [];
+
+        //Evaluacion para validar si es el Colegio
+        if($plantelId != 2){
+            return ['result'=>$allRecargos];
+        }
+        // Recargos
+        if(!$this->isRecargoAlreadyApplied($alumnoId, $ordenId)){
+            $allRecargos = $this->getRecargos($monthDay, $ordenId, $plantelId);
+        }
+
+        return ['result'=>$allRecargos];
+    }
+    
     function getAllRecargos($alumno,$mensualidad){
         $alumnoId = $alumno['id'];
         $ordenId  = $mensualidad['id'];
@@ -651,14 +861,33 @@ class AlumnoController extends Controller
             SET A.Estatus = 1 WHERE G.Fecha_finalizacion < now() AND G.Fecha_finalizacion = "2021-07-01" AND A.Estatus = 3
         */
 
+
+                    // 'SELECT A.Id, (                                                                 '.
+                    // '   SELECT COUNT(O.Id) FROM ordenes O WHERE Alumno_id = A.Id and O.Estatus <> 2 '.
+                    // '    ) as Pendientes_pago                                                       '.
+                    // 'FROM alumnos A                                                                 '.
+                    // 'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id                          '.
+                    // 'LEFT JOIN generaciones G ON G.Id = AR.Generacion_id                            '.
+                    // 'WHERE G.Fecha_finalizacion < now() AND A.Estatus <> 3                          ';
+
         $alumnosQuery = ''.
-                    'SELECT A.Id, (                                                                 '.
-                    '   SELECT COUNT(O.Id) FROM ordenes O WHERE Alumno_id = A.Id and O.Estatus <> 2 '.
-                    '    ) as Pendientes_pago                                                       '.
-                    'FROM alumnos A                                                                 '.
-                    'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id                          '.
-                    'LEFT JOIN generaciones G ON G.Id = AR.Generacion_id                            '.
-                    'WHERE G.Fecha_finalizacion < now() AND A.Estatus <> 3                          ';
+                    'SELECT                                          '.
+                    '    A.Id,                                       '.
+                    '    COUNT(O.Id) AS Pendientes_pago              '.
+                    'FROM                                            '.
+                    '    alumnos A                                   '.
+                    'LEFT JOIN                                       '.
+                    '    alumno_relaciones AR ON AR.Alumno_id = A.Id '.
+                    'LEFT JOIN                                       '.
+                    '    generaciones G ON G.Id = AR.Generacion_id   '.
+                    'LEFT JOIN                                       '.
+                    '    ordenes O ON O.Alumno_id = A.Id             '.
+                    'WHERE                                           '.
+                    '    G.Fecha_finalizacion < NOW()                '.
+                    '    AND A.Estatus <> 3                          '.
+                    '    AND O.Estatus <> 2                          '.
+                    'GROUP BY                                        '.
+                    '    A.Id                                        ';
                         
         
         $alumnos = DB::select($alumnosQuery);

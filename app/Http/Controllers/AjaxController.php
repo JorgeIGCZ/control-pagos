@@ -157,6 +157,14 @@ class AjaxController extends Controller
         $result = $this->AlumnoController->descuentoIsValid($alumno,$mensualidad);
         return $result;
     }
+    function validDescuentos(Request $request){
+        $alumno      = $_POST['alumno'];
+        $orden       = $_POST['orden'];
+        $concepto    = $_POST['concepto'];
+        $plantel     = $_POST['plantel'];
+        $result = $this->AlumnoController->getValidDescuentos($alumno, $concepto, $orden, $plantel);
+        return $result;
+    }
     function getAllDescuentos(Request $request){
         $alumno      = $_POST['alumno'];
         $mensualidad = $_POST['mensualidad'];
@@ -170,6 +178,15 @@ class AjaxController extends Controller
         $result = $this->AlumnoController->recargoIsValid($alumno,$mensualidad);
         return $result;
     }
+
+    function validRecargos(Request $request){
+        $alumno      = $_POST['alumno'];
+        $orden       = $_POST['orden'];
+        $plantel     = $_POST['plantel'];
+        $result = $this->AlumnoController->getValidRecargos($alumno, $orden, $plantel);
+        return $result;
+    }
+
     function getallrecargos(Request $request){
         $alumno      = $_POST['alumno'];
         $mensualidad = $_POST['mensualidad'];

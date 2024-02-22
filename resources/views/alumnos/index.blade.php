@@ -69,7 +69,7 @@
                                             <option value="0">Seleccionar mensualidades</option>
                                         </select>
                                     </div>
-                                    @if (session()->get('user_roles')['Becas']->Crear == 'Y')
+                                    {{-- @if (session()->get('user_roles')['Becas']->Crear == 'Y')
                                     <div class="position-relative form-group" >
                                         <label for="descuento-pronto-pago" class="">Descuento</label>
                                         <select name="select" id="descuento-pronto-pago" class="form-control">
@@ -79,41 +79,29 @@
                                             @endforeach
                                         </select> 
                                     </div>
-                                    @else
-                                    <div class="position-relative form-group descuento-pronto-pago-container"  style="display:none;">
+                                    @else --}}
+                                    <div class="position-relative form-group descuento-pronto-pago-container">
                                         <label for="descuento-pronto-pago" class="">Descuento</label>
                                         <select name="select" id="descuento-pronto-pago" class="form-control">
                                             <option value="0" precio="0">Seleccionar descuento</option>
-                                            @foreach ($prontoPago as $prontoPag)
+                                            {{-- @foreach ($prontoPago as $prontoPag)
                                                 <option value="{{$prontoPag->Id}}" precio="{{$prontoPag->Precio}}">{{$prontoPag->Nombre}}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select> 
                                     </div>
-                                    @endif
+                                    {{-- @endif --}}
 
 
 
                                     @if ($_GET['Id'] == 2)
-                                        @if (session()->get('user_roles')['Becas']->Crear == 'Y')
-                                        <div class="position-relative form-group" >
+                                        <div class="position-relative form-group recargo-pago-container">
                                             <label for="recargo-pago" class="">Recargo</label>
                                             <select name="select" id="recargo-pago" class="form-control">
-                                                @foreach ($recargoPagos as $recargoPago)
-                                                    <option value="0" precio="0">Seleccionar recargo</option>
+                                                {{-- @foreach ($recargoPagos as $recargoPago)
                                                     <option value="{{$recargoPago->Id}}" precio="{{$recargoPago->Precio}}">{{$recargoPago->Nombre}}</option>
-                                                @endforeach
+                                                @endforeach --}}
                                             </select> 
                                         </div>
-                                        @else
-                                        <div class="position-relative form-group recargo-pago-container"  style="display:none;">
-                                            <label for="recargo-pago" class="">Recargo</label>
-                                            <select name="select" id="recargo-pago" class="form-control">
-                                                @foreach ($recargoPagos as $recargoPago)
-                                                    <option value="{{$recargoPago->Id}}" precio="{{$recargoPago->Precio}}">{{$recargoPago->Nombre}}</option>
-                                                @endforeach
-                                            </select> 
-                                        </div>
-                                        @endif
                                     @endif
 
 
@@ -512,39 +500,162 @@
             setRecargo(recargos);
         }
 
+
+        $('#concepto').change(function(e){
+            let tipo    = $(this).children("option:selected").attr('tipo');
+            let conceptoId = $(this).children("option:selected").val();
+            let precio = ($(this).children("option:selected").attr('precio') == undefined) ? 0 : $(this).children("option:selected").attr('precio');
+            let alumnoId = $('.nombre-alumno-pago').attr('alumnoId');
+
+            clearCantidades();
+
+            if(conceptoId > 0){
+                displayDescuentos(alumnoId, conceptoId);
+                displayMensualidadContainer(tipo);
+            }
+
+            displayPrecio(precio);
+            calcularTotal();
+        });
+
+        function displayRecargos(alumnoId, ordenId){
+            const recargos = callRecargos(alumnoId, ordenId);
+            let recargosOptions = '';
+
+            $('#recargo-pago .dinamic').remove();
+
+            recargos.forEach(function(recargo){
+                recargosOptions += `<option class="dinamic" value="${recargo.Id}" precio="${recargo.Precio}" >${recargo.Nombre}</option>`;
+            });
+
+            $('#recargo-pago').append(recargosOptions);
+        }
+
+        function displayDescuentos(alumnoId, conceptoId, ordenId = 0){
+            const descuentos = callDescuentos(alumnoId, conceptoId, ordenId);
+            let descuentosOptions = '';
+
+            $('#descuento-pronto-pago .dinamic').remove();
+
+            descuentos.forEach(function(descuento){
+                descuentosOptions += `<option class="dinamic" value="${descuento.Id}" precio="${descuento.Precio}" >${descuento.Nombre}</option>`;
+            });
+
+            $('#descuento-pronto-pago').append(descuentosOptions);
+        }
+
+        function callDescuentos(alumnoId, conceptoId, ordenId){
+            let result;
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const plantel = urlParams.get('Id')
+
+            $.ajax({
+                    type: 'POST',
+                    url: '/ajax/validDescuentos',
+                    dataType: 'json',
+                    async:false,
+                    data:
+                    {
+                        '_token'      : '{{ csrf_token() }}',
+                        'alumno'      : {'id':alumnoId},
+                        'concepto'    : {'id':conceptoId},
+                        'orden'       : {'id':ordenId},
+                        'plantel'     : {'id':plantel},
+                    },
+                    success: function (response) {
+                        $('.loader').hide();
+                        result  = response.result;
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $('.loader').hide();
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: 'Error al cargar el descuento'
+                        });
+                    }
+                });
+
+            return result;
+        }
+
+        function callRecargos(alumnoId, ordenId){
+            let result;
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const plantel = urlParams.get('Id')
+
+            $.ajax({
+                    type: 'POST',
+                    url: '/ajax/validRecargos',
+                    dataType: 'json',
+                    async:false,
+                    data:
+                    {
+                        '_token'      : '{{ csrf_token() }}',
+                        'alumno'      : {'id':alumnoId},
+                        'orden'       : {'id':ordenId},
+                        'plantel'     : {'id':plantel},
+                    },
+                    success: function (response) {
+                        $('.loader').hide();
+                        result  = response.result;
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $('.loader').hide();
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: 'Error al cargar el recargo'
+                        });
+                    }
+                });
+
+            return result;
+        }
+
         $('#mensualidad').change(function(e){
             clearCantidades()
             let alumnoId = $('.nombre-alumno-pago').attr('alumnoId');
             let tipo     = $('#concepto').children("option:selected").attr('tipo');
-            let mensualidad     = $(this).children("option:selected").val();
+            let conceptoId = $('#concepto').children("option:selected").val();
+            let ordenId    = $(this).children("option:selected").val();
             let mensualidadTipo = $(this).children("option:selected").attr('tipo');
-            if(mensualidad > 0){
+            if(ordenId > 0){
                 if(tipo == 'colegiatura'){
                     //if(mensualidadTipo == 'colegiatura'){
-                        getBeca(alumnoId,mensualidad);
+                        getBeca(alumnoId,ordenId);
                     //}
 
-                    if(descuentoIsValid(alumnoId,mensualidad)){
-                        $('.descuento-pronto-pago-container').show();
-                    }else{
-                        $('.descuento-pronto-pago-container').hide();
-                        $("#descuento-pronto-pago").val('0');
-                    }
 
-                    if(recargoIsValid(alumnoId,mensualidad)){
-                        $('.recargo-pago-container').show();
-                        $("#recargo-pago :nth(0)").prop("selected","selected").change();
-                    }else{
-                        $('.recargo-pago-container').hide();
-                        $("#recargo-pago").val('0');
-                    }
+                    displayDescuentos(alumnoId, conceptoId, ordenId);
+
+                    // if(descuentoIsValid(alumnoId,orden)){
+                    //     $('.descuento-pronto-pago-container').show();
+                    // }else{
+                    //     $('.descuento-pronto-pago-container').hide();
+                    //     $("#descuento-pronto-pago").val('0');
+                    // }
+
+                    displayRecargos(alumnoId, ordenId);
+
+                    // if(recargoIsValid(alumnoId, ordenId)){
+                    //     $('.recargo-pago-container').show();
+                    //     $("#recargo-pago :nth(0)").prop("selected","selected").change();
+                    // }else{
+                    //     $('.recargo-pago-container').hide();
+                    //     $("#recargo-pago").val('0');
+                    // }
                 }
             }
-            getColegiatura(mensualidad);
+            getColegiatura(ordenId);
             calcularDescuentos();
             calcularRecargos();
             calcularTotal();
         });
+
+
         function setDescuento(descuento) {        
             $('#cantidad-descuento').val(formatter.format(descuento));
             $('#cantidad-descuento').attr('value',descuento);
@@ -789,16 +900,6 @@
             }
             return result;
         }
-        $('#concepto').change(function(e){
-            let tipo   = $(this).children("option:selected").attr('tipo');
-            let precio = ($(this).children("option:selected").attr('precio') == undefined) ? 0 : $(this).children("option:selected").attr('precio');
-            let alumnoId = $('.nombre-alumno-pago').attr('alumnoId');
-            clearCantidades();
-            
-            displayMensualidadContainer(tipo);
-            displayPrecio(precio);
-            calcularTotal();
-        });
         /*$('#tipo').change(function(e){
             let tipo   = $(this).children("option:selected").val();
             displayDescuentoContainer(tipo);

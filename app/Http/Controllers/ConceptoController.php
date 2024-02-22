@@ -72,7 +72,8 @@ class ConceptoController extends Controller
                             'Nombre'     => $concepto['nombre'],
                             'Precio'     => $concepto['precio'],
                             'Tipo'       => $concepto['tipo'],
-                            'Plantel_id' => $concepto['plantel']
+                            'Plantel_id' => $concepto['plantel'],
+                            'Dias'       => $concepto['dias']
                         ]
                     );
             
@@ -91,7 +92,7 @@ class ConceptoController extends Controller
     function updateConcepto($concepto){
         $result = '';
         try{
-            $conceptos         = conceptos::where('Id', $concepto['id'])->update(['Nombre' => $concepto['nombre'],'Precio' => $concepto['precio'],'tipo' => $concepto['tipo'],'Estatus' => $concepto['estatus'],'Plantel_id' => $concepto['plantel']]);
+            $conceptos         = conceptos::where('Id', $concepto['id'])->update(['Nombre' => $concepto['nombre'],'Precio' => $concepto['precio'],'tipo' => $concepto['tipo'],'Estatus' => $concepto['estatus'],'Plantel_id' => $concepto['plantel'],'Dias' => $concepto['dias']]);
             $result = ['success','¡Concepto editado exitosamente!'];
         }catch(\Illuminate\Database\QueryException $e){
             print_r($e->errorInfo);
