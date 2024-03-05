@@ -15,8 +15,31 @@
         </div>
         <div class="">
             <div class="row">
+
+                <div class="col-md-12">
+                    <div class="container">
+                        <ul class="tabs-animated-shadow tabs-animated nav nav-justified tabs-rounded-lg">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/alumnos/new">
+                                    <span>Nuevo Alumno</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/pagos">
+                                    <span>Pagos (Corte Caja)</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/controlpagos">
+                                    <span>Control Pagos</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="col-lg-6 col-xl-4">
-                    <div class="card mb-3 widget-content">
+                    <div class="card mt-3 mb-3 widget-content">
                         <div class="widget-content-wrapper">
                             <div class="widget-content-left">
                                 <div class="widget-heading">Total De Estudiantes</div>
@@ -28,7 +51,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-xl-4">
-                    <div class="card mb-3 widget-content">
+                    <div class="card mt-3 mb-3 widget-content">
                         <div class="widget-content-wrapper">
                             <div class="widget-content-left">
                                 <div class="widget-heading">Estudiantes Activos</div>
@@ -41,7 +64,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-xl-4">
-                    <div class="card mb-3 widget-content">
+                    <div class="card mt-3 mb-3 widget-content">
                         <div class="widget-content-wrapper">
                             <div class="widget-content-left">
                                 <div class="widget-heading">Estudiantes Inactivos</div>
@@ -56,62 +79,67 @@
                 <div class="divider mt-0" style="margin-bottom: 30px;"></div>
                 @if (session()->get('user_roles')['role'] === 'Administrador')
                     <div class="col-md-6">
-                        <div class="main-card mb-3 card">
-                            <div class="card-header-tab card-header-tab-animation card-header">
-                                <div class="card-header-title">
-                                    <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                                    Reporte de Recaudación
+                        <div id="accordion" class="accordion-wrapper mb-3">
+                            <div class="card">
+                                <div id="headingRecaudacion" class="card-header">
+                                    <button type="button" data-toggle="collapse" data-target="#collapseRecaudacion" aria-expanded="true" aria-controls="collapseOne" class="card-header-title text-left m-0 p-0" style="">
+                                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                        Reporte de Recaudación
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="card-body">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-outer">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left">
-                                                        <div class="widget-heading">Recaudación total mensual</div>
-                                                    </div>
-                                                    <div class="widget-content-right">
-                                                        <div class="widget-numbers text-primary">${{ number_format($recaudacionMensualTotal,2) }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-outer">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left">
-                                                        <div class="widget-heading">Recaudación bancaria</div>
-                                                    </div>
-                                                    <div class="widget-content-right">
-                                                        <div class="widget-numbers text-success">${{ number_format($recaudacionMensualBancaria,2) }}</div>
+                                <div data-parent="#accordion" id="collapseRecaudacion" aria-labelledby="headingRecaudacion" class="collapse" style="">
+                                    <div class="card-body">
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-outer">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left">
+                                                                <div class="widget-heading">Recaudación total mensual</div>
+                                                            </div>
+                                                            <div class="widget-content-right">
+                                                                <div class="widget-numbers text-primary">${{ number_format($recaudacionMensualTotal,2) }}</div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-outer">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left">
-                                                        <div class="widget-heading">Recaudación en efectivo</div>
-                                                    </div>
-                                                    <div class="widget-content-right">
-                                                        <div class="widget-numbers text-success">${{ number_format($recaudacionMensualEfectivo,2) }}</div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-outer">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left">
+                                                                <div class="widget-heading">Recaudación bancaria</div>
+                                                            </div>
+                                                            <div class="widget-content-right">
+                                                                <div class="widget-numbers text-success">${{ number_format($recaudacionMensualBancaria,2) }}</div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-outer">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left">
+                                                                <div class="widget-heading">Recaudación en efectivo</div>
+                                                            </div>
+                                                            <div class="widget-content-right">
+                                                                <div class="widget-numbers text-success">${{ number_format($recaudacionMensualEfectivo,2) }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 @endif
+                <div class="divider mt-0" style="margin-bottom: 30px;"></div>
                 <!--
                 <div class="col-md-6">
                     <div class="main-card mb-3 card">

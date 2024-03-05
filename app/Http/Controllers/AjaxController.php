@@ -71,6 +71,11 @@ class AjaxController extends Controller
         $result = $this->PagoController->getPago($pagoId);
         return $result;
     }
+    function getpagos(Request $request){
+        $ordenId = $_POST['ordenId'];
+        $result = $this->PagoController->getPagos($ordenId);
+        return $result;
+    }
     function updatePago(Request $request){
         $pagoId = $_POST['pagoId'];
         $datos   = $_POST['datos'];

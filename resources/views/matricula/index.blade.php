@@ -122,10 +122,10 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="form-group  ">
+                                            <div class="form-group"  @if (count($niveles) == 1) style="display:none;" @endif>
                                                 <label for="nivel">Nivel</label>
                                                 <select class="form-control" name="nivel" id="nivel">
-                                                    <option value="0" selected="selected">Seleccionar nivel</option>
+                                                    <option value="0" >Seleccionar nivel</option>
                                                     @foreach ($niveles as $nivel)
                                                         <option value="@php echo($nivel->Id); @endphp">@php echo($nivel->Nombre); @endphp</option>
                                                     @endforeach
@@ -134,7 +134,7 @@
                                             <div class="form-group  ">
                                                 <label for="licenciaturas">Licenciatura</label>
                                                 <select class="form-control" name="licenciatura" id="licenciatura">
-                                                    <option value="0" selected="selected">Seleccionar licenciatura</option>
+                                                    <option value="0">Seleccionar licenciatura</option>
                                                     @foreach ($licenciaturas as $licenciatura)
                                                         <option value="@php echo($licenciatura->Id); @endphp">@php echo($licenciatura->Nombre); @endphp</option>
                                                     @endforeach
@@ -143,7 +143,7 @@
                                             <div class="form-group  ">
                                                 <label for="sistema">Sistema</label>
                                                 <select class="form-control" name="sistema" id="sistema">
-                                                    <option value="0" selected="selected">Seleccionar sistema</option>
+                                                    <option value="0">Seleccionar sistema</option>
                                                     @foreach ($sistemas as $sistema)
                                                         <option value="@php echo($sistema->Id); @endphp">@php echo($sistema->Nombre); @endphp</option>
                                                     @endforeach
@@ -161,7 +161,7 @@
                                             <div class="form-group  ">
                                                 <label for="generacion">Generación</label>
                                                 <select class="form-control" name="generacion" id="generacion">
-                                                    <option value="0" selected="selected">Seleccionar generación</option>
+                                                    <option value="0" >Seleccionar generación</option>
                                                     @foreach ($generaciones as $generacion)
                                                         <option value="@php echo($generacion->Id); @endphp">@php echo($generacion->Nombre); @endphp</option>
                                                     @endforeach

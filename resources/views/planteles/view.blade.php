@@ -27,11 +27,13 @@
     function editPlantel(){
         $('.loader').show();
         let nombre          = $('#nombre').val();
+        let identificador   = $('#identificador').val();
         let region          = $('#region').val();
         
         let plantel = {
             'id'              : @php echo($_GET['plantel']) @endphp,
             'nombre'          : nombre,
+            'identificador'   : identificador,
             'region'          : region
         }
         $.ajax({
@@ -97,12 +99,17 @@
                                         <h5 class="card-title">Datos Del Plantel</h5>
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
-                                                <label for="inputEmail4">Nombre</label>
+                                                <label for="nombre">Nombre</label>
                                                 <input type="test" class="form-control" id="nombre" disabled="disabled" value="@php echo($plantel[0]->Nombre); @endphp">
                                                 <button class="edit-save-btn edit" input="nombre">Editar</button>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label for="inputEmail4">Region</label>
+                                                <label for="identificador">Identificador (3 caracteres)</label>
+                                                <input type="test" class="form-control" id="identificador" disabled="disabled" value="@php echo($plantel[0]->Identificador); @endphp" maxlength="3">
+                                                <button class="edit-save-btn edit" input="identificador">Editar</button>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="region">Region</label>
                                                 <input type="test" class="form-control" id="region" disabled="disabled" value="@php echo($plantel[0]->Region); @endphp">
                                                 <button class="edit-save-btn edit" input="region">Editar</button>
                                             </div>

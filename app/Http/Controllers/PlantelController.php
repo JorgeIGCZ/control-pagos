@@ -45,6 +45,7 @@ class PlantelController extends Controller
         try{
             $planteles         = new planteles;
     		$planteles->Nombre = $plantel['nombre'];
+    		$planteles->Identificador = $plantel['identificador'];
     		$planteles->Region = $plantel['region'];
             $planteles->save();
             $result = ['success','¡Plantel creado exitosamente!'];
@@ -62,7 +63,7 @@ class PlantelController extends Controller
     function updatePlantel($plantel){
         $result = '';
         try{
-            $planteles         = planteles::where('Id', $plantel['id'])->update(['Nombre' => $plantel['nombre'],'Region' => $plantel['region']]);
+            $planteles         = planteles::where('Id', $plantel['id'])->update(['Nombre' => $plantel['nombre'],'Identificador' => $plantel['identificador'],'Region' => $plantel['region']]);
             $result = ['success','¡Plantel editado exitosamente!'];
         }catch(\Illuminate\Database\QueryException $e){
             print_r($e->errorInfo);

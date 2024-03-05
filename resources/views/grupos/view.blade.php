@@ -163,10 +163,10 @@
                                                 <button class="edit-save-btn edit" input="plantel">Editar</button>
                                             </div>
 
-                                            <div class="form-group col-md-3">
+                                            <div class="form-group col-md-3 "  @if (count($niveles) == 1) style="display:none;" @endif>
                                                 <label for="nivel">Nivel</label>
                                                 <select class="form-control" name="nivel" id="nivel" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($grupo[0]->Nivel_id == 0) selected="selected"  @endif>Seleccionar nivel</option>
+                                                    <option value="0">Seleccionar nivel</option>
                                                     
                                                 </select>
                                                 <button class="edit-save-btn edit" input="nivel">Editar</button>
@@ -174,7 +174,7 @@
                                             <div class="form-group col-md-3" @if(count($licenciaturas) == 0) style="display:none;"  @endif>
                                                 <label for="licenciaturas">Licenciaturas</label>
                                                 <select class="form-control" name="licenciatura" id="licenciatura" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($grupo[0]->Licenciatura_id == 0) selected="selected"  @endif>Seleccionar licenciatura</option>
+                                                    <option value="0" @if($grupo[0]->Licenciatura_id == 0) selected="selected"  @endif>Seleccionar licenciatura</option>
                                                     
                                                 </select>
                                                 <button class="edit-save-btn edit" input="licenciatura">Editar</button>
@@ -182,7 +182,7 @@
                                             <div class="form-group col-md-3">
                                                 <label for="sistema">Sistema</label>
                                                 <select class="form-control" name="sistema" id="sistema" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($grupo[0]->Sistema_id == 0) selected="selected"  @endif>Seleccionar sistema</option>
+                                                    <option value="0" @if($grupo[0]->Sistema_id == 0) selected="selected"  @endif>Seleccionar sistema</option>
                                                     @foreach ($sistemas as $sistema)
                                                         <option value="@php echo($sistema->Id); @endphp" @if($grupo[0]->Sistema_id == $sistema->Id) selected="selected"  @endif>@php echo($sistema->Nombre); @endphp </option>
                                                     @endforeach

@@ -7,6 +7,7 @@ use App\Models\Alumnos;
 use App\Models\Alumno_relaciones;
 use App\Http\Controllers\OrdenController;
 use App\Models\Ordenes;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use URL;
 
@@ -50,24 +51,33 @@ class AlumnoController extends Controller
             $estatusQuery = " Estatus IN (1,10) ";
         }
 
-        $plantel        = DB::select('SELECT * FROM planteles WHERE Id = '.@$_GET['Id'].' ');
         $planteles      = DB::select('SELECT * FROM planteles WHERE Id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.') ');
-        $licenciaturas  = DB::select('SELECT * FROM licenciaturas WHERE Plantel_id = '.@$_GET['Id'].' ');
-        $niveles        = DB::select('SELECT * FROM niveles WHERE Plantel_id = '.@$_GET['Id'].' AND Estatus = 1');
+        $licenciaturas  = DB::select('SELECT * FROM licenciaturas WHERE Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.') ');
+        $niveles        = DB::select('SELECT * FROM niveles WHERE Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.') AND Estatus = 1');
         $sistemas       = DB::select('SELECT * FROM sistemas');
         $grupos         = DB::select('SELECT * FROM grupos WHERE Estatus = 1 ORDER BY Nombre ASC ');
-
-
-        $conceptos      = DB::select('SELECT * FROM conceptos WHERE Tipo ="colegiatura" AND '.$estatusQuery.' AND Plantel_id = '.@$_GET['Id'].' AND Estatus = 1 ORDER BY Nombre ASC ');
-        $titulaciones   = DB::select('SELECT * FROM conceptos WHERE Tipo ="titulacion" AND '.$estatusQuery.' AND Plantel_id = '.@$_GET['Id'].'  AND Estatus = 1');
-        $cuotas         = DB::select('SELECT * FROM conceptos WHERE Tipo ="cuota-personalizada-anual" AND '.$estatusQuery.' AND Plantel_id = '.@$_GET['Id'].' AND Estatus = 1 ORDER BY Nombre ASC');
-        $inscripciones  = DB::select('SELECT * FROM conceptos WHERE Tipo ="inscripcion" AND '.$estatusQuery.' AND Plantel_id = '.@$_GET['Id'].' AND Estatus = 1 ORDER BY Nombre ASC');
+        $conceptos      = DB::select('SELECT * FROM conceptos WHERE Tipo ="colegiatura" AND '.$estatusQuery.' AND Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.') AND Estatus = 1 ORDER BY Nombre ASC ');
+        $titulaciones   = DB::select('SELECT * FROM conceptos WHERE Tipo ="titulacion" AND '.$estatusQuery.' AND Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.')  AND Estatus = 1');
+        $cuotas         = DB::select('SELECT * FROM conceptos WHERE Tipo ="cuota-personalizada-anual" AND '.$estatusQuery.' AND Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.') AND Estatus = 1 ORDER BY Nombre ASC');
+        $inscripciones  = DB::select('SELECT * FROM conceptos WHERE Tipo ="inscripcion" AND '.$estatusQuery.' AND Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.') AND Estatus = 1 ORDER BY Nombre ASC');
+        $generaciones   = DB::select('SELECT * FROM generaciones WHERE Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.')  AND Estatus = 1 ORDER BY Nombre DESC ');
         
+        if(isset($_GET['Id'])){
+            $planteles      = DB::select('SELECT * FROM planteles WHERE Id = '.@$_GET['Id'].' ');
+            $licenciaturas  = DB::select('SELECT * FROM licenciaturas WHERE Plantel_id = '.@$_GET['Id'].' ');
+            $niveles        = DB::select('SELECT * FROM niveles WHERE Plantel_id = '.@$_GET['Id'].' AND Estatus = 1');
+            // $sistemas       = DB::select('SELECT * FROM sistemas');
+            // $grupos         = DB::select('SELECT * FROM grupos WHERE Estatus = 1 ORDER BY Nombre ASC ');
+            $conceptos      = DB::select('SELECT * FROM conceptos WHERE Tipo ="colegiatura" AND '.$estatusQuery.' AND Plantel_id = '.@$_GET['Id'].' AND Estatus = 1 ORDER BY Nombre ASC ');
+            $titulaciones   = DB::select('SELECT * FROM conceptos WHERE Tipo ="titulacion" AND '.$estatusQuery.' AND Plantel_id = '.@$_GET['Id'].'  AND Estatus = 1');
+            $cuotas         = DB::select('SELECT * FROM conceptos WHERE Tipo ="cuota-personalizada-anual" AND '.$estatusQuery.' AND Plantel_id = '.@$_GET['Id'].' AND Estatus = 1 ORDER BY Nombre ASC');
+            $inscripciones  = DB::select('SELECT * FROM conceptos WHERE Tipo ="inscripcion" AND '.$estatusQuery.' AND Plantel_id = '.@$_GET['Id'].' AND Estatus = 1 ORDER BY Nombre ASC');
+            $generaciones   = DB::select('SELECT * FROM generaciones WHERE Plantel_id = '.@$_GET['Id'].' AND Estatus = 1 ORDER BY Nombre DESC ');
+        }
 
 
-        $generaciones   = DB::select('SELECT * FROM generaciones WHERE Plantel_id = '.@$_GET['Id'].' AND Estatus = 1 ORDER BY Nombre DESC ');
         
-        return view('alumnos.new',['planteles' => $plantel,'licenciaturas' => $licenciaturas,'sistemas' => $sistemas,'grupos' => $grupos,'niveles' => $niveles,'conceptos' => $conceptos,'generaciones' => $generaciones,'titulaciones' => $titulaciones,'cuotas' => $cuotas,'inscripciones' => $inscripciones]);
+        return view('alumnos.new',['planteles' => $planteles,'licenciaturas' => $licenciaturas,'sistemas' => $sistemas,'grupos' => $grupos,'niveles' => $niveles,'conceptos' => $conceptos,'generaciones' => $generaciones,'titulaciones' => $titulaciones,'cuotas' => $cuotas,'inscripciones' => $inscripciones]);
     }
     function viewAction(){
         if (session()->get('user_roles')['Alumnos']->Ver != 'Y'){
@@ -77,7 +87,7 @@ class AlumnoController extends Controller
         $alumnoId = $_GET['alumno'];
         
 
-        $alumno   = DB::select('SELECT Id,Nombre,Apellido_materno,Apellido_paterno,Email,Telefono,Estatus,Nombre_tutor,Telefono_tutor,DATE_FORMAT(Fecha_inicio, "%Y-%m") AS Fecha_inicio FROM alumnos WHERE Id = :Id', ['Id' => $alumnoId]);
+        $alumno   = DB::select('SELECT Id,Nombre,Apellido_materno,Apellido_paterno,Email,Telefono, Matricula,Estatus,Nombre_tutor,Telefono_tutor,DATE_FORMAT(Fecha_inicio, "%Y-%m") AS Fecha_inicio FROM alumnos WHERE Id = :Id', ['Id' => $alumnoId]);
         $alumnoRelaciones   = DB::select('SELECT Plantel_id FROM alumno_relaciones WHERE Alumno_id = :Id', ['Id' => $alumnoId]);
         
         $planteles      = DB::select('SELECT * FROM planteles WHERE Id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.') ');
@@ -209,26 +219,28 @@ class AlumnoController extends Controller
         $plantelId = $plantel['id'];
         $result   = false;
 
+        $allDescuentosProntoPago = [];
+        $allDescuentosTitulacion = [];
         $allDescuentos = [];
 
         // Descuentos Pronto Pago
         if(!$this->isDiscountAlreadyApplied($alumnoId, $ordenId)){
             // Descuentos Pronto Pago Colegiatura - Inscripcion
             if($this->canShowDescuentosProntoPago('colegiatura-inscripcion', $conceptoId)){
-                $allDescuentos = $this->getProntoPagoDescuentos($monthDay, $ordenId, $plantelId);
+                $allDescuentosProntoPago = $this->getProntoPagoDescuentos($monthDay, $ordenId, $plantelId);
             }
 
             // Descuentos Pronto Pago Titulacion
             if($this->canShowDescuentosProntoPago('titulacion', $conceptoId)){
-                $allDescuentos = $this->getProntoPagoTitulacionDescuentos($monthDay, $plantelId);
+                $allDescuentosTitulacion = $this->getProntoPagoTitulacionDescuentos($monthDay, $plantelId);
             }
         }
 
         // Descuentos generales
         $descuentosGenerales = $this->getDescuentosGenerales($plantelId);
-        if(count($descuentosGenerales) > 0){
-            $allDescuentos = array_merge($allDescuentos, $descuentosGenerales);
-        }
+
+        $allDescuentos = array_merge($allDescuentosProntoPago, $descuentosGenerales, $allDescuentosTitulacion);
+        
 
         return ['result'=>$allDescuentos];
     }
@@ -706,6 +718,8 @@ class AlumnoController extends Controller
                     );
                 $OrdenController->createOrdenAlumno($id,$alumno['fechaInicio'].'-01');
 
+                $this->generateMatricula($id, $alumno['plantel']);
+
                 $result = ['success','¡Alumnos creados exitosamente!'];
             }catch(\Illuminate\Database\QueryException $e){
                 print_r($e->errorInfo);
@@ -719,6 +733,21 @@ class AlumnoController extends Controller
         }
         return $result;
     }
+
+    private function generateMatricula($alumnoId, $plantel){
+        $currentYear = Carbon::now()->format('Y');
+        $plantelIdentificador = DB::select('SELECT * FROM planteles WHERE Id = '.$plantel)[0]->Identificador;
+        $seisDigitosAlumnoId = str_pad($alumnoId, 6, "0", STR_PAD_LEFT);
+        $matricula = sprintf(
+            '%s%s%s',
+            $currentYear,
+            $plantelIdentificador,
+            $seisDigitosAlumnoId
+        );
+
+        alumnos::where('Id', $alumnoId)->update(['Matricula' => $matricula]);
+    }
+
     function updateDPAlumno($datos,$actualizarColegiatura){
         $result = '';
         $OrdenController = new OrdenController;

@@ -62,6 +62,7 @@ Route::post('ajax/newalumnodescuento',[AjaxController::class,'createAlumnoDescue
 
 
 Route::post('ajax/getpago',[AjaxController::class,'getPago']);
+Route::post('ajax/getpagos',[AjaxController::class,'getpagos']);
 Route::post('ajax/updatepago',[AjaxController::class,'updatePago']);
 
 Route::post('ajax/newdescuento',[AjaxController::class,'createDescuento']);

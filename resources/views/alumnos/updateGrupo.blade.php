@@ -234,12 +234,12 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="form-group  ">
+                                            <div class="form-group"  @if (count($niveles) == 1) style="display:none;" @endif>
                                                 <label for="nivel">Nivel</label>
                                                 <select class="form-control dinamic_filters" name="nivel" id="nivel">
-                                                    <option value="0" selected="selected">Seleccionar nivel</option>
+                                                    <option value="0">Seleccionar nivel</option>
                                                     @foreach ($niveles as $nivel)
-                                                        <option value="@php echo($nivel->Id); @endphp">@php echo($nivel->Nombre); @endphp</option>
+                                                        <option value="{{$nivel->Id}}" @if (count($niveles) == 1) selected="selected" @endif >{{$nivel->Nombre}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

@@ -401,6 +401,7 @@
                 { data: 'Tipo_pago' },
                 { data: 'Descripcion_pago' },
                 { data: 'Notas' },
+                { data: 'Usuario' },
                 { data: 'updated_at' },
                 @if (session()->get('user_roles')['role'] === 'Administrador')
                 { defaultContent: 'Actions', 'render': function ( data, type, row ) 
@@ -1078,6 +1079,7 @@
                     </div>
                     <div>
                         @php echo($alumno[0]->Nombre." ".$alumno[0]->Apellido_paterno." ".$alumno[0]->Apellido_materno); @endphp
+                        <strong>#{{$alumno[0]->Matricula}}</strong>
                     </div>
                 </div>
                 <div class="page-title-actions">
@@ -1162,26 +1164,24 @@
                                                 </select>
                                                 @if (session()->get('user_roles')['Alumnos']->Modificar == 'Y')<button class="edit-save-btn edit" input="plantel">Editar</button>@endif
                                             </div>
-                                            <div class="form-group col-md-3 datos-academicos">
+                                            <div class="form-group col-md-3 datos-academicos" @if (count($niveles) == 1) style="display:none;" @endif>
                                                 <label for="nivel">Nivel</label>
                                                 <select class="form-control" source="niveles" name="nivel" id="nivel" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($informacion[0]->Nivel_id == 0) selected="selected"  @endif>Seleccionar nivel</option>
-                                                    
+                                                    <option value="0">Seleccionar nivel</option>
                                                 </select>
                                                 @if (session()->get('user_roles')['Alumnos']->Modificar == 'Y')<button class="edit-save-btn edit" input="nivel">Editar</button>@endif
                                             </div>
                                             <div class="form-group col-md-3 datos-academicos" @if(count($licenciaturas) == 0) style="display:none;"  @endif>
                                                 <label for="licenciaturas">Licenciaturas</label>
                                                 <select class="form-control" source="licenciaturas" name="licenciatura" id="licenciatura" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($informacion[0]->Licenciatura_id == 0) selected="selected"  @endif>Seleccionar licenciatura</option>
-                                                    
+                                                    <option value="0" >Seleccionar licenciatura</option>
                                                 </select>
                                                 @if (session()->get('user_roles')['Alumnos']->Modificar == 'Y')<button class="edit-save-btn edit" input="licenciatura">Editar</button>@endif
                                             </div>
                                             <div class="form-group col-md-3 datos-academicos">
                                                 <label for="sistema">Sistema</label>
                                                 <select class="form-control" name="sistema" id="sistema" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($informacion[0]->Sistema_id == 0) selected="selected"  @endif>Seleccionar sistema</option>
+                                                    <option value="0">Seleccionar sistema</option>
                                                     @foreach ($sistemas as $sistema)
                                                         <option value="@php echo($sistema->Id); @endphp" @if($informacion[0]->Sistema_id == $sistema->Id) selected="selected"  @endif>@php echo($sistema->Nombre); @endphp </option>
                                                     @endforeach
@@ -1191,7 +1191,7 @@
                                             <div class="form-group col-md-3 datos-academicos">
                                                 <label for="grupo">Grupo</label>
                                                 <select class="form-control " source="grupos" name="grupo" id="grupo" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($informacion[0]->Grupo_id == 0) selected="selected"  @endif>Seleccionar grupo</option>
+                                                    <option value="0">Seleccionar grupo</option>
                                                     
                                                 </select>
                                                 @if (session()->get('user_roles')['Alumnos']->Modificar == 'Y')<button class="edit-save-btn edit" input="grupo">Editar</button>@endif
@@ -1200,7 +1200,7 @@
                                             <div class="form-group col-md-3 datos-academicos">
                                                 <label for="generacion">Generacion</label>
                                                 <select class="form-control" source="generaciones" name="generacion" id="generacion" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($informacion[0]->Generacion_id == 0) selected="selected"  @endif>Seleccionar generacion</option>
+                                                    <option value="0">Seleccionar generacion</option>
                                                     
                                                 </select>
                                                 @if (session()->get('user_roles')['Alumnos']->Modificar == 'Y')<button class="edit-save-btn edit" input="generacion">Editar</button>@endif
@@ -1218,7 +1218,7 @@
                                             <div class="form-group col-md-3 datos-academicos">
                                                 <label for="concepto">Colegiatura concepto</label>
                                                 <select class="form-control" name="concepto" id="concepto" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($informacion[0]->Concepto_id == 0) selected="selected"  @endif>Seleccionar concepto</option>
+                                                    <option value="0" @if($informacion[0]->Concepto_id == 0) selected="selected"  @endif>Seleccionar concepto</option>
                                                     
                                                 </select>
                                                 @if (session()->get('user_roles')['Alumnos']->Modificar == 'Y')<button class="edit-save-btn edit" input="concepto">Editar</button>@endif
@@ -1226,7 +1226,7 @@
                                             <div class="form-group col-md-3 datos-academicos" @if(count($licenciaturas) == 0) style="display:none;"  @endif>
                                                 <label for="fecha-inicio">Titulación concepto</label>
                                                 <select class="form-control" name="concepto-titulacion" id="concepto-titulacion" disabled="disabled">
-                                                    <option value="0" selected="selected" @if(@$informacion[0]->Concepto_titulacion_id == 0) selected="selected"  @endif>Seleccionar concepto titulación</option>
+                                                    <option value="0" @if(@$informacion[0]->Concepto_titulacion_id == 0) selected="selected"  @endif>Seleccionar concepto titulación</option>
                                                     @foreach ($titulaciones as $titulacion)
                                                         <option value="@php echo($titulacion->Id); @endphp" @if(@$informacion[0]->Concepto_titulacion_id == $titulacion->Id) selected="selected"  @endif>{{$titulacion->Nombre}} </option>
                                                     @endforeach
@@ -1238,7 +1238,7 @@
                                             <div class="form-group col-md-3 datos-academicos">
                                                 <label for="fecha-inicio">Inscripción concepto</label>
                                                 <select class="form-control" name="concepto-inscripcion" id="concepto-inscripcion" disabled="disabled">
-                                                    <option value="0" selected="selected" @if(@$informacion[0]->Concepto_inscripcion_id == 0) selected="selected"  @endif>Seleccionar concepto inscripción</option>
+                                                    <option value="0" @if(@$informacion[0]->Concepto_inscripcion_id == 0) selected="selected"  @endif>Seleccionar concepto inscripción</option>
                                                     
                                                 </select>
                                                 @if (session()->get('user_roles')['Alumnos']->Modificar == 'Y')<button class="edit-save-btn edit" input="concepto-inscripcion">Editar</button>@endif
@@ -1248,7 +1248,7 @@
                                             <div class="form-group col-md-3 datos-academicos">
                                                 <label for="fecha-inicio">Cuota anual</label>
                                                 <select class="form-control" name="concepto-cuota" id="concepto-cuota" disabled="disabled">
-                                                    <option value="0" selected="selected" @if(@$informacion[0]->Concepto_inscripcion_id == 0) selected="selected"  @endif>Seleccionar concepto inscripción</option>
+                                                    <option value="0" @if(@$informacion[0]->Concepto_inscripcion_id == 0) selected="selected"  @endif>Seleccionar concepto inscripción</option>
                                                     
                                                 </select>
                                                 @if (session()->get('user_roles')['Alumnos']->Modificar == 'Y')<button class="edit-save-btn edit" input="concepto-cuota">Editar</button>@endif
@@ -1309,6 +1309,7 @@
                                             <th>Tipo Pago</th>
                                             <th>Descripcion Pago</th>
                                             <th>Notas</th>
+                                            <th>Usuario</th>
                                             <th>Fecha</th>
                                             @if (session()->get('user_roles')['role'] === 'Administrador')
                                             <th>Acciones</th>

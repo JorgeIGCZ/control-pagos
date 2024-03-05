@@ -130,7 +130,8 @@
             telefonoTutor.push($(`#telefono-tutor_${i}`).val());
         }
         
-        let plantel         = {{$_GET['Id']}};//$('#plantel').children("option:selected").val();
+        
+        let plantel         = $('#plantel').children("option:selected").val();
         let nivel           = $('#nivel').children("option:selected").val();
         let licenciatura    = $('#licenciatura').children("option:selected").val();
         let sistema         = $('#sistema').children("option:selected").val();
@@ -303,20 +304,20 @@
                                     <form>
                                         <h5 class="card-title">Información Academica</h5>
                                         <div class="form-row">
-                                            <div class="form-group col-md-3 " style="display:none;">
+                                            <div class="form-group col-md-3 " @if (count($planteles) == 1) style="display:none;" @endif>
                                                 <label for="plantel">Plantel</label>
                                                 
                                                 <select class="form-control" name="plantel" id="plantel">
                                                     <option value="0">Seleccionar plantel</option>
                                                     @foreach ($planteles as $plantel)
-                                                        <option value="{{$plantel->Id}}" selected="selected">{{$plantel->Nombre}}</option>
+                                                        <option value="{{$plantel->Id}}" @if (count($planteles) == 1) selected="selected" @endif >{{$plantel->Nombre}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="form-group col-md-3 ">
+                                            <div class="form-group col-md-3 "  @if (count($niveles) == 1) style="display:none;" @endif>
                                                 <label for="nivel">Nivel</label>
                                                 <select class="form-control" name="nivel" id="nivel">
-                                                    <option value="0" selected="selected">Seleccionar nivel</option>
+                                                    <option value="0">Seleccionar nivel</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-3" @if(count($licenciaturas) == 0) style="display:none;"  @endif>

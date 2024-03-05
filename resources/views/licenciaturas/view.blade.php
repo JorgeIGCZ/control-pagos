@@ -115,10 +115,10 @@
                                             </div>
 
 
-                                            <div class="form-group col-md-4 datos-licenciatura edit-container">
+                                            <div class="form-group col-md-4 datos-licenciatura edit-container" @if (count($niveles) == 1) style="display:none;" @endif>
                                                 <label for="nivel">Nivel</label>
                                                 <select class="form-control" name="nivel" id="nivel" disabled="disabled">
-                                                    <option value="0" selected="selected" @if($licenciatura[0]->Nivel_id == 0) selected="selected"  @endif>Seleccionar nivel</option>
+                                                    <option value="0" @if($licenciatura[0]->Nivel_id == 0) selected="selected"  @endif>Seleccionar nivel</option>
                                                     @foreach ($niveles as $nivel)
                                                         <option value="@php echo($nivel->Id); @endphp" @if($licenciatura[0]->Nivel_id == $nivel->Id) selected="selected"  @endif >@php echo($nivel->Nombre); @endphp</option>
                                                     @endforeach

@@ -156,22 +156,22 @@
                                                         <!--option value="{{$plantel->Id}}" @if(session()->get('user_roles')['Matrícula']->Plantel_id == $plantel->Id) selected="selected" @endif >{{$plantel->Nombre}}</option-->
                                                     </select>
                                                 </div>
-                                                <div class="form-group  ">
+                                                <div class="form-group "  @if (count($niveles) == 1) style="display:none;" @endif>
                                                     <label for="nivel">Nivel</label>
                                                     <select class="form-control dinamic_filters" name="nivel" id="nivel">
-                                                        <option value="0" selected="selected">Seleccionar nivel</option>
+                                                        <option value="0">Seleccionar nivel</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group  ">
                                                     <label for="licenciaturas">Licenciatura</label>
                                                     <select class="form-control dinamic_filters" name="licenciatura" id="licenciatura">
-                                                        <option value="0" selected="selected">Seleccionar licenciatura</option>
+                                                        <option value="0">Seleccionar licenciatura</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group  ">
                                                     <label for="sistema">Sistema</label>
                                                     <select class="form-control dinamic_filters" name="sistema" id="sistema">
-                                                        <option value="0" selected="selected">Seleccionar sistema</option>
+                                                        <option value="0" >Seleccionar sistema</option>
                                                         @foreach ($sistemas as $sistema)
                                                             <option value="@php echo($sistema->Id); @endphp">@php echo($sistema->Nombre); @endphp</option>
                                                         @endforeach
@@ -180,13 +180,13 @@
                                                 <div class="form-group  ">
                                                     <label for="grupo">Grupo</label>
                                                     <select class="form-control" name="grupo" id="grupo">
-                                                        <option value="0" selected="selected">Seleccionar grupo</option>
+                                                        <option value="0">Seleccionar grupo</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group  ">
                                                     <label for="generacion">Generación</label>
                                                     <select class="form-control dinamic_filters" name="generacion" id="generacion">
-                                                        <option value="0" selected="selected">Seleccionar generación</option>
+                                                        <option value="0">Seleccionar generación</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group buscar-button " style="text-align: center;">

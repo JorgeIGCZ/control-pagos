@@ -64,7 +64,8 @@ function displayOptions(element,selectionArray,source,sourceKeyArray,selected){
     });
     $(`#${element} .dinamic`).remove();
     selectionObj.forEach(function(select){
-        isSelected = (select.Id == selected) ? " selected='selected' " : "";
+        isSelected = (select.Id == selected || selectionObj.length == 1) ? " selected='selected' " : "";
+
         Options += `<option class="dinamic" ${isSelected} value="${select.Id}" >${select.Nombre}</option>`;
     });
     $(`#${element}`).append(Options);

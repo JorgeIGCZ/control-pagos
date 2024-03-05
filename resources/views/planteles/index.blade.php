@@ -34,6 +34,7 @@
             columns: [
                 { data: 'Id' },
                 { data: 'Nombre' },
+                { data: 'Identificador' },
                 { data: 'Region' },
                 { defaultContent: 'Actions', 'render': function ( data, type, row ) 
                     {
@@ -82,6 +83,7 @@
                                     <tr>
                                         <th>Id</th>
                                         <th>Nombre</th>
+                                        <th>Identificador</th>
                                         <th>Region</th>
                                         <th>Acciones</th>
                                     </tr>

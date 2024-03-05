@@ -7,6 +7,7 @@ use App\Models\Ordenes;
 use App\Models\Conceptos;
 use App\Models\Pagos;
 use App\Http\Controllers\OrdenController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -19,14 +20,25 @@ class PagoController extends Controller
             header("Location: " . URL::to('/login'), true, 302);
             exit(); 
         }
-        $plantel        = DB::select('SELECT * FROM planteles WHERE Id = '.@$_GET['Id'].' ');
-        $planteles      = DB::select('SELECT * FROM planteles WHERE Id = '.$_GET['Id'].' ');
-        $licenciaturas  = DB::select('SELECT * FROM licenciaturas WHERE Plantel_id = '.@$_GET['Id'].' ');
-        $niveles        = DB::select('SELECT * FROM niveles WHERE Plantel_id = '.@$_GET['Id'].' ');
+
+        $plantel        = DB::select('SELECT * FROM planteles WHERE Id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.') ');
+        $planteles      = DB::select('SELECT * FROM planteles WHERE Id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.')  ');
+        $licenciaturas  = DB::select('SELECT * FROM licenciaturas WHERE Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.')  ');
+        $niveles        = DB::select('SELECT * FROM niveles WHERE Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.')  ');
+        $generaciones   = DB::select('SELECT * FROM generaciones WHERE Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.')  ');
+
+        if(isset($_GET['Id'])){
+            $plantel        = DB::select('SELECT * FROM planteles WHERE Id = '.@$_GET['Id'].' ');
+            $planteles      = DB::select('SELECT * FROM planteles WHERE Id = '.$_GET['Id'].' ');
+            $licenciaturas  = DB::select('SELECT * FROM licenciaturas WHERE Plantel_id = '.@$_GET['Id'].' ');
+            $niveles        = DB::select('SELECT * FROM niveles WHERE Plantel_id = '.@$_GET['Id'].' ');
+            $generaciones   = DB::select('SELECT * FROM generaciones WHERE Plantel_id = '.@$_GET['Id'].'  ');
+        }
+
         $sistemas       = DB::select('SELECT * FROM sistemas');
         $grupos         = DB::select('SELECT * FROM grupos ');
 
-        $generaciones         = DB::select('SELECT * FROM generaciones WHERE Plantel_id = '.@$_GET['Id'].'  ');
+        
         
         return view('pagos.index',['plantel' => $plantel[0]->Nombre,'planteles' => $planteles,'licenciaturas' => $licenciaturas,'sistemas' => $sistemas,'grupos' => $grupos,'niveles' => $niveles,'generaciones' => $generaciones]);
     } 
@@ -37,9 +49,9 @@ class PagoController extends Controller
             foreach($datos as $key => $value){
                 if($value <> 0){
                     switch ($key) {
-                        case 'plantel':
-                            $queryWhere .= ' AND AR.Plantel_id IN ('.$value.') ';
-                            break;
+                        // case 'plantel':
+                        //     $queryWhere .= ' AND AR.Plantel_id IN ('.$value.') ';
+                        //     break;
                         case 'nivel':
                             $queryWhere .= ' AND AR.Nivel_id = '.$value.' ';
                             break;
@@ -83,9 +95,16 @@ class PagoController extends Controller
             }
         }
         
-        
-        if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
-            $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
+        if($datos->plantel > 0){
+            $queryWhere .= ' AND AR.Plantel_id = '.$datos->plantel.' ';   
+        }else{
+            if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
+                $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
+            }
+        }
+
+        if($datos->tipo_corte_usuario > 0){
+            $queryWhere .= ' AND P.User_Id = '.$datos->tipo_corte_usuario.' ';   
         }
         
         $pagosQuery = ''.
@@ -546,10 +565,19 @@ class PagoController extends Controller
             header("Location: " . URL::to('/login'), true, 302);
             exit();
         }
-        $plantel        = DB::select('SELECT * FROM planteles WHERE Id = '.@$_GET['Id'].' ');
-        $planteles      = DB::select('SELECT * FROM planteles WHERE Id = '.@$_GET['Id'].' ');
-        $licenciaturas  = DB::select('SELECT * FROM licenciaturas WHERE Plantel_id = '.@$_GET['Id'].' ');
-        $niveles        = DB::select('SELECT * FROM niveles WHERE Plantel_id = '.@$_GET['Id'].' ');
+
+        $plantel        = DB::select('SELECT * FROM planteles WHERE Id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.') ');
+        $planteles      = DB::select('SELECT * FROM planteles WHERE Id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.')  ');
+        $licenciaturas  = DB::select('SELECT * FROM licenciaturas WHERE Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.')  ');
+        $niveles        = DB::select('SELECT * FROM niveles WHERE Plantel_id IN('.session()->get('user_roles')['Matrícula']->Plantel_id.')  ');
+
+        if(isset($_GET['Id'])){
+            $plantel        = DB::select('SELECT * FROM planteles WHERE Id = '.@$_GET['Id'].' ');
+            $planteles      = DB::select('SELECT * FROM planteles WHERE Id = '.$_GET['Id'].' ');
+            $licenciaturas  = DB::select('SELECT * FROM licenciaturas WHERE Plantel_id = '.@$_GET['Id'].' ');
+            $niveles        = DB::select('SELECT * FROM niveles WHERE Plantel_id = '.@$_GET['Id'].' ');
+        }
+
         $sistemas       = DB::select('SELECT * FROM sistemas');
         $grupos         = DB::select('SELECT * FROM grupos ');
         $ciclosEscolares   = DB::select('SELECT YEAR(O.Fecha_creacion) AS year FROM ordenes O GROUP BY YEAR(O.Fecha_creacion) ');
@@ -574,7 +602,8 @@ class PagoController extends Controller
                     'Tipo_pago'       => 'Efectivo',
                     'Cantidad_pago'   => $descuentoDetalles['cantidadDescuento'],
                     'Descripcion'     => $descuentoDetalles['subConceptoId'],
-                    'Notas'           => '' 
+                    'Notas'           => '',
+                    'User_Id'         => Auth::user()->id
                 ]
             );
             ordenes::where('Id', $descuentoDetalles['ordenId'])->update(
@@ -697,7 +726,8 @@ class PagoController extends Controller
                     'Tipo_pago'       => $pagoDetalles['tipoPago'],
                     'Cantidad_pago'   => $pagoCantidad['cantidadPago'],
                     'Descripcion'     => $pagoCantidad['subConceptoId'],
-                    'Notas'           => $pagoDetalles['notas'] 
+                    'Notas'           => $pagoDetalles['notas'] ,
+                    'User_Id'         => Auth::user()->id
                 ]
             );
         }
@@ -735,9 +765,9 @@ class PagoController extends Controller
             foreach($datos as $key => $value){
                 if($value <> 0){
                     switch ($key) {
-                        case 'plantel':
-                            $queryWhere .= ' AND AR.Plantel_id IN ('.$value.') ';
-                            break;
+                        // case 'plantel':
+                        //     $queryWhere .= ' AND AR.Plantel_id IN ('.$value.') ';
+                        //     break;
                         case 'nivel':
                             $queryWhere .= ' AND AR.Nivel_id = '.$value.' ';
                             break;
@@ -780,15 +810,24 @@ class PagoController extends Controller
                 }
             }
         }
-        
-        if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
-            $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
+
+        if($datos->plantel > 0){
+            $queryWhere .= ' AND AR.Plantel_id = '.$datos->plantel.' ';   
+        }else{
+            if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
+                $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
+            }
+        }
+
+        if($datos->tipo_corte_usuario > 0){
+            $queryWhere .= ' AND P.User_Id = '.$datos->tipo_corte_usuario.' ';   
         }
         
         $pagosQuery = ''.
-                      'SELECT P.Id,A.Id AS Alumno_id,CONCAT(A.Nombre," ",A.Apellido_materno," ",A.Apellido_paterno) AS Nombre,C.Nombre AS Descripcion_pago,A.Email,O.Descripcion,P.Cantidad_pago,P.Tipo_pago,P.Notas,DATE_FORMAT(P.updated_at, "%d-%m-%Y @ %r") AS updated_at '.
+                      'SELECT P.Id,U.name AS Usuario,A.Id AS Alumno_id,CONCAT(A.Nombre," ",A.Apellido_materno," ",A.Apellido_paterno) AS Nombre,C.Nombre AS Descripcion_pago,A.Email,O.Descripcion,P.Cantidad_pago,P.Tipo_pago,P.Notas,DATE_FORMAT(P.updated_at, "%d-%m-%Y @ %r") AS updated_at '.
                       'FROM pagos P                                          '.
                       'LEFT JOIN conceptos C ON C.Id = P.Descripcion         '.
+                      'LEFT JOIN users U ON U.id = P.User_Id                  '.
                       'LEFT JOIN alumnos A ON A.Id = P.Alumno_id             '.
                       'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id '.
                       'LEFT JOIN ordenes O ON O.Id = P.Orden_id              '.
@@ -900,9 +939,9 @@ class PagoController extends Controller
             foreach($datos as $key => $value){
                 if($value !== "0" && $value !== "" ){
                     switch ($key) {
-                        case 'plantel':
-                            $queryWhere .= ' AND AR.Plantel_id IN ('.$value.') ';
-                            break;
+                        // case 'plantel':
+                        //     $queryWhere .= ' AND AR.Plantel_id IN ('.$value.') ';
+                        //     break;
                         case 'nivel':
                             $queryWhere .= ' AND AR.Nivel_id = '.$value.' ';
                             break;
@@ -923,52 +962,130 @@ class PagoController extends Controller
             }
         }
 
-        if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
-            $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
+        if($datos->plantel > 0){
+            $queryWhere .= ' AND AR.Plantel_id = '.$datos->plantel.' ';   
+        }else{
+            if(session()->get('user_roles')['Matrícula']->Plantel_id > 0){
+                $queryWhere .= ' AND AR.Plantel_id IN ('.session()->get('user_roles')['Matrícula']->Plantel_id.') ';
+            }
         }
         
-        $pagosQuery = ''.
-                      'SELECT A.Id,@total := @total + 1 AS provId,A.Id AS Alumno_id,CONCAT(A.Nombre," ",A.Apellido_materno," ",A.Apellido_paterno) AS Nombre,A.Email,    '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 1  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoEnero,      '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 2  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoFebrero,    '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 3  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoMarzo,      '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 4  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoAbril,      '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 5  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoMayo,       '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 6  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoJunio,      '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 7  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoJulio,      '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 8  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoAgosto,     '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 9  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoSeptiembre, '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 10 THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoOctubre,    '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 11 THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoNoviembre,  '.
-                      'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 12 THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoDiciembre,  '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 1, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Enero,      '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 2, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Febrero,    '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 3, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Marzo,      '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 4, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Abril,      '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 5, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Mayo,       '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 6, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Junio,      '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 7, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Julio,      '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 8, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Agosto,     '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 9, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Septimebre, '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 10,IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Octubre,    '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 11,IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Novienbre,  '.
-                      'MAX(IF(MONTH(O.Fecha_creacion) = 12,IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Diciembre   '.
-                      'FROM ordenes O                                        '.
-                      'LEFT JOIN generaciones  G ON G.Id = O.Generacion_id              '.
+        // $pagosQuery = ''.
+        //               'SELECT A.Id,@total := @total + 1 AS provId,A.Id AS Alumno_id,CONCAT(A.Nombre," ",A.Apellido_materno," ",A.Apellido_paterno) AS Nombre,A.Email,    '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 1  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoEnero,      '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 2  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoFebrero,    '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 3  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoMarzo,      '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 4  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoAbril,      '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 5  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoMayo,       '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 6  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoJunio,      '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 7  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoJulio,      '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 8  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoAgosto,     '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 9  THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoSeptiembre, '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 10 THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoOctubre,    '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 11 THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoNoviembre,  '.
+        //               'MAX( CASE WHEN MONTH(O.Fecha_creacion) = 12 THEN (SELECT SUM(P.Cantidad_pago) FROM pagos P LEFT JOIN conceptos C ON C.Id = P.Descripcion WHERE P.Orden_id = O.Id AND C.Tipo IN ("colegiatura","inscripcion","pagos","cuota-personalizada-anual") ) ELSE 0 END) AS CantidadPagoDiciembre,  '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 1, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Enero,      '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 2, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Febrero,    '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 3, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Marzo,      '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 4, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Abril,      '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 5, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Mayo,       '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 6, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Junio,      '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 7, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Julio,      '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 8, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Agosto,     '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 9, IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Septimebre, '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 10,IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Octubre,    '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 11,IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Novienbre,  '.
+        //               'MAX(IF(MONTH(O.Fecha_creacion) = 12,IF(O.Estatus = 2,2,IF(O.Estatus = 1,3,1)),0)) AS Diciembre   '.
+        //               'FROM ordenes O                                        '.
+        //               'LEFT JOIN generaciones  G ON G.Id = O.Generacion_id              '.
 
-                      'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = O.Alumno_id '.
-                      'LEFT JOIN alumnos A ON A.Id = AR.Alumno_id            '.
-                      'WHERE 1 = 1 '.$queryWhere.' AND A.Estatus = 1 AND YEAR(O.Fecha_creacion) = '.$datos->generacionEscolar.' GROUP BY A.Id,A.Nombre,A.Apellido_materno,A.Apellido_paterno,A.Email ORDER BY provId';//.$queryWhere;   
+        //               'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = O.Alumno_id '.
+        //               'LEFT JOIN alumnos A ON A.Id = AR.Alumno_id            '.
+        //               'WHERE 1 = 1 '.$queryWhere.' AND A.Estatus = 1 AND YEAR(O.Fecha_creacion) = '.$datos->generacionEscolar.' GROUP BY A.Id,A.Nombre,A.Apellido_materno,A.Apellido_paterno,A.Email ORDER BY provId';//.$queryWhere;   
+        //  DB::statement( DB::raw( 'SET @total := 0'));
+
+         $pagosQuery = '
+                        SELECT 
+                        A.Id AS Alumno_id,
+                        @total := @total + 1 AS provId,
+                        CONCAT(A.Nombre, " ", A.Apellido_materno, " ", A.Apellido_paterno) AS Nombre,
+                        A.Email,
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 1 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoEnero,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 1 THEN P.Id ELSE 0 END) AS IdOrdenEnero,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 1 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Enero,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 2 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoFebrero,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 2 THEN P.Id ELSE 0 END) AS IdOrdenFebrero,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 2 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Febrero,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 3 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoMarzo,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 3 THEN P.Id ELSE 0 END) AS IdOrdenMarzo,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 3 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Marzo,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 4 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoAbril,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 4 THEN P.Id ELSE 0 END) AS IdOrdenAbril,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 4 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Abril,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 5 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoMayo,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 5 THEN P.Id ELSE 0 END) AS IdOrdenMayo,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 5 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Mayo,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 6 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoJunio,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 6 THEN P.Id ELSE 0 END) AS IdOrdenJunio,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 6 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Junio,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 7 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoJulio,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 7 THEN P.Id ELSE 0 END) AS IdOrdenJulio,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 7 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Julio,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 8 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoAgosto,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 8 THEN P.Id ELSE 0 END) AS IdOrdenAgosto,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 8 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Agosto,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 9 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoSeptiembre,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 9 THEN P.Id ELSE 0 END) AS IdOrdenSeptiembre,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 9 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Septiembre,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 10 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoOctubre,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 10 THEN P.Id ELSE 0 END) AS IdOrdenOctubre,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 10 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Octubre,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 11 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoNoviembre,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 11 THEN P.Id ELSE 0 END) AS IdOrdenNoviembre,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 11 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Noviembre,
+                        
+                        SUM(CASE WHEN MONTH(O.Fecha_creacion) = 12 THEN P.Cantidad_pago ELSE 0 END) AS CantidadPagoDiciembre,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 12 THEN P.Id ELSE 0 END) AS IdOrdenDiciembre,
+                        MAX(CASE WHEN MONTH(O.Fecha_creacion) = 12 THEN IF(O.Estatus = 2, 2, IF(O.Estatus = 1, 3, 1)) ELSE 0 END) AS Diciembre
+                        
+                    FROM 
+                        alumnos A
+                        LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id
+                        LEFT JOIN ordenes O ON O.Alumno_id = A.Id AND YEAR(O.Fecha_creacion) = 2024
+                        LEFT JOIN pagos P ON P.Orden_id = O.Id
+                        LEFT JOIN conceptos C ON C.Id = P.Descripcion AND C.Tipo IN ("colegiatura", "inscripcion", "pagos", "cuota-personalizada-anual")
+                    WHERE 1 = 1 '.$queryWhere.' 
+                        AND A.Estatus = 1 
+                        AND YEAR(O.Fecha_creacion) = '.$datos->generacionEscolar.' 
+                    GROUP BY 
+                        A.Id,
+                        Nombre,
+                        A.Apellido_materno,
+                        A.Apellido_paterno,
+                        A.Email
+                        ORDER BY provId;
+         ';
          DB::statement( DB::raw( 'SET @total := 0'));
         $pagos  = DB::select($pagosQuery);
         return ['data'=>$pagos];
     }
     function getAlumnoAllPagos($alumnoId){ 
         $pagosQuery = ''.
-                      'SELECT P.Id,O.Descripcion,P.Cantidad_pago,P.Tipo_pago,C.Nombre AS Descripcion_pago,P.Notas,DATE_FORMAT(P.updated_at, "%d-%m-%Y @ %r") AS updated_at '.
+                      'SELECT P.Id,U.name AS Usuario,O.Descripcion,P.Cantidad_pago,P.Tipo_pago,C.Nombre AS Descripcion_pago,P.Notas,DATE_FORMAT(P.updated_at, "%d-%m-%Y @ %r") AS updated_at '.
                       'FROM pagos P                             '.
                       'LEFT JOIN ordenes O ON O.Id = P.Orden_id '.
                       'LEFT JOIN conceptos C ON C.Id = P.Descripcion '.
+                      'LEFT JOIN users U ON U.id = P.User_Id '.
                       'WHERE P.Alumno_id = :Id ORDER BY P.Id DESC';    
         
         $pagos  = DB::select($pagosQuery, ['Id' => $alumnoId]);
@@ -1035,7 +1152,16 @@ class PagoController extends Controller
 
     function getPago($pagoId){
         try{
-            $pagos  = DB::select('SELECT P.Id,P.Cantidad_pago,C.Nombre,P.Tipo_pago,P.Notas FROM pagos P LEFT JOIN conceptos C On C.Id = P.Concepto_id WHERE P.Id = :Id', ['Id' => $pagoId])[0];
+            $pagos  = DB::select('SELECT P.Id,P.Cantidad_pago,C.Nombre,P.Tipo_pago,P.Notas,P.created_at AS fecha FROM pagos P LEFT JOIN conceptos C On C.Id = P.Concepto_id WHERE P.Id = :Id', ['Id' => $pagoId])[0];
+            $result = ['success',$pagos];
+        }catch(\Illuminate\Database\QueryException $e){
+            $result = ['error','¡Error al cargar el pago!'];
+        }
+        return $result;
+    }
+    function getPagos($ordenId){
+        try{
+            $pagos  = DB::select('SELECT P.Id,O.Descripcion,P.Cantidad_pago,C.Nombre,P.Tipo_pago,P.Notas,P.created_at AS fecha FROM pagos P LEFT JOIN conceptos C On C.Id = P.Concepto_id LEFT JOIN ordenes O On O.Id = P.Orden_id WHERE P.Orden_id = :Id', ['Id' => $ordenId]);
             $result = ['success',$pagos];
         }catch(\Illuminate\Database\QueryException $e){
             $result = ['error','¡Error al cargar el pago!'];

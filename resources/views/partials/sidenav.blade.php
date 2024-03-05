@@ -161,12 +161,12 @@
                                 <a href="{{ url('pagos') }}?Id=1">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Pagos
+                                    Pagos (Corte Caja)
                                 </a>
                                 <a href="{{ url('controlpagos') }}?Id=1">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Control
+                                    Control Pagos
                                 </a>
                                 <a href="{{ url('titulaciones') }}?Id=1">
                                     <i class="metismenu-icon">
@@ -190,12 +190,12 @@
                                 <a href="{{ url('pagos') }}?Id=3">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Pagos
+                                    Pagos (Corte Caja)
                                 </a>
                                 <a href="{{ url('controlpagos') }}?Id=3">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Control
+                                    Control Pagos
                                 </a>
                                 <a href="{{ url('titulaciones') }}?Id=3">
                                     <i class="metismenu-icon">
@@ -219,12 +219,12 @@
                                 <a href="{{ url('pagos') }}?Id=32">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Pagos
+                                    Pagos (Corte Caja)
                                 </a>
                                 <a href="{{ url('controlpagos') }}?Id=32">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Control
+                                    Control Pagos
                                 </a>
                                 <a href="{{ url('titulaciones') }}?Id=32">
                                     <i class="metismenu-icon">
@@ -248,12 +248,12 @@
                                 <a href="{{ url('pagos') }}?Id=31">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Pagos
+                                    Pagos (Corte Caja)
                                 </a>
                                 <a href="{{ url('controlpagos') }}?Id=31">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Control
+                                    Control Pagos
                                 </a>
                                 <a href="{{ url('titulaciones') }}?Id=31">
                                     <i class="metismenu-icon">
@@ -277,12 +277,12 @@
                                 <a href="{{ url('pagos') }}?Id=33">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Pagos
+                                    Pagos (Corte Caja)
                                 </a>
                                 <a href="{{ url('controlpagos') }}?Id=33">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Control
+                                    Control Pagos
                                 </a>
                                 <a href="{{ url('titulaciones') }}?Id=33">
                                     <i class="metismenu-icon">
@@ -306,12 +306,12 @@
                                 <a href="{{ url('pagos') }}?Id=2">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Pagos
+                                    Pagos (Corte Caja)
                                 </a>
                                 <a href="{{ url('controlpagos') }}?Id=2">
                                     <i class="metismenu-icon">
                                     </i>
-                                    Control
+                                    Control Pagos
                                 </a>
                             </ul>
                         </li>

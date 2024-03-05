@@ -31,6 +31,7 @@
         const grupos        = @php echo(json_encode($grupos)); @endphp;
         const generaciones  = @php echo(json_encode($generaciones)); @endphp;
 
+        displayOptions('nivel',[$('#plantel').children("option:selected").val()],niveles,['Plantel_id'],0);
         displayOptions('licenciatura',[$('#plantel').children("option:selected").val()],licenciaturas,['Plantel_id'],0);
         displayOptions('generacion',[$('#plantel').children("option:selected").val()],generaciones,['Plantel_id'],0);
         displayOptions('grupo',[$('#plantel').children("option:selected").val(),$('#licenciatura').children("option:selected").val(),$('#sistema').children("option:selected").val()],grupos,['Plantel_id','Licenciatura_id','Sistema_id'],0);
@@ -38,6 +39,7 @@
             const selection    = $(this).children("option:selected").val();
             const licenciatura = $('#licenciatura').children("option:selected").val();
             const sistema      = $('#sistema').children("option:selected").val();
+            displayOptions('nivel',[selection],niveles,['Plantel_id'],0);
             displayOptions('licenciatura',[selection],licenciaturas,['Plantel_id'],0);
             displayOptions('generacion',[selection],generaciones,['Plantel_id'],0);
             displayOptions('grupo',[selection,licenciatura,sistema],grupos,['Plantel_id','Licenciatura_id','Sistema_id'],0);
@@ -278,27 +280,27 @@
                                                 <label for="plantel">Plantel</label>
                                                 <select class="form-control" name="plantel" id="plantel">
                                                     @foreach ($planteles as $plantel)
-                                                        <option value="{{$plantel->Id}}" selected="selected" >{{$plantel->Nombre}}</option>
+                                                        <option value="{{$plantel->Id}}" @if (count($planteles) == 1) selected="selected" @endif >{{$plantel->Nombre}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div class="form-group  ">
+                                            <div class="form-group  "  @if (count($niveles) == 1) style="display:none;" @endif>
                                                 <label for="nivel">Nivel</label>
                                                 <select class="form-control" name="nivel" id="nivel">
-                                                    <option value="1" selected="selected">Licenciatura</option>
+                                                    <option value="0" >Seleccionar nivel</option>
                                                 </select>
                                             </div>
                                             <div class="form-group  ">
                                                 <label for="licenciaturas">Licenciatura</label>
                                                 <select class="form-control" name="licenciatura" id="licenciatura">
-                                                    <option value="0" selected="selected">Seleccionar licenciatura</option>
+                                                    <option value="0" >Seleccionar licenciatura</option>
                                                     
                                                 </select>
                                             </div>
                                             <div class="form-group  ">
                                                 <label for="sistema">Sistema</label>
                                                 <select class="form-control" name="sistema" id="sistema">
-                                                    <option value="0" selected="selected">Seleccionar sistema</option>
+                                                    <option value="0">Seleccionar sistema</option>
                                                     
                                                     @foreach ($sistemas as $sistema)
                                                         <option value="@php echo($sistema->Id); @endphp">@php echo($sistema->Nombre); @endphp</option>
@@ -308,14 +310,14 @@
                                             <div class="form-group  ">
                                                 <label for="grupo">Grupo</label>
                                                 <select class="form-control" name="grupo" id="grupo">
-                                                    <option value="0" selected="selected">Seleccionar grupo</option>
+                                                    <option value="0" >Seleccionar grupo</option>
                                                     
                                                 </select>
                                             </div>
                                             <div class="form-group  ">
                                                 <label for="generacion">Generación</label>
                                                 <select class="form-control" name="generacion" id="generacion">
-                                                    <option value="0" selected="selected">Seleccionar generación</option>
+                                                    <option value="0">Seleccionar generación</option>
                                                     
                                                 </select>
                                             </div>

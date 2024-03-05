@@ -144,23 +144,23 @@
                                                 </select>
                                             </div>
 
-                                            <div class="form-group col-md-2">
+                                            <div class="form-group col-md-2 "  @if (count($niveles) == 1) style="display:none;" @endif>
                                                 <label for="nivel">Nivel</label>
                                                 <select class="form-control" name="nivel" id="nivel">
-                                                    <option value="0" selected="selected">Seleccionar nivel</option>
+                                                    <option value="0" >Seleccionar nivel</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-2" @if(count($licenciaturas) == 0) style="display:none;"  @endif>
                                                 <label for="licenciaturas">Licenciatura</label>
                                                 <select class="form-control" name="licenciatura" id="licenciatura">
-                                                    <option value="0" selected="selected">Seleccionar licenciatura</option>
+                                                    <option value="0" >Seleccionar licenciatura</option>
                                                 </select>
                                             </div>
 
                                             <div class="form-group  col-md-2">
                                                 <label for="sistema">Sistema</label>
                                                 <select class="form-control dinamic_filters" name="sistema" id="sistema">
-                                                    <option value="0" selected="selected">Seleccionar sistema</option>
+                                                    <option value="0">Seleccionar sistema</option>
                                                     @foreach ($sistemas as $sistema)
                                                         <option value="@php echo($sistema->Id); @endphp">@php echo($sistema->Nombre); @endphp</option>
                                                     @endforeach

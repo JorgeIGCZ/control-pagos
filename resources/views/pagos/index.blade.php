@@ -191,6 +191,7 @@
                 { data: 'updated_at' },
                 { data: 'Tipo_pago' },
                 { data: 'Notas' },
+                { data: 'Usuario' },
                 { data: 'Cantidad_pago',defaultContent: 'Actions', 'render': function ( data, type, row ) 
                     {
                         return  formatter.format(row.Cantidad_pago);
@@ -202,17 +203,17 @@
 
     function getAlumnoFilters(){
         alumno = {
-            'plantel'      : <?php echo(@$_GET['Id']); ?>, 
+            'plantel'      : $('#plantel').children("option:selected").val(),
             'nivel'        : $('#nivel').children("option:selected").val(),
             'licenciatura' : $('#licenciatura').children("option:selected").val(),
             'sistema'      : $('#sistema').children("option:selected").val(),
             'grupo'        : $('#grupo').children("option:selected").val(),
-            'fecha'        : $('#grupo').children("option:selected").val(),
             'start_date'   : $('#start_date').val(),
             'end_date'     : $('#end_date').val(),
             'tipoPago'     : $('#tipo-pago').children("option:selected").val(),
             'fuente'       : $('#fuente').children("option:selected").val(),
             'fecha'        : $('#fecha').children("option:selected").val(),
+            'tipo_corte_usuario' : $('#corte-usuario').children("option:selected").val(),
         }
         return alumno;
     }
@@ -289,31 +290,31 @@
                                 <hr>
                                 <div class="col-md-12">
                                     <form>
-                                        <div class="form-row filters" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 90px;">
-                                            <div class="form-group " style="display: none;">
+                                        <div class="form-row filters" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 90px;">
+                                            <div class="form-group " @if (count($planteles) == 1) style="display:none;" @endif>
                                                 <label for="plantel">Plantel</label>
                                                 <select class="form-control" name="plantel" id="plantel">
                                                     @foreach ($planteles as $plantel)
-                                                        <option value="{{$plantel->Id}}" selected="selected" >{{$plantel->Nombre}}</option>
+                                                        <option value="{{$plantel->Id}}" @if (count($planteles) == 1) selected="selected" @endif >{{$plantel->Nombre}}</option>
                                                     @endforeach
-                                                </select>
+                                                </select> 
                                             </div>
-                                            <div class="form-group  ">
+                                            <div class="form-group "  @if (count($niveles) == 1) style="display:none;" @endif>
                                                 <label for="nivel">Nivel</label>
                                                 <select class="form-control dinamic_filters" name="nivel" id="nivel">
-                                                    <option value="0" selected="selected">Seleccionar nivel</option>
+                                                    <option value="0">Seleccionar nivel</option>
                                                 </select>
                                             </div>
                                             <div class="form-group  ">
                                                 <label for="licenciaturas">Licenciatura</label>
                                                 <select class="form-control dinamic_filters" name="licenciatura" id="licenciatura">
-                                                    <option value="0" selected="selected">Seleccionar licenciatura</option>
+                                                    <option value="0" >Seleccionar licenciatura</option>
                                                 </select>
                                             </div>
                                             <div class="form-group  ">
                                                 <label for="sistema">Sistema</label>
                                                 <select class="form-control" name="sistema" id="sistema">
-                                                    <option value="0" selected="selected">Seleccionar sistema</option>
+                                                    <option value="0" >Seleccionar sistema</option>
                                                     @foreach ($sistemas as $sistema)
                                                         <option value="@php echo($sistema->Id); @endphp">@php echo($sistema->Nombre); @endphp</option>
                                                     @endforeach
@@ -322,18 +323,27 @@
                                             <div class="form-group  ">
                                                 <label for="grupo">Grupo</label>
                                                 <select class="form-control" name="grupo" id="grupo">
-                                                    <option value="0" selected="selected">Seleccionar grupo</option>
+                                                    <option value="0" >Seleccionar grupo</option>
                                                 </select>
                                             </div>
                                             <div class="form-group  ">
                                                 <label for="generacion">Generación</label>
                                                 <select class="form-control dinamic_filters" name="generacion" id="generacion">
-                                                    <option value="0" selected="selected">Seleccionar generación</option>
+                                                    <option value="0" >Seleccionar generación</option>
                                                 </select>
                                             </div>
+
+                                            <div class="form-group  ">
+                                                <label for="generacion">Ejecutar Corte Cómo...</label>
+                                                <select class="form-control dinamic_filters btn-outline-danger" name="corte-usuario" id="corte-usuario">
+                                                    <option value="{{ Auth::user()->id }}" selected="selected">Corte Usuario actual</option>
+                                                    <option value="0">Corte General</option>
+                                                </select>
+                                            </div>
+
                                             <div class="form-group buscar-button " style="text-align: center;">
                                                 <button id="buscar-alumnos" type="button" aria-haspopup="true" aria-expanded="false" class="btn-shadow btn btn-primary" style="margin-top: 33px;"> 
-                                                    <i class="fas fa-search"></i> Buscar
+                                                    <i class="fas fa-search"></i> Generar
                                                 </button>
                                             </div>
                                         </div>
@@ -355,6 +365,7 @@
                                         <th>Fecha Pago</th>
                                         <th>Tipo Pago</th>
                                         <th>Notas</th>
+                                        <th>Usuario</th>
                                         <th>Cantidad</th>
                                     </tr>
                                 </thead>
@@ -362,6 +373,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>

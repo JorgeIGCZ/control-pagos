@@ -27,10 +27,12 @@
     function createPlantel(){
         $('.loader').show();
         let nombre          = $('#nombre').val();
+        let identificador   = $('#identificador').val();
         let region          = $('#region').val();
         
         let plantel = {
             'nombre'          : nombre,
+            'identificador'   : identificador
             'region'          : region
         }
         $.ajax({
@@ -91,6 +93,10 @@
                                             <div class="form-group col-md-4">
                                                 <label for="inputEmail4">Nombre</label>
                                                 <input type="text" class="form-control" id="nombre">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="inputEmail4">Identificador (3 caracteres)</label>
+                                                <input type="text" class="form-control" id="identificador" maxlength="3">
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label for="inputEmail4">Region</label>
