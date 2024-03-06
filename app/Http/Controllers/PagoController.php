@@ -108,9 +108,10 @@ class PagoController extends Controller
         }
         
         $pagosQuery = ''.
-                      'SELECT P.Id,A.Id AS Alumno_id,CONCAT(YEAR(G.Fecha_inicio),"-",YEAR(G.Fecha_finalizacion)) AS Generacion,CONCAT(A.Nombre," ",A.Apellido_materno," ",A.Apellido_paterno) AS Nombre,N.Nombre AS Nivel,C.Nombre AS Descripcion_pago,A.Email,O.Descripcion,P.Cantidad_pago,P.Tipo_pago,P.Notas,DATE_FORMAT(P.updated_at, "%d-%m-%Y") AS updated_at '.
+                      'SELECT P.Id,A.Id AS Alumno_id,U.name AS Usuario,CONCAT(YEAR(G.Fecha_inicio),"-",YEAR(G.Fecha_finalizacion)) AS Generacion,CONCAT(A.Nombre," ",A.Apellido_materno," ",A.Apellido_paterno) AS Nombre,N.Nombre AS Nivel,C.Nombre AS Descripcion_pago,A.Email,O.Descripcion,P.Cantidad_pago,P.Tipo_pago,P.Notas,DATE_FORMAT(P.updated_at, "%d-%m-%Y") AS updated_at '.
                       'FROM pagos                   P                            '.
                       'LEFT JOIN conceptos          C ON C.Id = P.Descripcion    '.
+                      'LEFT JOIN users              U ON U.id = P.User_Id        '.
                       'LEFT JOIN alumnos            A ON A.Id = P.Alumno_id      '.
                       'LEFT JOIN alumno_relaciones AR ON AR.Alumno_id = A.Id     '.
                       'LEFT JOIN niveles            N ON N.Id = AR.Nivel_id      '.
@@ -133,8 +134,8 @@ class PagoController extends Controller
         $drawing->setWorksheet($spreadsheet->getActiveSheet());
         */
 
-        $spreadsheet->getActiveSheet()->mergeCells('A1:I1');
-        $sheet->getStyle('A:I')->getAlignment()
+        $spreadsheet->getActiveSheet()->mergeCells('A1:J1');
+        $sheet->getStyle('A:J')->getAlignment()
             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER) //Set vertical center
             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER) //Set horizontal center
             ->setWrapText(true); 
@@ -219,20 +220,20 @@ class PagoController extends Controller
 
         $sheet->getRowDimension('1')->setRowHeight(30);
 
-        $spreadsheet->getActiveSheet()->getStyle('A1:I1')
+        $spreadsheet->getActiveSheet()->getStyle('A1:J1')
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-        $spreadsheet->getActiveSheet()->getStyle('A1:I1')
+        $spreadsheet->getActiveSheet()->getStyle('A1:J1')
             ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-        $spreadsheet->getActiveSheet()->getStyle('A1:I1')
+        $spreadsheet->getActiveSheet()->getStyle('A1:J1')
             ->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-        $spreadsheet->getActiveSheet()->getStyle('A2:I2')
+        $spreadsheet->getActiveSheet()->getStyle('A2:J2')
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
-        $spreadsheet->getActiveSheet()->getStyle('A3:I3')
+        $spreadsheet->getActiveSheet()->getStyle('A3:J3')
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-        $spreadsheet->getActiveSheet()->getStyle('A3:I3')
+        $spreadsheet->getActiveSheet()->getStyle('A3:J3')
             ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-        $spreadsheet->getActiveSheet()->getStyle('A3:I3')
+        $spreadsheet->getActiveSheet()->getStyle('A3:J3')
             ->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
         $spreadsheet->getActiveSheet()->getStyle('A3')
@@ -251,8 +252,10 @@ class PagoController extends Controller
             ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
         $spreadsheet->getActiveSheet()->getStyle('H3')
             ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
+        $spreadsheet->getActiveSheet()->getStyle('I3')
+            ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
-        $spreadsheet->getActiveSheet()->getStyle('A4:I4')
+        $spreadsheet->getActiveSheet()->getStyle('A4:j4')
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
         
         
@@ -264,7 +267,8 @@ class PagoController extends Controller
         $sheet->getColumnDimension('F')->setWidth(15);
         $sheet->getColumnDimension('G')->setWidth(45);
         $sheet->getColumnDimension('H')->setWidth(15);
-        $sheet->getColumnDimension('I')->setWidth(20);
+        $sheet->getColumnDimension('I')->setWidth(15);
+        $sheet->getColumnDimension('J')->setWidth(40);
 
         $spreadsheet->getActiveSheet()->getStyle('A1')->getFont()->setBold(true);
         $spreadsheet->getActiveSheet()->getStyle('A3')->getFont()->setBold(true);
@@ -275,7 +279,9 @@ class PagoController extends Controller
         $spreadsheet->getActiveSheet()->getStyle('F3')->getFont()->setBold(true);
         $spreadsheet->getActiveSheet()->getStyle('G3')->getFont()->setBold(true);
         $spreadsheet->getActiveSheet()->getStyle('H3')->getFont()->setBold(true);
-        $spreadsheet->getActiveSheet()->getStyle('I3')->getFont()->setBold(true);/*
+        $spreadsheet->getActiveSheet()->getStyle('I3')->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle('J3')->getFont()->setBold(true);
+        /*
         $spreadsheet->getActiveSheet()->getStyle('AD11')->getFont()->setBold(true);*/
 
 
@@ -290,8 +296,9 @@ class PagoController extends Controller
         $sheet->setCellValue('F3', 'MONTO');
         $sheet->setCellValue('G3', 'CONCEPTO');
         $sheet->setCellValue('H3', 'TIPO DE PAGO');
-        $sheet->setCellValue('I3', 'NOTAS');
-        $spreadsheet->getActiveSheet()->getStyle('A5'.':I5')
+        $sheet->setCellValue('I3', 'USUARIO');
+        $sheet->setCellValue('J3', 'NOTAS');
+        $spreadsheet->getActiveSheet()->getStyle('A5'.':J5')
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
         $startCell = 5;
@@ -307,17 +314,18 @@ class PagoController extends Controller
                 $sheet->setCellValue('F'.$startCell,"$".number_format($pago->Cantidad_pago, 2));
                 $sheet->setCellValue('G'.$startCell,$pago->Descripcion_pago);
                 $sheet->setCellValue('H'.$startCell,$pago->Tipo_pago);
-                $sheet->setCellValue('I'.$startCell,$pago->Notas);
+                $sheet->setCellValue('I'.$startCell,$pago->Usuario);
+                $sheet->setCellValue('J'.$startCell,$pago->Notas);
                 $subtotalCBAncaria += $pago->Cantidad_pago;
                 $spreadsheet->getActiveSheet()->getStyle('A'.$startCell)
                     ->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-                $spreadsheet->getActiveSheet()->getStyle('I'.$startCell)
+                $spreadsheet->getActiveSheet()->getStyle('J'.$startCell)
                     ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
                 $indice++;
                 $startCell++;
             }
         }
-        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':I'.$startCell)
+        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':J'.$startCell)
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
         $spreadsheet->getActiveSheet()->mergeCells('D'.$startCell.':E'.$startCell);
@@ -351,20 +359,20 @@ class PagoController extends Controller
 
         $sheet->getRowDimension($startCell)->setRowHeight(30);
 
-        $spreadsheet->getActiveSheet()->mergeCells('A'.$startCell.':I'.$startCell);
-        $sheet->getStyle('A'.$startCell.':I'.$startCell)->getAlignment()
+        $spreadsheet->getActiveSheet()->mergeCells('A'.$startCell.':J'.$startCell);
+        $sheet->getStyle('A'.$startCell.':J'.$startCell)->getAlignment()
             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER) //Set vertical center
             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER) //Set horizontal center
             ->setWrapText(true); 
 
-        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':I'.$startCell)
+        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':J'.$startCell)
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':I'.$startCell)
+        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':J'.$startCell)
             ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':I'.$startCell)
+        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':J'.$startCell)
             ->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
-        $spreadsheet->getActiveSheet()->getStyle('A'.($startCell+1).':I'.($startCell+1))
+        $spreadsheet->getActiveSheet()->getStyle('A'.($startCell+1).':J'.($startCell+1))
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
         $spreadsheet->getActiveSheet()->getStyle('A'.$startCell)->getFont()->setBold(true);
@@ -373,14 +381,14 @@ class PagoController extends Controller
         $startCell++;
         $startCell++;
 
-        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':I'.$startCell)
+        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':J'.$startCell)
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':I'.$startCell)
+        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':J'.$startCell)
             ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':I'.$startCell)
+        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':J'.$startCell)
             ->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
-        $spreadsheet->getActiveSheet()->getStyle('A'.($startCell+1).':I'.($startCell+1))
+        $spreadsheet->getActiveSheet()->getStyle('A'.($startCell+1).':J'.($startCell+1))
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
 
@@ -400,6 +408,10 @@ class PagoController extends Controller
             ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
         $spreadsheet->getActiveSheet()->getStyle('H'.$startCell)
             ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
+        $spreadsheet->getActiveSheet()->getStyle('I'.$startCell)
+            ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
+        $spreadsheet->getActiveSheet()->getStyle('J'.$startCell)
+            ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
         $spreadsheet->getActiveSheet()->getStyle('A'.$startCell)->getFont()->setBold(true);
         $spreadsheet->getActiveSheet()->getStyle('B'.$startCell)->getFont()->setBold(true);
@@ -410,6 +422,7 @@ class PagoController extends Controller
         $spreadsheet->getActiveSheet()->getStyle('G'.$startCell)->getFont()->setBold(true);
         $spreadsheet->getActiveSheet()->getStyle('H'.$startCell)->getFont()->setBold(true);
         $spreadsheet->getActiveSheet()->getStyle('I'.$startCell)->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle('J'.$startCell)->getFont()->setBold(true);
 
         $sheet->setCellValue('A'.$startCell, 'NÚM');
         $sheet->setCellValue('B'.$startCell, 'FECHA');
@@ -419,11 +432,12 @@ class PagoController extends Controller
         $sheet->setCellValue('F'.$startCell, 'MONTO');
         $sheet->setCellValue('G'.$startCell, 'CONCEPTO');
         $sheet->setCellValue('H'.$startCell, 'TIPO DE PAGO');
-        $sheet->setCellValue('I'.$startCell, 'NOTAS');
+        $sheet->setCellValue('I'.$startCell, 'USUARIO');
+        $sheet->setCellValue('J'.$startCell, 'NOTAS');
 
         $startCell++;
         $startCell++;
-        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':I'.$startCell)
+        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':J'.$startCell)
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
         $indice    = 1;
         $subtotalEfectivo  = 0;
@@ -437,12 +451,13 @@ class PagoController extends Controller
                 $sheet->setCellValue('F'.$startCell,"$".number_format($pago->Cantidad_pago, 2));
                 $sheet->setCellValue('G'.$startCell,$pago->Descripcion_pago);
                 $sheet->setCellValue('H'.$startCell,$pago->Tipo_pago);
-                $sheet->setCellValue('I'.$startCell,$pago->Notas);
+                $sheet->setCellValue('I'.$startCell,$pago->Usuario);
+                $sheet->setCellValue('J'.$startCell,$pago->Notas);
                 $subtotalEfectivo += $pago->Cantidad_pago;
 
                 $spreadsheet->getActiveSheet()->getStyle('A'.$startCell)
                     ->getBorders()->getLeft()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
-                $spreadsheet->getActiveSheet()->getStyle('I'.$startCell)
+                $spreadsheet->getActiveSheet()->getStyle('J'.$startCell)
                     ->getBorders()->getRight()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
                 $indice++;
@@ -450,7 +465,7 @@ class PagoController extends Controller
             }
         }
         
-        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':I'.$startCell)
+        $spreadsheet->getActiveSheet()->getStyle('A'.$startCell.':J'.$startCell)
             ->getBorders()->getTop()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK);
 
         $spreadsheet->getActiveSheet()->mergeCells('D'.$startCell.':E'.$startCell);

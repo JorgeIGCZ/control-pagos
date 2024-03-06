@@ -133,7 +133,7 @@
      
                 // Total over all pages
                 total = api
-                    .column( 7 )
+                    .column( 8 )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
@@ -141,14 +141,14 @@
      
                 // Total over this page
                 pageTotal = api
-                    .column( 7, { page: 'current'} )
+                    .column( 8, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
      
                 // Update footer
-                $( api.column( 7 ).footer() ).html(
+                $( api.column( 8 ).footer() ).html(
                     formatter.format(total)
                 );
             },
@@ -290,7 +290,7 @@
                                 <hr>
                                 <div class="col-md-12">
                                     <form>
-                                        <div class="form-row filters" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 90px;">
+                                        <div class="form-row filters" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;">
                                             <div class="form-group " @if (count($planteles) == 1) style="display:none;" @endif>
                                                 <label for="plantel">Plantel</label>
                                                 <select class="form-control" name="plantel" id="plantel">
